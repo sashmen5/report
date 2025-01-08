@@ -149,3 +149,5 @@ sketch
 storybook-static/
 
 .idea/
+.output/
+.vinxi
