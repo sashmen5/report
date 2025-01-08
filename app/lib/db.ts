@@ -1,5 +1,5 @@
 
-import mongoose from 'mongoose'
+import mongoose, {ConnectOptions} from 'mongoose'
 
 const MONGODB_URI = process.env.MONGO_URI ?? 'Error message: No MONGO_URI in .env.local'
 
@@ -22,8 +22,9 @@ async function dbConnect() {
         return cached.conn
     }
     if (!cached.promise) {
-        const opts = {
+        const opts: ConnectOptions = {
             bufferCommands: false,
+
         }
         cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
             console.log('Db connected')
