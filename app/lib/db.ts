@@ -1,23 +1,39 @@
-
 import mongoose, {ConnectOptions} from 'mongoose'
+import {createMiddleware} from "@tanstack/start";
 
-const MONGODB_URI = process.env.MONGO_URI ?? 'Error message: No MONGO_URI in .env.local'
 
-console.log('MONGODB_URI', MONGODB_URI, process.env)
-
-if (!MONGODB_URI) {
-    throw new Error(
-        'Please define the MONGODB_URI environment variable inside .env.local',
-    )
+function waitFor(timeout = 1000): Promise<void> {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve()
+        }, timeout)
+    })
 }
 
-let cached = global.mongoose
 
-if (!cached) {
-    cached = global.mongoose = { conn: null, promise: null }
-}
+const dbConnectMiddleware = createMiddleware().server(async ({ next, data }) => {
+    console.log('[dbConnectMiddleware] Request received')
+    await dbConnect();
+    console.log('[dbConnectMiddleware] DB connected.')
+    console.log('[dbConnectMiddleware] Continue to next')
+    return next()
+})
 
 async function dbConnect() {
+    const MONGODB_URI = process.env.MONGO_URI ?? 'Error message: No MONGO_URI in .env.local'
+
+    if (!MONGODB_URI) {
+        throw new Error(
+            'Please define the MONGODB_URI environment variable inside .env.local',
+        )
+    }
+
+    let cached = global.mongoose
+
+    if (!cached) {
+        cached = global.mongoose = { conn: null, promise: null }
+    }
+
     if (cached.conn) {
         return cached.conn
     }
@@ -27,13 +43,14 @@ async function dbConnect() {
 
         }
         cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
-            console.log('Db connected')
             return mongoose
         })
     }
     try {
         cached.conn = await cached.promise
+        console.log('Db connected')
     } catch (e) {
+        console.log('!!!Ooops Db NOT connected')
         cached.promise = null
         throw e
     }
@@ -41,4 +58,4 @@ async function dbConnect() {
     return cached.conn
 }
 
-export {dbConnect}
+export {dbConnect, dbConnectMiddleware}

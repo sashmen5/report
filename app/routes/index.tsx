@@ -1,7 +1,8 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { createServerFn } from '@tanstack/start'
+import {createFileRoute, useRouter} from '@tanstack/react-router'
+import {createServerFn} from '@tanstack/start'
 import {generateBlogTitle} from "../lib/generate";
 import {Post} from "../models/post";
+import {dbConnectMiddleware} from "../lib/db";
 
 
 let counter: number = 10;
@@ -23,27 +24,28 @@ async function writeCount(number): Promise<void> {
     })
 }
 
-function getPosts(): Promise<{title: string, description: string}[]> {
+function getPosts(): Promise<{ title: string, description: string }[]> {
     return Post.find().exec();
 }
 
 const getCount = createServerFn({
     method: 'GET',
-}).handler(async () => {
-    return {
-        count: await readCount(),
-        posts: await getPosts(),
-    }
 })
+    .middleware([dbConnectMiddleware])
+    .handler(async () => {
+        return {
+            count: await readCount(),
+            posts: await getPosts(),
+        }
+    })
 
 
-
-
-const updateCount = createServerFn({ method: 'POST' })
+const updateCount = createServerFn({method: 'POST'})
     .validator((d: number) => d)
-    .handler(async ({ data }) => {
+    .middleware([dbConnectMiddleware])
+    .handler(async ({data}) => {
         const count = await readCount();
-        console.log({ count, data })
+        console.log({count, data})
         await writeCount(count + data);
         console.log('[AFTER]')
     })
@@ -52,9 +54,10 @@ function readPosts() {
     return Post.find().exec();
 }
 
-const addPost = createServerFn({ method: 'POST' })
-    .handler(async ({ data }) => {
-        const newPost = new Post({ title: generateBlogTitle(), description: generateBlogTitle() })
+const addPost = createServerFn({method: 'POST'})
+    .middleware([dbConnectMiddleware])
+    .handler(async ({data}) => {
+        const newPost = new Post({title: generateBlogTitle(), description: generateBlogTitle()})
         return newPost.save()
     })
 
@@ -66,6 +69,7 @@ export const Route = createFileRoute('/')({
 function Home() {
     const router = useRouter()
     const state = Route.useLoaderData()
+    // return <div>{'Empty'}</div>
 
     return (
         <div>
@@ -96,18 +100,18 @@ function Home() {
                 >
                     There are {state.posts.length} posts. Add a new one?
                 </button>
-            <div style={{
-                border: "2px dashed purple",
-                borderRadius: "15px",
-                padding: "10px",
-            }}>
+                <div style={{
+                    border: "2px dashed purple",
+                    borderRadius: "15px",
+                    padding: "10px",
+                }}>
                 <pre>
                     <code>
 
                 {JSON.stringify(state.posts, null, 2)}
                     </code>
                 </pre>
-            </div>
+                </div>
             </div>
         </div>
     )

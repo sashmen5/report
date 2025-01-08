@@ -5,11 +5,17 @@ import {
     defaultStreamHandler,
 } from '@tanstack/start/server'
 import { getRouterManifest } from '@tanstack/start/router-manifest'
+// import { registerGlobalMiddleware } from '@tanstack/start'
 
 import { createRouter } from './router'
-import {dbConnect} from "./lib/db";
+import {dbConnect, dbConnectMiddleware} from "./lib/db";
 
-dbConnect()
+// dbConnect()
+
+
+// registerGlobalMiddleware({
+//     middleware: [dbConnectMiddleware],
+// })
 
 export default createStartHandler({
     createRouter,
