@@ -106,7 +106,9 @@ function Home() {
                     padding: "10px",
                 }}>
                 <pre>
-                    <code>
+                    <code style={{
+                        whiteSpace: 'break-spaces'
+                    }}>
 
                 {JSON.stringify(state.posts, null, 2)}
                     </code>
