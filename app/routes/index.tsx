@@ -1,11 +1,8 @@
-// app/routes/index.tsx
-// import * as fs from 'node:fs'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/start'
-// import {Post} from "../models/post";
-// import {generateBlogTitle} from "./generate";
+import {generateBlogTitle} from "../lib/generate";
+import {Post} from "../models/post";
 
-// const filePath = 'count.txt'
 
 let counter: number = 10;
 
@@ -26,10 +23,17 @@ async function writeCount(number): Promise<void> {
     })
 }
 
+function getPosts(): Promise<{title: string, description: string}[]> {
+    return Post.find().exec();
+}
+
 const getCount = createServerFn({
     method: 'GET',
 }).handler(async () => {
-    return await readCount()
+    return {
+        count: await readCount(),
+        posts: await getPosts(),
+    }
 })
 
 
@@ -44,15 +48,15 @@ const updateCount = createServerFn({ method: 'POST' })
         console.log('[AFTER]')
     })
 
-// function readPosts() {
-//     return Post.find().exec();
-// }
+function readPosts() {
+    return Post.find().exec();
+}
 
-// const addPost = createServerFn({ method: 'POST' })
-//     .handler(async ({ data }) => {
-//         const newPost = new Post({ title: generateBlogTitle(), description: generateBlogTitle() })
-//         return newPost.save()
-//     })
+const addPost = createServerFn({ method: 'POST' })
+    .handler(async ({ data }) => {
+        const newPost = new Post({ title: generateBlogTitle(), description: generateBlogTitle() })
+        return newPost.save()
+    })
 
 export const Route = createFileRoute('/')({
     component: Home,
@@ -64,32 +68,47 @@ function Home() {
     const state = Route.useLoaderData()
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '10px',
-        }}>
-            <button
-                type="button"
-                onClick={() => {
-                    updateCount({ data: 1 }).then(() => {
-                        router.invalidate()
-                    })
-                }}
-            >
-                Add 1 to {state}?
-            </button>
+        <div>
 
-            {/*<button*/}
-            {/*    type="button"*/}
-            {/*    onClick={() => {*/}
-            {/*        addPost({ data: undefined  }).then(() => {*/}
-            {/*            router.invalidate()*/}
-            {/*        })*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    There are {state.posts.length} posts. Add a new one?*/}
-            {/*</button>*/}
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+            }}>
+                <button
+                    type="button"
+                    onClick={() => {
+                        updateCount({data: 1}).then(() => {
+                            router.invalidate()
+                        })
+                    }}
+                >
+                    Add 1 to {state.count}?
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => {
+                        addPost({data: undefined}).then(() => {
+                            router.invalidate()
+                        })
+                    }}
+                >
+                    There are {state.posts.length} posts. Add a new one?
+                </button>
+            <div style={{
+                border: "2px dashed purple",
+                borderRadius: "15px",
+                padding: "10px",
+            }}>
+                <pre>
+                    <code>
+
+                {JSON.stringify(state.posts, null, 2)}
+                    </code>
+                </pre>
+            </div>
+            </div>
         </div>
     )
 }
