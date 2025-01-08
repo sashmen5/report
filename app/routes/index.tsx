@@ -2,6 +2,7 @@ import {createFileRoute, useRouter} from '@tanstack/react-router'
 import {createServerFn} from '@tanstack/start'
 import {generateBlogTitle} from "../lib/generate";
 import {Post} from "../models/post";
+import {dbConnectMiddleware} from "../lib/db";
 
 
 let counter: number = 10;
@@ -30,7 +31,7 @@ function getPosts(): Promise<{ title: string, description: string }[]> {
 const getCount = createServerFn({
     method: 'GET',
 })
-    // .middleware([dbConnectMiddleware])
+    .middleware([dbConnectMiddleware])
     .handler(async () => {
         return {
             count: await readCount(),
@@ -41,7 +42,7 @@ const getCount = createServerFn({
 
 const updateCount = createServerFn({method: 'POST'})
     .validator((d: number) => d)
-    // .middleware([dbConnectMiddleware])
+    .middleware([dbConnectMiddleware])
     .handler(async ({data}) => {
         const count = await readCount();
         console.log({count, data})
@@ -54,7 +55,7 @@ function readPosts() {
 }
 
 const addPost = createServerFn({method: 'POST'})
-    // .middleware([dbConnectMiddleware])
+    .middleware([dbConnectMiddleware])
     .handler(async ({data}) => {
         const newPost = new Post({title: generateBlogTitle(), description: generateBlogTitle()})
         return newPost.save()

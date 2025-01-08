@@ -1,6 +1,6 @@
-import {registerGlobalMiddleware} from "@tanstack/start";
-import {dbConnectMiddleware} from "./lib/db";
+// import {registerGlobalMiddleware} from "@tanstack/start";
+// import {dbConnectMiddleware} from "./lib/db";
 
-registerGlobalMiddleware({
-    middleware: [dbConnectMiddleware],
-})
+// registerGlobalMiddleware({
+//     middleware: [dbConnectMiddleware],
+// })
