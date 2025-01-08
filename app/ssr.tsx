@@ -17,7 +17,7 @@ import {dbConnect, dbConnectMiddleware} from "./lib/db";
 //     middleware: [dbConnectMiddleware],
 // })
 
-await dbConnect();
+dbConnect();
 
 export default createStartHandler({
     createRouter,
