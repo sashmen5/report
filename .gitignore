@@ -150,4 +150,5 @@ storybook-static/
 
 .idea/
 .output/
-.vinxi
+.vinxi/
+.netlify/
