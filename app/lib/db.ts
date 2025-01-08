@@ -13,7 +13,7 @@ function waitFor(timeout = 1000): Promise<void> {
 
 const dbConnectMiddleware = createMiddleware().server(async ({ next, data }) => {
     console.log('[dbConnectMiddleware] Request received')
-    await dbConnect();
+    // await dbConnect();
     console.log('[dbConnectMiddleware] DB connected.')
     console.log('[dbConnectMiddleware] Continue to next')
     return next()
@@ -39,7 +39,7 @@ async function dbConnect() {
     }
     if (!cached.promise) {
         const opts: ConnectOptions = {
-            bufferCommands: false,
+            bufferCommands: true,
 
         }
         cached.promise = mongoose.connect(MONGODB_URI, opts).then(mongoose => {
