@@ -7,7 +7,9 @@
     "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier:check": "prettier --check 'app/**/*.{js,jsx,ts,tsx,css}'",
+    "prettier:fix": "prettier --log-level silent --write 'app/**/*.{js,jsx,ts,tsx,css}'"
   },
   "keywords": [],
   "author": "",
@@ -22,9 +24,15 @@
     "vinxi": "0.5.1"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "5.2.1",
     "@types/react": "19.0.3",
     "@types/react-dom": "19.0.2",
     "@vitejs/plugin-react": "4.3.4",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.49",
+    "prettier": "3.4.2",
+    "prettier-plugin-tailwindcss": "0.6.9",
+    "tailwindcss": "3.4.17",
     "typescript": "5.7.2"
   }
 }
