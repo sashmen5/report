@@ -1,6 +1,14 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 
+import { Button } from '../components/Button.component';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../components/Select.component';
 import { dbConnectMiddleware } from '../lib/db';
 import { generateBlogTitle } from '../lib/generate';
 import { Post } from '../models/post';
@@ -72,15 +80,10 @@ function Home() {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '10px',
-        }}
-      >
-        <button
+      <div className={'mx-auto flex max-w-[400px] flex-col gap-4 pt-4'}>
+        <Button
           type="button"
+          variant={'secondary'}
           onClick={() => {
             updateCount({ data: 1 }).then(() => {
               router.invalidate();
@@ -88,10 +91,20 @@ function Home() {
           }}
         >
           Add 1 to {state.count}?
-        </button>
+        </Button>
 
-        <button
-          className={'rounded-2xl border bg-amber-700 py-4 text-amber-50'}
+        <Select>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Theme" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="light">Light</SelectItem>
+            <SelectItem value="dark">Dark</SelectItem>
+            <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Button
           type="button"
           onClick={() => {
             addPost({ data: undefined }).then(() => {
@@ -100,14 +113,8 @@ function Home() {
           }}
         >
           There are {state.posts.length} posts. Add a new one?
-        </button>
-        <div
-          style={{
-            border: '2px dashed purple',
-            borderRadius: '15px',
-            padding: '10px',
-          }}
-        >
+        </Button>
+        <div className={'rounded-2xl border-2 border-dashed border-purple-500 p-4'}>
           <pre>
             <code
               style={{

@@ -40,7 +40,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <head>
         <Meta />
       </head>
-      <body className={'p-10'}>
+      <body>
         {children}
         <ScrollRestoration />
         <Scripts />
