@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ['./app/**/*.{js,ts,jsx,tsx}'],
-};
+// module.exports = {
+//   content: ['./app/**/*.{js,ts,jsx,tsx}'],
+// };
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ['class'],
-  // content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
-  content: ['./app/**/*.{js,ts,jsx,tsx}'],
+  content: ['./app/**/*.{ts,tsx}', './shared/**/*.{ts,tsx}'],
+  // content: ['./app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {

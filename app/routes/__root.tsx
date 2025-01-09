@@ -1,5 +1,5 @@
 // app/routes/__root.tsx
-import type { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Outlet, ScrollRestoration, createRootRoute } from '@tanstack/react-router';
 import { Meta, Scripts } from '@tanstack/start';
@@ -17,10 +17,11 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Report sashmen5!',
       },
     ],
-    links: [{ rel: 'stylesheet', href: appCss }],
+    links: [{ rel: 'stylesheet', href: appCss, suppressHydrationWarning: false }],
+    scripts: [{ src: '/scripts/entry.js', suppressHydrationWarning: true }],
   }),
   component: RootComponent,
   notFoundComponent: () => <div>NotFound</div>,

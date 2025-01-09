@@ -1,14 +1,8 @@
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@sashmen5/components';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 
-import { Button } from '../components/Button.component';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '../components/Select.component';
+import { ModeToggle } from '../features';
 import { dbConnectMiddleware } from '../lib/db';
 import { generateBlogTitle } from '../lib/generate';
 import { Post } from '../models/post';
@@ -69,7 +63,13 @@ const addPost = createServerFn({ method: 'POST' })
   });
 
 export const Route = createFileRoute('/')({
-  component: Home,
+  component: () => {
+    return (
+      <>
+        <Home />
+      </>
+    );
+  },
   loader: async () => await getCount(),
 });
 
@@ -81,6 +81,9 @@ function Home() {
   return (
     <div>
       <div className={'mx-auto flex max-w-[400px] flex-col gap-4 pt-4'}>
+        <div className={'ml-auto'}>
+          <ModeToggle />
+        </div>
         <Button
           type="button"
           variant={'secondary'}

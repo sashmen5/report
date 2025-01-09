@@ -35,6 +35,7 @@ function generateBlogTitle() {
   const formats = ['Guide', 'Tips', 'Strategies', 'Secrets', 'Roadmap', 'Checklist', 'Blueprint'];
 
   const randomElement = arr => arr[Math.floor(Math.random() * arr.length)];
+  // const randomElement = arr => arr[2];
 
   const topic = randomElement(topics);
   const audience = randomElement(audiences);
