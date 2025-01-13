@@ -63,7 +63,7 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
   }, [daysInYear]);
 
   return (
-    <div className="inline-block border border-gray-300">
+    <div className="mx-auto inline-block border border-gray-300">
       <div className="flex bg-gray-200">
         <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Wk</div>
         <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Sun</div>
@@ -102,8 +102,8 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
 
 const ReportYear: FC = () => {
   return (
-    <div className={'border border-purple-500 px-10'}>
-      <div>ReportYear Page</div>
+    <div className={'flex flex-col justify-center gap-2 border border-purple-500 px-10 pt-10'}>
+      <div className={'mx-auto border bg-red-400'}>Report 2025 Year</div>
       <Calendar year={2025} />
     </div>
   );
