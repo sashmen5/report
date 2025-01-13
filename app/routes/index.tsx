@@ -1,6 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@sashmen5/components';
+import {
+  Button,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  cn,
+} from '@sashmen5/components';
 import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 
@@ -9,6 +17,7 @@ import { dbConnectMiddleware } from '../lib/db';
 import { generateBlogTitle } from '../lib/generate';
 import { Post } from '../models/post';
 import { ReportYear } from '../pages';
+import classes from './cell.module.css';
 
 let counter: number = 10;
 
@@ -135,25 +144,44 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
   return (
     <div className="mx-auto flex flex-col gap-2">
       <div className="flex gap-2 *:rounded-md *:bg-gray-200">
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-100" />
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Sun</div>
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Mon</div>
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Tue</div>
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Wed</div>
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Thu</div>
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Fri</div>
-        <div className="flex h-10 w-10 items-center justify-center border border-gray-300">Sat</div>
+        <div className={cn('flex items-center justify-center border border-gray-100', classes.cellSize)} />
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Sun
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Mon
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Tue
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Wed
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Thu
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Fri
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Sat
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         {weeks.map((week, weekIndex) => (
           <div className="flex gap-2" key={weekIndex}>
-            <div className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-300 bg-gray-200">
+            <div
+              className={cn(
+                'flex items-center justify-center rounded-md border border-gray-300 bg-gray-200',
+                classes.cellSize,
+              )}
+            >
               {weekIndex + 1}
             </div>
             {week.map((day, dayIndex) => (
               <div
                 id={day ? `day-${weekIndex}-${dayIndex}` : undefined}
-                className={`flex h-10 w-10 items-center justify-center rounded-md border border-gray-300 text-gray-400 ${
+                className={`flex items-center justify-center rounded-md border border-gray-300 text-gray-400 ${classes.cellSize} ${
                   day && day.toDateString() === new Date().toDateString()
                     ? 'border-2 border-purple-500 bg-purple-100 font-semibold text-purple-600'
                     : ''
@@ -177,8 +205,6 @@ function Home() {
   return (
     <div className={'flex flex-col justify-center gap-2 px-10 pt-10'}>
       <ModeToggle />
-      <div className={'mx-auto border bg-red-400'}>Report 2025 Year</div>
-
       <Calendar year={2025} />
     </div>
   );
