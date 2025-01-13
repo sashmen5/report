@@ -176,6 +176,7 @@ function Home() {
   // return <div>{'Empty'}</div>
   return (
     <div className={'flex flex-col justify-center gap-2 px-10 pt-10'}>
+      <ModeToggle />
       <div className={'mx-auto border bg-red-400'}>Report 2025 Year</div>
 
       <Calendar year={2025} />
