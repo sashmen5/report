@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 
 import { Outlet, ScrollRestoration, createRootRoute } from '@tanstack/react-router';
 import { Meta, Scripts } from '@tanstack/start';
+import { ThemeProvider } from 'next-themes';
 
 import appCss from '../styles/app.css?url';
 
@@ -21,7 +22,6 @@ export const Route = createRootRoute({
       },
     ],
     links: [{ rel: 'stylesheet', href: appCss, suppressHydrationWarning: false }],
-    scripts: [{ src: '/scripts/entry.js', suppressHydrationWarning: true }],
   }),
   component: RootComponent,
   notFoundComponent: () => <div>NotFound</div>,
@@ -37,14 +37,16 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html>
+    <html suppressHydrationWarning>
       <head>
         <Meta />
       </head>
       <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
+        <ThemeProvider attribute={'class'} storageKey={'theme'} disableTransitionOnChange>
+          {children}
+          <ScrollRestoration />
+          <Scripts />
+        </ThemeProvider>
       </body>
     </html>
   );
