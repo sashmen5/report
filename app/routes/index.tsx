@@ -6,6 +6,7 @@ import { ModeToggle } from '../features';
 import { dbConnectMiddleware } from '../lib/db';
 import { generateBlogTitle } from '../lib/generate';
 import { Post } from '../models/post';
+import { ReportYear } from '../pages';
 
 let counter: number = 10;
 
@@ -74,9 +75,10 @@ export const Route = createFileRoute('/')({
 });
 
 function Home() {
-  const router = useRouter();
-  const state = Route.useLoaderData();
+  // const router = useRouter();
+  // const state = Route.useLoaderData();
   // return <div>{'Empty'}</div>
+  return <ReportYear />;
 
   return (
     <div>
