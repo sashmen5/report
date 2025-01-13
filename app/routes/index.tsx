@@ -144,23 +144,25 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
   return (
     <div className="flex flex-col gap-2 overflow-hidden pt-2">
       <div className="flex justify-center gap-2 *:rounded-md *:bg-gray-200 [&>*:not(:last-child)]:invisible">
-        <div className={cn('flex items-center justify-center border border-gray-100', classes.cellSize)} />
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div
+          className={cn('flex items-center justify-center border border-gray-100', 'aspect-square w-10')}
+        />
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Sun
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Mon
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Tue
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Wed
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Thu
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Fri
         </div>
         <div>
@@ -168,26 +170,28 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
         </div>
       </div>
       <div className="flex justify-center gap-2 *:rounded-md *:bg-gray-200">
-        <div className={cn('flex items-center justify-center border border-gray-100', classes.cellSize)} />
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div
+          className={cn('flex items-center justify-center border border-gray-100', 'aspect-square w-10')}
+        />
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Sun
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Mon
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Tue
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Wed
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Thu
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Fri
         </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
           Sat
         </div>
       </div>
@@ -197,7 +201,7 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
             <div
               className={cn(
                 'flex items-center justify-center rounded-md border border-gray-300 bg-gray-200',
-                classes.cellSize,
+                'aspect-square w-10',
               )}
             >
               {weekIndex + 1}
@@ -205,7 +209,7 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
             {week.map((day, dayIndex) => (
               <div
                 id={day ? `day-${weekIndex}-${dayIndex}` : undefined}
-                className={`flex items-center justify-center rounded-md border border-gray-300 text-gray-400 ${classes.cellSize} ${
+                className={`flex items-center justify-center rounded-md border border-gray-300 text-gray-400 ${'aspect-square w-10'} ${
                   day && day.toDateString() === new Date().toDateString()
                     ? 'border-2 border-purple-500 bg-purple-100 font-semibold text-purple-600'
                     : ''
