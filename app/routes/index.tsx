@@ -83,7 +83,7 @@ function Home() {
   // const state = Route.useLoaderData();
   // return <div>{'Empty'}</div>
   return (
-    <div className={'flex flex-col justify-center gap-1 overflow-hidden pt-10'}>
+    <div className={'flex flex-col justify-center gap-1 overflow-hidden'}>
       <ReportYear />
     </div>
   );
