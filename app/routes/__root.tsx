@@ -22,7 +22,23 @@ export const Route = createRootRoute({
       },
     ],
     links: [{ rel: 'stylesheet', href: appCss, suppressHydrationWarning: false }],
+    scripts: (function () {
+      if (!import.meta.env.DEV) {
+        return [];
+      }
+
+      return [
+        {
+          type: 'module',
+          children: `import RefreshRuntime from "/_build/@react-refresh";
+RefreshRuntime.injectIntoGlobalHook(window)
+window.$RefreshReg$ = () => {}
+window.$RefreshSig$ = () => (type) => type`,
+        },
+      ];
+    })(),
   }),
+
   component: RootComponent,
   notFoundComponent: () => <div>NotFound</div>,
 });
