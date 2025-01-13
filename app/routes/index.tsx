@@ -142,8 +142,32 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
   }, [daysInYear]);
 
   return (
-    <div className="mx-auto flex flex-col gap-2">
-      <div className="flex gap-2 *:rounded-md *:bg-gray-200">
+    <div className="flex flex-col gap-2 overflow-hidden pt-2">
+      <div className="flex justify-center gap-2 *:rounded-md *:bg-gray-200 [&>*:not(:last-child)]:invisible">
+        <div className={cn('flex items-center justify-center border border-gray-100', classes.cellSize)} />
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Sun
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Mon
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Tue
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Wed
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Thu
+        </div>
+        <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
+          Fri
+        </div>
+        <div>
+          <ModeToggle />
+        </div>
+      </div>
+      <div className="flex justify-center gap-2 *:rounded-md *:bg-gray-200">
         <div className={cn('flex items-center justify-center border border-gray-100', classes.cellSize)} />
         <div className={cn('flex items-center justify-center border border-gray-300', classes.cellSize)}>
           Sun
@@ -169,7 +193,7 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
       </div>
       <div className="flex flex-col gap-2">
         {weeks.map((week, weekIndex) => (
-          <div className="flex gap-2" key={weekIndex}>
+          <div className="flex justify-center gap-2" key={weekIndex}>
             <div
               className={cn(
                 'flex items-center justify-center rounded-md border border-gray-300 bg-gray-200',
@@ -203,8 +227,7 @@ function Home() {
   // const state = Route.useLoaderData();
   // return <div>{'Empty'}</div>
   return (
-    <div className={'flex flex-col justify-center gap-2 px-10 pt-10'}>
-      <ModeToggle />
+    <div className={'flex flex-col justify-center gap-2 overflow-hidden pt-10'}>
       <Calendar year={2025} />
     </div>
   );
