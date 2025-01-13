@@ -142,8 +142,8 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
   }, [daysInYear]);
 
   return (
-    <div className="flex flex-col gap-2 overflow-hidden pt-2">
-      <div className="flex justify-center gap-2 *:rounded-md *:bg-gray-200 [&>*:not(:last-child)]:invisible">
+    <div className="mx-2 flex flex-col gap-1 overflow-hidden pt-2">
+      <div className="flex justify-center gap-1 *:rounded-md *:bg-gray-200 [&>*:not(:last-child)]:invisible">
         <div
           className={cn('flex items-center justify-center border border-gray-100', 'aspect-square w-10')}
         />
@@ -169,7 +169,7 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
           <ModeToggle />
         </div>
       </div>
-      <div className="flex justify-center gap-2 *:rounded-md *:bg-gray-200">
+      <div className="flex justify-center gap-1 *:rounded-md *:bg-gray-200">
         <div
           className={cn('flex items-center justify-center border border-gray-100', 'aspect-square w-10')}
         />
@@ -195,9 +195,9 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
           Sat
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         {weeks.map((week, weekIndex) => (
-          <div className="flex justify-center gap-2" key={weekIndex}>
+          <div className="flex justify-center gap-1" key={weekIndex}>
             <div
               className={cn(
                 'flex items-center justify-center rounded-md border border-gray-300 bg-gray-200',
@@ -231,7 +231,7 @@ function Home() {
   // const state = Route.useLoaderData();
   // return <div>{'Empty'}</div>
   return (
-    <div className={'flex flex-col justify-center gap-2 overflow-hidden pt-10'}>
+    <div className={'flex flex-col justify-center gap-1 overflow-hidden pt-10'}>
       <Calendar year={2025} />
     </div>
   );
