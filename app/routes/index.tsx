@@ -1,18 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
-import {
-  Button,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  cn,
-} from '@sashmen5/components';
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
+import { getCookie } from 'vinxi/http';
 
-import { ModeToggle } from '../features';
 import { dbConnectMiddleware } from '../lib/db';
 import { generateBlogTitle } from '../lib/generate';
 import { Post } from '../models/post';
@@ -57,9 +48,7 @@ const updateCount = createServerFn({ method: 'POST' })
   .middleware([dbConnectMiddleware])
   .handler(async ({ data }) => {
     const count = await readCount();
-    console.log({ count, data });
     await writeCount(count + data);
-    console.log('[AFTER]');
   });
 
 function readPosts() {
@@ -73,7 +62,22 @@ const addPost = createServerFn({ method: 'POST' })
     return newPost.save();
   });
 
+const authStateFn = createServerFn({ method: 'GET' }).handler(async () => {
+  const cookie = getCookie('alex-token');
+
+  if (!cookie) {
+    // This will error because you're redirecting to a path that doesn't exist yet
+    // You can create a sign-in route to handle this
+    throw redirect({
+      to: '/login',
+    });
+  }
+
+  return {};
+});
+
 export const Route = createFileRoute('/')({
+  beforeLoad: async () => await authStateFn(),
   component: Home,
   // loader: async () => await getCount(),
 });
@@ -83,7 +87,7 @@ function Home() {
   // const state = Route.useLoaderData();
   // return <div>{'Empty'}</div>
   return (
-    <div className={'flex flex-col justify-center gap-1 overflow-hidden'}>
+    <div className={'flex flex-col justify-center gap-1 overflow-hidden pt-10'}>
       <ReportYear />
     </div>
   );

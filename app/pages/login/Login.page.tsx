@@ -1,0 +1,98 @@
+import { FC } from 'react';
+
+import { Button, Input, Label } from '@sashmen5/components';
+import { JsonResponse, createServerFn } from '@tanstack/start';
+import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { GalleryVerticalEnd } from 'lucide-react';
+import { setCookie, setHeaders } from 'vinxi/http';
+
+import { dbConnectMiddleware } from '../../lib/db';
+import { User } from '../../models';
+
+interface SignupFormData {
+  email: string;
+  password: string;
+}
+
+interface Props {
+  onSubmit: (v: SignupFormData) => void;
+}
+
+const loginServerFn = createServerFn({ method: 'POST' })
+  .validator((d: SignupFormData) => d)
+  .middleware([dbConnectMiddleware])
+  .handler(async ({ data }) => {
+    const { email, password } = data;
+
+    const user = await User.findOne({ email });
+    const validPassword = await bcryptjs.compare(password, user.password);
+    const tokenData = {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+    };
+
+    const token = await jwt.sign(tokenData, 'ILovePokemon', { expiresIn: '7d' });
+    const dateIn7Days = new Date();
+    dateIn7Days.setDate(dateIn7Days.getDate() + 7);
+    setCookie('alex-token', token, { expires: dateIn7Days, httpOnly: true });
+    return {
+      message: 'Login successful',
+      success: true,
+    };
+  });
+
+const LoginPage: FC<Props> = ({ onSubmit }) => {
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
+      <div className="w-full max-w-sm">
+        <div className={'flex flex-col gap-6'}>
+          <div>
+            <div className="flex flex-col gap-6">
+              <div className="flex flex-col items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-md">
+                  <GalleryVerticalEnd className="size-6" />
+                </div>
+                <span className="sr-only">Acme Inc.</span>
+                <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+                <div className="text-center text-sm">
+                  Don&apos;t have an account?{' '}
+                  <a href="#" className="underline underline-offset-4">
+                    Sign up
+                  </a>
+                </div>
+              </div>
+              <div className="flex flex-col gap-6">
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="m@example.com" />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input id="passowrd" type="text" />
+                </div>
+                <Button
+                  className="w-full"
+                  onMouseDown={e => {
+                    // e.preventDefault();
+                    console.log('login');
+                    loginServerFn({ data: { email: 'sashmen5@gmail.com', password: '04091992' } });
+                  }}
+                >
+                  Login
+                </Button>
+              </div>
+            </div>
+          </div>
+          <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
+            By clicking continue, you agree to our <a href="#">Terms of Service</a> and{' '}
+            <a href="#">Privacy Policy</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export { LoginPage };

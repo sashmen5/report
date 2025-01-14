@@ -1,19 +1,7 @@
 import { createMiddleware } from '@tanstack/start';
 import mongoose, { ConnectOptions } from 'mongoose';
 
-function waitFor(timeout = 1000): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, timeout);
-  });
-}
-
 const dbConnectMiddleware = createMiddleware().server(async ({ next, data }) => {
-  console.log('[dbConnectMiddleware] Request received');
-  // await dbConnect();
-  console.log('[dbConnectMiddleware] DB connected.');
-  console.log('[dbConnectMiddleware] Continue to next');
   return next();
 });
 
