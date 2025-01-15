@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef } from 'react';
 
-import { cn } from '@sashmen5/components';
+import { Day, cn } from '@sashmen5/components';
 
 import { ModeToggle } from '../../features';
 
@@ -64,83 +64,54 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
     }
   }, [daysInYear]);
 
+  const weekDays = ['', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
   return (
     <div className="mx-2 flex flex-col gap-1 overflow-hidden pt-2">
-      <div className="flex justify-center gap-1 *:rounded-md *:bg-gray-200 [&>*:not(:last-child)]:invisible">
-        <div
-          className={cn('flex items-center justify-center border border-gray-100', 'aspect-square w-10')}
-        />
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Sun
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Mon
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Tue
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Wed
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Thu
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Fri
-        </div>
+      <div className="flex justify-center gap-1 [&>*:not(:last-child)]:invisible">
+        {weekDays.slice(0, weekDays.length - 1).map(d => (
+          <div key={d} className={'aspect-square w-10'} />
+        ))}
         <div>
           <ModeToggle />
         </div>
       </div>
-      <div className="flex justify-center gap-1 *:rounded-md *:bg-gray-200">
-        <div
-          className={cn('flex items-center justify-center border border-gray-100', 'aspect-square w-10')}
-        />
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Sun
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Mon
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Tue
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Wed
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Thu
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Fri
-        </div>
-        <div className={cn('flex items-center justify-center border border-gray-300', 'aspect-square w-10')}>
-          Sat
-        </div>
+      <div className="flex justify-center gap-1">
+        {weekDays.map(d => (
+          <div
+            key={d}
+            className={'flex aspect-square w-10 items-center justify-center p-0.5 first:invisible'}
+          >
+            <div
+              className={
+                'flex size-full items-center justify-center rounded-md bg-accent text-xs font-normal text-muted-foreground'
+              }
+            >
+              {d}
+            </div>
+          </div>
+        ))}
       </div>
       <div className="flex flex-col gap-1">
         {weeks.map((week, weekIndex) => (
           <div className="flex justify-center gap-1" key={weekIndex}>
-            <div
-              className={cn(
-                'flex items-center justify-center rounded-md border border-gray-300 bg-gray-200',
-                'aspect-square w-10',
-              )}
-            >
-              {weekIndex + 1}
+            <div className={'flex aspect-square w-10 items-center justify-center p-0.5'}>
+              <div
+                className={
+                  'flex size-full items-center justify-center rounded-md bg-accent text-xs font-normal text-muted-foreground'
+                }
+              >
+                {weekIndex + 1}
+              </div>
             </div>
             {week.map((day, dayIndex) => (
-              <div
+              <Day
                 id={day ? `day-${weekIndex}-${dayIndex}` : undefined}
-                className={`flex items-center justify-center rounded-md border border-gray-300 text-gray-400 ${'aspect-square w-10'} ${
-                  day && day.toDateString() === new Date().toDateString()
-                    ? 'border-2 border-purple-300 bg-purple-100 font-semibold text-purple-600'
-                    : ''
-                }`}
+                toDay={Boolean(day && day.toDateString() === new Date().toDateString())}
                 key={dayIndex}
               >
                 {day ? day.getDate() : ''} {/* Show date or empty if null */}
-              </div>
+              </Day>
             ))}
           </div>
         ))}
