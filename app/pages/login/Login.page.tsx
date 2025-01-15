@@ -27,6 +27,8 @@ const loginServerFn = createServerFn({ method: 'POST' })
     const { email, password } = data;
 
     const user = await User.findOne({ email });
+    console.log(user);
+
     if (!user) {
       throw json({ message: 'User not found', success: false, error: 404 });
     }
@@ -38,7 +40,6 @@ const loginServerFn = createServerFn({ method: 'POST' })
 
     const tokenData = {
       id: user._id,
-      username: user.username,
       email: user.email,
     };
 
@@ -105,17 +106,16 @@ const LoginPage: FC<Props> = ({ onSubmit }) => {
                   Login
                 </Button>
 
-                <Button
-                  variant={'outline'}
-                  className="w-full"
-                  onMouseDown={() => {
-                    // e.preventDefault();
-                    console.log('Sign up');
-                    onSubmit({ email: username, password: password });
-                  }}
-                >
-                  Sign up
-                </Button>
+                {/*<Button*/}
+                {/*  variant={'outline'}*/}
+                {/*  className="w-full"*/}
+                {/*  onMouseDown={() => {*/}
+                {/*    console.log('Sign up');*/}
+                {/*    onSubmit({ email: username, password: password });*/}
+                {/*  }}*/}
+                {/*>*/}
+                {/*  Sign up*/}
+                {/*</Button>*/}
               </div>
             </div>
           </div>

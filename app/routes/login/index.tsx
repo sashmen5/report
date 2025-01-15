@@ -2,6 +2,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 // import bcrypt from 'bcrypt';
 import bcrypt from 'bcryptjs';
+import { uid } from 'uid';
 import { getCookie } from 'vinxi/http';
 
 import { dbConnectMiddleware } from '../../lib/db';
@@ -26,11 +27,10 @@ export async function signup(state: SignupFormData) {
   const newUser = new User({
     email,
     password: hashedPassword,
+    id: uid(21),
   });
 
   const savedUser = await newUser.save();
-
-  console.log({ savedUser });
 
   return {
     message: 'User created successfully',
