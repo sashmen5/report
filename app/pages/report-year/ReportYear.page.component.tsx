@@ -19,17 +19,22 @@ import {
   DrawerTrigger,
   Input,
   Label,
+  ToggleGroup,
+  ToggleGroupItem,
   cn,
 } from '@sashmen5/components';
 import { useMediaQuery } from '@sashmen5/hooks';
+import { Bold, Italic, Underline } from 'lucide-react';
 
 import { ModeToggle } from '../../features';
+import { ReportModal } from './ReportModal.component';
 
 interface CalendarProps {
   year: number;
+  onSelectDate: (date: Date) => void;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ year }) => {
+const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate }) => {
   const getDaysInYear = (year: number): Date[] => {
     const startDate = new Date(year, 0, 1); // January 1st
     const endDate = new Date(year + 1, 0, 1); // January 1st of next year
@@ -130,6 +135,11 @@ const Calendar: React.FC<CalendarProps> = ({ year }) => {
                 id={day ? `day-${weekIndex}-${dayIndex}` : undefined}
                 toDay={Boolean(day && day.toDateString() === new Date().toDateString())}
                 key={dayIndex}
+                onMouseDown={() => {
+                  if (day) {
+                    onSelectDate(day);
+                  }
+                }}
               >
                 {day ? day.getDate() : ''} {/* Show date or empty if null */}
               </Day>
@@ -146,78 +156,44 @@ interface ReportModalProps {
   setOpen: (open: boolean) => void;
 }
 
-function ProfileForm({ className }: React.ComponentProps<'form'>) {
+const tags = ['training:gym', 'training:kettlebell', 'weight'];
+
+function ProfileForm() {
+  const [value, setValue] = React.useState<string[]>([]);
   return (
-    <form className={cn('grid items-start gap-4', className)}>
-      <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input type="email" id="email" defaultValue="shadcn@example.com" />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" defaultValue="@shadcn" />
-      </div>
-      <Button type="submit">Save changes</Button>
-    </form>
+    <ToggleGroup
+      value={value}
+      onValueChange={setValue}
+      orientation={'vertical'}
+      variant="outline"
+      type="multiple"
+    >
+      {tags.map(tag => (
+        <ToggleGroupItem
+          key={tag}
+          value={tag}
+          aria-label="Toggle bold"
+          className={'w-full justify-start text-start'}
+        >
+          {tag}
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
   );
 }
 
-const ReportModal: FC = () => {
-  const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery('(min-width: 768px)');
-
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant="outline">Edit Profile</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader>
-          <ProfileForm />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DrawerDescription>
-        </DrawerHeader>
-        <ProfileForm className="px-4" />
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  );
-};
-
 const ReportYear: FC = () => {
-  const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const [selectedDate, onSelect] = useState<Date | undefined>();
+  // const [open, setOpen] = React.useState(false);
 
   return (
     <div>
       <div className={'mx-auto border'}>
-        <ReportModal />
+        <ReportModal open={Boolean(selectedDate)} onOpenChange={() => onSelect(undefined)}>
+          <ProfileForm />
+        </ReportModal>
       </div>
-      <Calendar year={2025} />
+      <Calendar year={2025} onSelectDate={onSelect} />
     </div>
   );
 };

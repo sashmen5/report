@@ -58,8 +58,15 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <Meta />
       </head>
       <body>
-        <ThemeProvider attribute={'class'} storageKey={'theme'} disableTransitionOnChange>
-          {children}
+        <ThemeProvider
+          attribute={'class'}
+          defaultTheme={'light'}
+          storageKey={'theme'}
+          disableTransitionOnChange
+        >
+          <div data-vaul-drawer-wrapper={''} className={'bg-background'}>
+            {children}
+          </div>
           <ScrollRestoration />
           <Scripts />
         </ThemeProvider>
