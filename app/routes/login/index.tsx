@@ -30,6 +30,8 @@ export async function signup(state: SignupFormData) {
 
   const savedUser = await newUser.save();
 
+  console.log({ savedUser });
+
   return {
     message: 'User created successfully',
     success: true,
