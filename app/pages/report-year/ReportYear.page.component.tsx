@@ -19,7 +19,7 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
-  const includesHabits = (date?: Date | null) => {
+  const includesHabits = (date?: Date | number | null) => {
     if (!date) {
       return false;
     }
@@ -148,14 +148,15 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
 
 const tags = ['training:gym', 'training:kettlebell', 'weight'];
 
-function dateToDayDate(date: Date) {
+function dateToDayDate(val: Date | number) {
+  const date = new Date(val);
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
 const removeHabit = createServerFn({ method: 'POST' })
   .validator(data => {
     return {
-      date: data.date as Date,
+      date: data.date as number,
       habitId: data.habitId as string,
     };
   })
@@ -185,7 +186,7 @@ const removeHabit = createServerFn({ method: 'POST' })
 const updateHabit = createServerFn({ method: 'POST' })
   .validator(data => {
     return {
-      date: data.date as Date,
+      date: data.date as number,
       habitId: data.habitId as string,
       value: data.value as number | string,
     };
@@ -258,7 +259,7 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
     if (val) {
       await updateHabit({
         data: {
-          date: date,
+          date: date.getTime(),
           habitId: tag,
           value: true,
         },
@@ -266,7 +267,7 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
     } else {
       await removeHabit({
         data: {
-          date: date,
+          date: date.getTime(),
           habitId: tag,
         },
       });
@@ -310,7 +311,7 @@ const ReportYear: FC = () => {
       <ReportModal
         open={Boolean(selectedDate)}
         onOpenChange={() => onSelect(undefined)}
-        title={`Select habits - ${new Date().toDateString()}`}
+        title={`Select habits - ${selectedDate?.toDateString()}`}
       >
         <ProfileForm date={selectedDate} entries={selectedHabits ?? []} />
       </ReportModal>
