@@ -186,7 +186,7 @@ const removeHabit = createServerFn({ method: 'POST' })
 const updateHabit = createServerFn({ method: 'POST' })
   .validator(data => {
     return {
-      date: data.date as number,
+      date: data.date as string,
       habitId: data.habitId as string,
       value: data.value as number | string,
     };
@@ -200,13 +200,11 @@ const updateHabit = createServerFn({ method: 'POST' })
       throw new Error('User not found');
     }
 
-    const habitDay = dateToDayDate(date);
-
-    const habit = await HabitLog.findOne({ date: habitDay, userId: user.id }).exec();
+    const habit = await HabitLog.findOne({ date, userId: user.id }).exec();
     if (!habit) {
       const newHabit = new HabitLog({
         id: uid(21),
-        date: habitDay,
+        date: date,
         userId: user.id,
         habits: [{ habitTypeId: habitId, value: true }],
       });
@@ -218,14 +216,14 @@ const updateHabit = createServerFn({ method: 'POST' })
     const habitIdEntry = habit.habits.find(habit => habit.habitTypeId === habitId);
     if (!habitIdEntry) {
       await HabitLog.updateOne(
-        { userId: user.id, date: habitDay },
+        { userId: user.id, date },
         { $push: { habits: { habitTypeId: habitId, value: true } } },
       );
       return;
     }
 
     await HabitLog.updateOne(
-      { userId: user.id, date: habitDay },
+      { userId: user.id, date },
       { $set: { 'habits.$[habit].value': 'kukuriku' } },
       { arrayFilters: [{ 'habit.habitTypeId': habitId }], upsert: true },
     );
@@ -259,7 +257,7 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
     if (val) {
       await updateHabit({
         data: {
-          date: date.getTime(),
+          date: dateToDayDate(date),
           habitId: tag,
           value: true,
         },
@@ -267,7 +265,7 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
     } else {
       await removeHabit({
         data: {
-          date: date.getTime(),
+          date: dateToDayDate(date),
           habitId: tag,
         },
       });
