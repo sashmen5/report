@@ -94,6 +94,8 @@ function Home() {
   // const router = useRouter();
   // const state = Route.useLoaderData();
   // return <div>{'Empty'}</div>
+  console.log('Render Home');
+
   useEffect(() => {
     console.log('Mount');
     return () => {
