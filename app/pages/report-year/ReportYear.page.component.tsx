@@ -1,40 +1,34 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
-import {
-  Button,
-  Day,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-  Input,
-  Label,
-  ToggleGroup,
-  ToggleGroupItem,
-  cn,
-} from '@sashmen5/components';
-import { useMediaQuery } from '@sashmen5/hooks';
-import { Bold, Italic, Underline } from 'lucide-react';
+import { Day, Input, Toggle, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
+import { getRouteApi, notFound, useRouter } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/start';
+import jwt from 'jsonwebtoken';
+import { uid } from 'uid';
+import { getCookie, getWebRequest } from 'vinxi/http';
 
 import { ModeToggle } from '../../features';
+import { dbConnectMiddleware } from '../../lib/db';
+import { HabitLog, HabitLogDTO, IHabitLog, User } from '../../models';
 import { ReportModal } from './ReportModal.component';
 
 interface CalendarProps {
   year: number;
   onSelectDate: (date: Date) => void;
+  data: Record<string, HabitLogDTO>;
 }
 
-const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate }) => {
+const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
+  const includesHabits = (date?: Date | null) => {
+    if (!date) {
+      return false;
+    }
+
+    const day = dateToDayDate(date);
+
+    return Boolean(data[day]?.habits?.length > 0);
+  };
+
   const getDaysInYear = (year: number): Date[] => {
     const startDate = new Date(year, 0, 1); // January 1st
     const endDate = new Date(year + 1, 0, 1); // January 1st of next year
@@ -93,7 +87,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate }) => {
   const weekDays = ['', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
-    <div className="mx-2 flex flex-col gap-1 overflow-hidden pt-2">
+    <div className="flex flex-col gap-1 overflow-hidden pt-2">
       <div className="flex justify-center gap-1 [&>*:not(:last-child)]:invisible">
         {weekDays.slice(0, weekDays.length - 1).map(d => (
           <div key={d} className={'aspect-square w-10'} />
@@ -133,6 +127,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate }) => {
             {week.map((day, dayIndex) => (
               <Day
                 id={day ? `day-${weekIndex}-${dayIndex}` : undefined}
+                includesHabits={includesHabits(day)}
                 toDay={Boolean(day && day.toDateString() === new Date().toDateString())}
                 key={dayIndex}
                 onMouseDown={() => {
@@ -151,49 +146,175 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate }) => {
   );
 };
 
-interface ReportModalProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
-
 const tags = ['training:gym', 'training:kettlebell', 'weight'];
 
-function ProfileForm() {
-  const [value, setValue] = React.useState<string[]>([]);
+function dateToDayDate(date: Date) {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
+const removeHabit = createServerFn({ method: 'POST' })
+  .validator(data => {
+    return {
+      date: data.date as Date,
+      habitId: data.habitId as string,
+    };
+  })
+  .handler(async ({ data }) => {
+    const { habitId, date } = data;
+    const token = getCookie('alex-token');
+    const user: { id: string; email: string } | undefined = await jwt.decode(token);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const habitDay = dateToDayDate(date);
+
+    const habit = await HabitLog.findOne({ date: habitDay, userId: user.id }).exec();
+    if (!habit) {
+      throw notFound();
+    }
+
+    await HabitLog.updateOne(
+      { userId: user.id, date: habitDay },
+      { $pull: { habits: { habitTypeId: habitId, value: true } } },
+    );
+    return;
+  });
+
+const updateHabit = createServerFn({ method: 'POST' })
+  .validator(data => {
+    return {
+      date: data.date as Date,
+      habitId: data.habitId as string,
+      value: data.value as number | string,
+    };
+  })
+  .handler(async ({ data }) => {
+    const { habitId, date, value } = data;
+    const token = getCookie('alex-token');
+    const user: { id: string; email: string } | undefined = await jwt.decode(token);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const habitDay = dateToDayDate(date);
+
+    const habit = await HabitLog.findOne({ date: habitDay, userId: user.id }).exec();
+    if (!habit) {
+      const newHabit = new HabitLog({
+        id: uid(21),
+        date: habitDay,
+        userId: user.id,
+        habits: [{ habitTypeId: habitId, value: true }],
+      });
+
+      await newHabit.save();
+      return;
+    }
+
+    const habitIdEntry = habit.habits.find(habit => habit.habitTypeId === habitId);
+    if (!habitIdEntry) {
+      await HabitLog.updateOne(
+        { userId: user.id, date: habitDay },
+        { $push: { habits: { habitTypeId: habitId, value: true } } },
+      );
+      return;
+    }
+
+    await HabitLog.updateOne(
+      { userId: user.id, date: habitDay },
+      { $set: { 'habits.$[habit].value': 'kukuriku' } },
+      { arrayFilters: [{ 'habit.habitTypeId': habitId }], upsert: true },
+    );
+  });
+
+interface ProfileFormProps {
+  date?: Date;
+  entries: HabitLogDTO['habits'];
+}
+
+function ProfileForm({ date, entries }: ProfileFormProps) {
+  useEffect(() => {
+    console.log('Mount');
+    return () => {
+      console.log('Unmount');
+    };
+  }, []);
+
+  const router = useRouter();
+
+  const findHabitEntry = (tag: string) => {
+    return entries.find(e => e.habitTypeId === tag);
+  };
+
+  const handleOnPressedChange = (tag: string) => async (val: boolean) => {
+    console.log(tag, val);
+    if (!date) {
+      return;
+    }
+
+    if (val) {
+      await updateHabit({
+        data: {
+          date: date,
+          habitId: tag,
+          value: true,
+        },
+      });
+    } else {
+      await removeHabit({
+        data: {
+          date: date,
+          habitId: tag,
+        },
+      });
+    }
+
+    await router.invalidate();
+  };
+
   return (
-    <ToggleGroup
-      value={value}
-      onValueChange={setValue}
-      orientation={'vertical'}
-      variant="outline"
-      type="multiple"
-    >
+    <div className={'space-y-2'}>
       {tags.map(tag => (
-        <ToggleGroupItem
+        <Toggle
           key={tag}
-          value={tag}
-          aria-label="Toggle bold"
+          variant="outline"
+          defaultPressed={Boolean(findHabitEntry(tag))}
+          onPressedChange={handleOnPressedChange(tag)}
           className={'w-full justify-start text-start'}
         >
-          {tag}
-        </ToggleGroupItem>
+          <div>{tag}</div>
+        </Toggle>
       ))}
-    </ToggleGroup>
+    </div>
   );
 }
 
+const Route = getRouteApi('/');
+
 const ReportYear: FC = () => {
+  const data = Route.useLoaderData();
+
   const [selectedDate, onSelect] = useState<Date | undefined>();
-  // const [open, setOpen] = React.useState(false);
+  const daysByDay: Record<string, HabitLogDTO> = {};
+  data.days.forEach((day: HabitLogDTO) => {
+    daysByDay[day.date] = day;
+  });
+
+  const selectedHabits = (selectedDate && daysByDay[dateToDayDate(selectedDate)]?.habits) ?? [];
 
   return (
     <div>
-      <div className={'mx-auto border'}>
-        <ReportModal open={Boolean(selectedDate)} onOpenChange={() => onSelect(undefined)}>
-          <ProfileForm />
-        </ReportModal>
-      </div>
-      <Calendar year={2025} onSelectDate={onSelect} />
+      <ReportModal
+        open={Boolean(selectedDate)}
+        onOpenChange={() => onSelect(undefined)}
+        title={`Select habits - ${new Date().toDateString()}`}
+      >
+        <ProfileForm date={selectedDate} entries={selectedHabits ?? []} />
+      </ReportModal>
+      <Calendar data={daysByDay} year={2025} onSelectDate={onSelect} />
     </div>
   );
 };

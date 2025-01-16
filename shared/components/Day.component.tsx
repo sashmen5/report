@@ -5,13 +5,12 @@ import { cn } from './cn';
 
 interface Props extends ComponentProps<'button'> {
   toDay?: boolean;
+  includesHabits?: boolean;
 }
 
-const Day: FC<Props> = ({ className, toDay, ...rest }) => {
+const Day: FC<Props> = ({ className, includesHabits, toDay, ...rest }) => {
   return (
     <button
-      onMouseDown={console.log}
-      onClick={console.log}
       {...rest}
       className={cn(
         buttonVariants({ variant: 'ghost' }),
@@ -19,6 +18,7 @@ const Day: FC<Props> = ({ className, toDay, ...rest }) => {
         {
           'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground':
             toDay,
+          'border-2 border-purple-400': includesHabits,
         },
         className,
       )}

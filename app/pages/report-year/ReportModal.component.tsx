@@ -20,9 +20,10 @@ import { useMediaQuery } from '@sashmen5/hooks';
 interface Props extends PropsWithChildren {
   open: boolean;
   onOpenChange: (value: boolean) => void;
+  title?: string;
 }
 
-const ReportModal: FC<Props> = ({ open, onOpenChange, children }) => {
+const ReportModal: FC<Props> = ({ open, title, onOpenChange, children }) => {
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const drawerRef = useRef<HTMLDivElement>(null);
   if (isDesktop) {
@@ -30,7 +31,7 @@ const ReportModal: FC<Props> = ({ open, onOpenChange, children }) => {
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Select habits - {new Date().toDateString()}</DialogTitle>
+            <DialogTitle>{title}</DialogTitle>
             <DialogDescription>
               Make changes to your profile here. Click save when you're done.
             </DialogDescription>
@@ -45,7 +46,7 @@ const ReportModal: FC<Props> = ({ open, onOpenChange, children }) => {
     <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground>
       <DrawerContent ref={drawerRef}>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Select habits - {new Date().toDateString()}</DrawerTitle>
+          <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>
             Make changes to your profile here. Click save when you're done.
           </DrawerDescription>
