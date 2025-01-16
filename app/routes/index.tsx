@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
@@ -94,6 +94,13 @@ function Home() {
   // const router = useRouter();
   // const state = Route.useLoaderData();
   // return <div>{'Empty'}</div>
+  useEffect(() => {
+    console.log('Mount');
+    return () => {
+      console.log('Unmount');
+    };
+  }, []);
+
   return (
     <div className={'flex flex-col justify-center gap-1 overflow-hidden pb-10 pt-0'}>
       <ReportYear />
