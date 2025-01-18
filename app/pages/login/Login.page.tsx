@@ -61,7 +61,13 @@ const LoginPage: FC<Props> = ({ onSubmit }) => {
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
       <div className="w-full max-w-sm">
         <div className={'flex flex-col gap-6'}>
-          <div>
+          <form
+            onSubmit={async e => {
+              e.preventDefault();
+              await loginServerFn({ data: { email: username, password: password } });
+              await navigate({ to: '/' });
+            }}
+          >
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-md">
@@ -82,6 +88,7 @@ const LoginPage: FC<Props> = ({ onSubmit }) => {
                   <Input
                     id="email"
                     type="email"
+                    required
                     placeholder="m@example.com"
                     value={username}
                     onChange={e => setUsername(e.target.value)}
@@ -91,17 +98,25 @@ const LoginPage: FC<Props> = ({ onSubmit }) => {
                   <Label htmlFor="password">Password</Label>
                   <Input
                     id="passowrd"
-                    type="text"
+                    type="password"
+                    required
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                   />
                 </div>
                 <Button
                   className="w-full"
-                  onMouseDown={async () => {
-                    await loginServerFn({ data: { email: username, password: password } });
-                    await navigate({ to: '/' });
-                  }}
+                  type={'submit'}
+                  // onMouseDown={async () => {
+                  //   await loginServerFn({ data: { email: username, password: password } });
+                  //   await navigate({ to: '/' });
+                  // }}
+                  // onKeyDown={async e => {
+                  //   if (e.key === 'Enter' || e.key === ' ') {
+                  //     await loginServerFn({ data: { email: username, password: password } });
+                  //     await navigate({ to: '/' });
+                  //   }
+                  // }}
                 >
                   Login
                 </Button>
@@ -118,7 +133,7 @@ const LoginPage: FC<Props> = ({ onSubmit }) => {
                 {/*</Button>*/}
               </div>
             </div>
-          </div>
+          </form>
           <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
             By clicking continue, you agree to our <a href="#">Terms of Service</a> and{' '}
             <a href="#">Privacy Policy</a>.
