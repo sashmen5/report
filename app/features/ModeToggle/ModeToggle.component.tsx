@@ -8,29 +8,28 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@sashmen5/components';
+import { useNavigate } from '@tanstack/react-router';
+import { createServerFn, json } from '@tanstack/start';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { deleteCookie, setCookie } from 'vinxi/http';
+
+const logout = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
+  deleteCookie('alex-token');
+  return {
+    message: 'Logout successful',
+    success: true,
+  };
+});
 
 export function ModeToggle() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  // const [theme, setThemeState] = React.useState<'theme-light' | 'dark' | 'system'>('theme-light');
-
-  // React.useEffect(() => {
-  //   const isDarkMode = document.documentElement.classList.contains('dark');
-  //   setThemeState(isDarkMode ? 'dark' : 'theme-light');
-  // }, []);
-
-  // React.useEffect(() => {
-  //   const isDark =
-  //     theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  //   document.documentElement.classList[isDark ? 'add' : 'remove']('dark');
-  // }, [theme]);
 
   if (!mounted) {
     return null;
@@ -49,6 +48,14 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            await logout();
+            await navigate({ to: '/login' });
+          }}
+        >
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
