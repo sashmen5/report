@@ -146,7 +146,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
   );
 };
 
-const tags = ['training:gym', 'training:kettlebell', 'weight'];
+const tagId = ['training:gym', 'training:kettlebell', 'weight', '3meals', '7hoursleep', 'coffee', 'snack'];
 
 function dateToDayDate(val: Date | number) {
   const date = new Date(val);
@@ -276,7 +276,7 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
 
   return (
     <div className={'space-y-2'}>
-      {tags.map(tag => (
+      {tagId.map(tag => (
         <Toggle
           key={tag}
           variant="outline"
