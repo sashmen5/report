@@ -121,18 +121,18 @@ const LoginPage: FC<Props> = ({ onSubmit: signUp }) => {
                   Login
                 </Button>
 
-                {/*<Button*/}
-                {/*  variant={'outline'}*/}
-                {/*  className="w-full"*/}
-                {/*  type={'button'}*/}
-                {/*  onMouseDown={e => {*/}
-                {/*    e.preventDefault();*/}
-                {/*    console.log('Sign up');*/}
-                {/*    signUp({ email: username, password: password });*/}
-                {/*  }}*/}
-                {/*>*/}
-                {/*  Sign up*/}
-                {/*</Button>*/}
+                <Button
+                  variant={'outline'}
+                  className="w-full"
+                  type={'button'}
+                  onMouseDown={e => {
+                    e.preventDefault();
+                    console.log('Sign up');
+                    signUp({ email: username, password: password });
+                  }}
+                >
+                  Sign up
+                </Button>
               </div>
             </div>
           </form>
