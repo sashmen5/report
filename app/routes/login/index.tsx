@@ -15,6 +15,7 @@ interface SignupFormData {
 }
 
 export async function signup(state: SignupFormData) {
+  return;
   // 1. Validate form fields
   // ...
 
