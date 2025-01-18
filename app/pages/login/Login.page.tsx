@@ -124,7 +124,9 @@ const LoginPage: FC<Props> = ({ onSubmit: signUp }) => {
                 <Button
                   variant={'outline'}
                   className="w-full"
-                  onMouseDown={() => {
+                  type={'button'}
+                  onMouseDown={e => {
+                    e.preventDefault();
                     console.log('Sign up');
                     signUp({ email: username, password: password });
                   }}
