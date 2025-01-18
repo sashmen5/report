@@ -53,7 +53,7 @@ const loginServerFn = createServerFn({ method: 'POST' })
     };
   });
 
-const LoginPage: FC<Props> = ({ onSubmit }) => {
+const LoginPage: FC<Props> = ({ onSubmit: signUp }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -121,16 +121,16 @@ const LoginPage: FC<Props> = ({ onSubmit }) => {
                   Login
                 </Button>
 
-                {/*<Button*/}
-                {/*  variant={'outline'}*/}
-                {/*  className="w-full"*/}
-                {/*  onMouseDown={() => {*/}
-                {/*    console.log('Sign up');*/}
-                {/*    onSubmit({ email: username, password: password });*/}
-                {/*  }}*/}
-                {/*>*/}
-                {/*  Sign up*/}
-                {/*</Button>*/}
+                <Button
+                  variant={'outline'}
+                  className="w-full"
+                  onMouseDown={() => {
+                    console.log('Sign up');
+                    signUp({ email: username, password: password });
+                  }}
+                >
+                  Sign up
+                </Button>
               </div>
             </div>
           </form>
