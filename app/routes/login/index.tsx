@@ -37,6 +37,7 @@ export async function signup(state: SignupFormData) {
     success: true,
     user: {
       email,
+      ...savedUser,
     },
   };
 

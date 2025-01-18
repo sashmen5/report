@@ -9,7 +9,7 @@ interface IUser extends Document {
 const userSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: [true, 'Please provide'],
+    required: [true, 'Please provide id'],
     unique: true,
   },
   email: {
