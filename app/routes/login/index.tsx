@@ -36,8 +36,7 @@ export async function signup(state: SignupFormData) {
     message: 'User created successfully',
     success: true,
     user: {
-      email,
-      ...savedUser,
+      email: savedUser.email,
     },
   };
 
