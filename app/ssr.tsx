@@ -1,7 +1,7 @@
 import { getRouterManifest } from '@tanstack/start/router-manifest';
 import { createStartHandler, defaultStreamHandler } from '@tanstack/start/server';
 
-import { dbConnect, dbConnectMiddleware } from './lib/db';
+import { dbConnect } from './lib/db';
 import { createRouter } from './router';
 
 (async function () {

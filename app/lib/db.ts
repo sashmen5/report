@@ -1,9 +1,4 @@
-import { createMiddleware } from '@tanstack/start';
 import mongoose, { ConnectOptions } from 'mongoose';
-
-const dbConnectMiddleware = createMiddleware().server(async ({ next, data }) => {
-  return next();
-});
 
 async function dbConnect() {
   const MONGODB_URI = process.env.MONGO_URI ?? 'Error message: No MONGO_URI in .env.local';
@@ -41,4 +36,4 @@ async function dbConnect() {
   return cached.conn;
 }
 
-export { dbConnect, dbConnectMiddleware };
+export { dbConnect };

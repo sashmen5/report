@@ -1,9 +1,12 @@
 import mongoose from 'mongoose';
 
-interface IUser extends Document {
+interface UserMeta {
   email: string;
-  password: string;
   id: string;
+}
+
+interface IUser extends UserMeta, Document {
+  password: string;
 }
 
 const userSchema = new mongoose.Schema({
@@ -26,3 +29,4 @@ const userSchema = new mongoose.Schema({
 const User: mongoose.Model<IUser> = mongoose.models?.Users2 || mongoose.model('Users2', userSchema);
 
 export { User };
+export type { UserMeta };

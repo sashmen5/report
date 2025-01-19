@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs';
 import { uid } from 'uid';
 import { getCookie } from 'vinxi/http';
 
-import { dbConnectMiddleware } from '../../lib/db';
 import { User } from '../../models';
 import { LoginPage } from '../../pages';
 
@@ -66,7 +65,6 @@ export async function signup(state: SignupFormData) {
 
 const signupServerFn = createServerFn({ method: 'POST' })
   .validator((d: SignupFormData) => d)
-  .middleware([dbConnectMiddleware])
   .handler(async ({ data }) => {
     return await signup(data);
   });
@@ -77,9 +75,7 @@ const authStateFn = createServerFn({ method: 'GET' }).handler(async () => {
   if (cookie) {
     // This will error because you're redirecting to a path that doesn't exist yet
     // You can create a sign-in route to handle this
-    throw redirect({
-      to: '/',
-    });
+    throw redirect({ to: '/' });
   }
 
   return {};

@@ -8,7 +8,7 @@ import { uid } from 'uid';
 import { getCookie, getWebRequest } from 'vinxi/http';
 
 import { ModeToggle } from '../../features';
-import { dbConnectMiddleware } from '../../lib/db';
+import { fetchAuth } from '../../lib/route-utils';
 import { HabitLog, HabitLogDTO, IHabitLog, User } from '../../models';
 import { ReportModal } from './ReportModal.component';
 
@@ -163,7 +163,7 @@ const removeHabit = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const { habitId, date } = data;
     const token = getCookie('alex-token');
-    const user: { id: string; email: string } | undefined = await jwt.decode(token);
+    const { user } = await fetchAuth();
 
     if (!user) {
       throw new Error('User not found');
@@ -193,8 +193,7 @@ const updateHabit = createServerFn({ method: 'POST' })
   })
   .handler(async ({ data }) => {
     const { habitId, date, value } = data;
-    const token = getCookie('alex-token');
-    const user: { id: string; email: string } | undefined = await jwt.decode(token);
+    const { user } = await fetchAuth();
 
     if (!user) {
       throw new Error('User not found');
@@ -235,13 +234,6 @@ interface ProfileFormProps {
 }
 
 function ProfileForm({ date, entries }: ProfileFormProps) {
-  useEffect(() => {
-    console.log('Mount');
-    return () => {
-      console.log('Unmount');
-    };
-  }, []);
-
   const router = useRouter();
 
   const findHabitEntry = (tag: string) => {
@@ -249,7 +241,6 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
   };
 
   const handleOnPressedChange = (tag: string) => async (val: boolean) => {
-    console.log(tag, val);
     if (!date) {
       return;
     }
@@ -291,7 +282,7 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
   );
 }
 
-const Route = getRouteApi('/');
+const Route = getRouteApi('/_authed/year');
 
 const ReportYear: FC = () => {
   const data = Route.useLoaderData();

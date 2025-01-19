@@ -11,10 +11,20 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as AuthedYearImport } from './routes/_authed/year'
+import { Route as AuthedPostsImport } from './routes/_authed/posts'
+import { Route as AuthedPostsIndexImport } from './routes/_authed/posts/index'
+import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts/$postId'
 
 // Create/Update Routes
+
+const AuthedRoute = AuthedImport.update({
+  id: '/_authed',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -28,6 +38,30 @@ const LoginIndexRoute = LoginIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthedYearRoute = AuthedYearImport.update({
+  id: '/year',
+  path: '/year',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedPostsRoute = AuthedPostsImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedPostsIndexRoute = AuthedPostsIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthedPostsRoute,
+} as any)
+
+const AuthedPostsPostIdRoute = AuthedPostsPostIdImport.update({
+  id: '/$postId',
+  path: '/$postId',
+  getParentRoute: () => AuthedPostsRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -39,6 +73,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthedImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authed/posts': {
+      id: '/_authed/posts'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof AuthedPostsImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/year': {
+      id: '/_authed/year'
+      path: '/year'
+      fullPath: '/year'
+      preLoaderRoute: typeof AuthedYearImport
+      parentRoute: typeof AuthedImport
+    }
     '/login/': {
       id: '/login/'
       path: '/login'
@@ -46,43 +101,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authed/posts/$postId': {
+      id: '/_authed/posts/$postId'
+      path: '/$postId'
+      fullPath: '/posts/$postId'
+      preLoaderRoute: typeof AuthedPostsPostIdImport
+      parentRoute: typeof AuthedPostsImport
+    }
+    '/_authed/posts/': {
+      id: '/_authed/posts/'
+      path: '/'
+      fullPath: '/posts/'
+      preLoaderRoute: typeof AuthedPostsIndexImport
+      parentRoute: typeof AuthedPostsImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AuthedPostsRouteChildren {
+  AuthedPostsPostIdRoute: typeof AuthedPostsPostIdRoute
+  AuthedPostsIndexRoute: typeof AuthedPostsIndexRoute
+}
+
+const AuthedPostsRouteChildren: AuthedPostsRouteChildren = {
+  AuthedPostsPostIdRoute: AuthedPostsPostIdRoute,
+  AuthedPostsIndexRoute: AuthedPostsIndexRoute,
+}
+
+const AuthedPostsRouteWithChildren = AuthedPostsRoute._addFileChildren(
+  AuthedPostsRouteChildren,
+)
+
+interface AuthedRouteChildren {
+  AuthedPostsRoute: typeof AuthedPostsRouteWithChildren
+  AuthedYearRoute: typeof AuthedYearRoute
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedPostsRoute: AuthedPostsRouteWithChildren,
+  AuthedYearRoute: AuthedYearRoute,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof AuthedRouteWithChildren
+  '/posts': typeof AuthedPostsRouteWithChildren
+  '/year': typeof AuthedYearRoute
   '/login': typeof LoginIndexRoute
+  '/posts/$postId': typeof AuthedPostsPostIdRoute
+  '/posts/': typeof AuthedPostsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof AuthedRouteWithChildren
+  '/year': typeof AuthedYearRoute
   '/login': typeof LoginIndexRoute
+  '/posts/$postId': typeof AuthedPostsPostIdRoute
+  '/posts': typeof AuthedPostsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_authed': typeof AuthedRouteWithChildren
+  '/_authed/posts': typeof AuthedPostsRouteWithChildren
+  '/_authed/year': typeof AuthedYearRoute
   '/login/': typeof LoginIndexRoute
+  '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
+  '/_authed/posts/': typeof AuthedPostsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths:
+    | '/'
+    | ''
+    | '/posts'
+    | '/year'
+    | '/login'
+    | '/posts/$postId'
+    | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
-  id: '__root__' | '/' | '/login/'
+  to: '/' | '' | '/year' | '/login' | '/posts/$postId' | '/posts'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authed'
+    | '/_authed/posts'
+    | '/_authed/year'
+    | '/login/'
+    | '/_authed/posts/$postId'
+    | '/_authed/posts/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthedRoute: typeof AuthedRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthedRoute: AuthedRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
 }
 
@@ -97,14 +224,42 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/_authed",
         "/login/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/_authed": {
+      "filePath": "_authed.tsx",
+      "children": [
+        "/_authed/posts",
+        "/_authed/year"
+      ]
+    },
+    "/_authed/posts": {
+      "filePath": "_authed/posts.tsx",
+      "parent": "/_authed",
+      "children": [
+        "/_authed/posts/$postId",
+        "/_authed/posts/"
+      ]
+    },
+    "/_authed/year": {
+      "filePath": "_authed/year.tsx",
+      "parent": "/_authed"
+    },
     "/login/": {
       "filePath": "login/index.tsx"
+    },
+    "/_authed/posts/$postId": {
+      "filePath": "_authed/posts/$postId.tsx",
+      "parent": "/_authed/posts"
+    },
+    "/_authed/posts/": {
+      "filePath": "_authed/posts/index.tsx",
+      "parent": "/_authed/posts"
     }
   }
 }

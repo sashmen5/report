@@ -6,9 +6,8 @@ import { createServerFn, json } from '@tanstack/start';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { GalleryVerticalEnd } from 'lucide-react';
-import { createError, sendError, setCookie } from 'vinxi/http';
+import { setCookie } from 'vinxi/http';
 
-import { dbConnectMiddleware } from '../../lib/db';
 import { User } from '../../models';
 
 interface SignupFormData {
@@ -22,7 +21,6 @@ interface Props {
 
 const loginServerFn = createServerFn({ method: 'POST' })
   .validator((d: SignupFormData) => d)
-  .middleware([dbConnectMiddleware])
   .handler(async ({ data }) => {
     const { email, password } = data;
 
@@ -53,9 +51,9 @@ const loginServerFn = createServerFn({ method: 'POST' })
     };
   });
 
-const LoginPage: FC<Props> = ({ onSubmit: signUp }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const LoginPage: FC<Props> = () => {
+  const [username, setUsername] = useState('sashmen5@gmail.com');
+  const [password, setPassword] = useState('04091992');
   const navigate = useNavigate();
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
@@ -63,6 +61,7 @@ const LoginPage: FC<Props> = ({ onSubmit: signUp }) => {
         <div className={'flex flex-col gap-6'}>
           <form
             onSubmit={async e => {
+              console.log('ONSUBMIT');
               e.preventDefault();
               await loginServerFn({ data: { email: username, password: password } });
               await navigate({ to: '/' });
