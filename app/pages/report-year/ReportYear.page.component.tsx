@@ -1,7 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import { Day, Input, Toggle, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
-import { getRouteApi, notFound, useRouter } from '@tanstack/react-router';
+import {
+  Day,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  Input,
+  Toggle,
+  ToggleGroup,
+  ToggleGroupItem,
+} from '@sashmen5/components';
+import { getRouteApi, notFound, useRouteContext, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import jwt from 'jsonwebtoken';
 import { uid } from 'uid';
@@ -19,6 +27,7 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
+  const { user } = useRouteContext({ from: '/_authed' });
   const includesHabits = (date?: Date | number | null) => {
     if (!date) {
       return false;
@@ -93,7 +102,14 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
           <div key={d} className={'aspect-square w-10'} />
         ))}
         <div>
-          <ModeToggle />
+          <ModeToggle
+            header={
+              <>
+                <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+              </>
+            }
+          />
         </div>
       </div>
       <div className="flex justify-center gap-1">

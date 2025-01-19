@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import {
   Button,
@@ -22,7 +22,11 @@ const logout = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
   };
 });
 
-export function ModeToggle() {
+interface Props {
+  header?: ReactNode;
+}
+
+export function ModeToggle({ header }: Props) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
@@ -44,6 +48,7 @@ export function ModeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        {header}
         <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
         <DropdownMenuItem
