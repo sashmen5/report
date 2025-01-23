@@ -16,8 +16,7 @@ const Day: FC<Props> = ({ className, includesHabits, toDay, ...rest }) => {
         buttonVariants({ variant: 'ghost' }),
         'flex aspect-square w-10 items-center justify-center rounded-md border border-gray-300/50 text-gray-400',
         {
-          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground':
-            toDay,
+          'border-muted-foreground bg-muted-foreground text-primary-foreground': toDay,
           'border-2 border-purple-400': includesHabits,
         },
         className,

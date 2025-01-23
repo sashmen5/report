@@ -4,6 +4,7 @@ export * from './Select.component';
 export * from './Dropdown.component';
 export * from './Toggle.component';
 export * from './ToggleGroup.component';
+export * from './NumericInput.component';
 export * from './Label.component';
 export * from './Input.component';
 export * from './Day.component';

@@ -5,19 +5,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   Input,
+  NumberInput,
   Toggle,
-  ToggleGroup,
-  ToggleGroupItem,
 } from '@sashmen5/components';
 import { getRouteApi, notFound, useRouteContext, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
-import jwt from 'jsonwebtoken';
 import { uid } from 'uid';
-import { getCookie, getWebRequest } from 'vinxi/http';
+import { getCookie } from 'vinxi/http';
 
 import { ModeToggle } from '../../features';
 import { fetchAuth } from '../../lib/route-utils';
-import { HabitLog, HabitLogDTO, IHabitLog, User } from '../../models';
+import { HabitLog, HabitLogDTO } from '../../models';
 import { ReportModal } from './ReportModal.component';
 
 interface CalendarProps {
@@ -162,7 +160,95 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
   );
 };
 
-const tagId = ['training:gym', 'training:kettlebell', 'weight', '3meals', '7hoursleep', 'coffee', 'snack'];
+const habitId = [
+  'training:gym',
+  'training:kettlebell',
+  'weight',
+  '3meals',
+  '7hoursleep',
+  'coffee',
+  'snack',
+  'steps',
+  'calories',
+  'pullups',
+] as const;
+
+const habitValueType = ['bool', 'numeric'] as const;
+
+type HabitId = (typeof habitId)[number];
+type HabitValueType = (typeof habitValueType)[number];
+
+interface HabitConfig {
+  id: HabitId;
+  name: string;
+  valueType: HabitValueType;
+  description: string;
+}
+
+const habitConfig: Record<HabitId, HabitConfig> = {
+  'training:gym': {
+    id: 'training:gym',
+    name: 'Training: Gym',
+    valueType: 'bool',
+    description: 'Did you go to the gym today?',
+  },
+  'training:kettlebell': {
+    id: 'training:kettlebell',
+    name: 'Training: Kettlebell',
+    valueType: 'bool',
+    description: 'Did you do kettlebell training today?',
+  },
+  weight: {
+    id: 'weight',
+    name: 'Weight',
+    valueType: 'numeric',
+    description: 'What is your weight today?',
+  },
+  '3meals': {
+    id: '3meals',
+    name: '3 Meals',
+    valueType: 'bool',
+    description: 'Did you have 3 meals today?',
+  },
+  '7hoursleep': {
+    id: '7hoursleep',
+    name: '7 Hour Sleep',
+    valueType: 'bool',
+    description: 'Did you sleep for 7 hours today?',
+  },
+  coffee: {
+    id: 'coffee',
+    name: 'Coffee',
+    valueType: 'numeric',
+    description: 'How many cups of coffee did you have today?',
+  },
+  snack: {
+    id: 'snack',
+    name: 'Snack',
+    valueType: 'bool',
+    description: 'How many snacks did you have today?',
+  },
+  steps: {
+    id: 'steps',
+    name: 'Steps',
+    valueType: 'numeric',
+    description: 'How many steps did you take today?',
+  },
+  calories: {
+    id: 'calories',
+    name: 'Calories',
+    valueType: 'numeric',
+    description: 'How many calories did you consume today?',
+  },
+  pullups: {
+    id: 'pullups',
+    name: 'Pullups',
+    valueType: 'numeric',
+    description: 'How many pullups did you do today?',
+  },
+};
+
+const getHabitConfig = (id: HabitId) => habitConfig[id];
 
 function dateToDayDate(val: Date | number) {
   const date = new Date(val);
@@ -221,7 +307,7 @@ const updateHabit = createServerFn({ method: 'POST' })
         id: uid(21),
         date: date,
         userId: user.id,
-        habits: [{ habitTypeId: habitId, value: true }],
+        habits: [{ habitTypeId: habitId, value }],
       });
 
       await newHabit.save();
@@ -232,14 +318,14 @@ const updateHabit = createServerFn({ method: 'POST' })
     if (!habitIdEntry) {
       await HabitLog.updateOne(
         { userId: user.id, date },
-        { $push: { habits: { habitTypeId: habitId, value: true } } },
+        { $push: { habits: { habitTypeId: habitId, value } } },
       );
       return;
     }
 
     await HabitLog.updateOne(
       { userId: user.id, date },
-      { $set: { 'habits.$[habit].value': 'kukuriku' } },
+      { $set: { 'habits.$[habit].value': value } },
       { arrayFilters: [{ 'habit.habitTypeId': habitId }], upsert: true },
     );
   });
@@ -249,32 +335,25 @@ interface ProfileFormProps {
   entries: HabitLogDTO['habits'];
 }
 
-function ProfileForm({ date, entries }: ProfileFormProps) {
+function ReportHabit({ date, entries }: ProfileFormProps) {
   const router = useRouter();
 
   const findHabitEntry = (tag: string) => {
     return entries.find(e => e.habitTypeId === tag);
   };
 
-  const handleOnPressedChange = (tag: string) => async (val: boolean) => {
+  const handleOnPressedChange = (tag: string) => async (val: boolean | string) => {
     if (!date) {
       return;
     }
 
     if (val) {
       await updateHabit({
-        data: {
-          date: dateToDayDate(date),
-          habitId: tag,
-          value: true,
-        },
+        data: { date: dateToDayDate(date), habitId: tag, value: val },
       });
     } else {
       await removeHabit({
-        data: {
-          date: dateToDayDate(date),
-          habitId: tag,
-        },
+        data: { date: dateToDayDate(date), habitId: tag },
       });
     }
 
@@ -283,17 +362,44 @@ function ProfileForm({ date, entries }: ProfileFormProps) {
 
   return (
     <div className={'space-y-2'}>
-      {tagId.map(tag => (
-        <Toggle
-          key={tag}
-          variant="outline"
-          defaultPressed={Boolean(findHabitEntry(tag))}
-          onPressedChange={handleOnPressedChange(tag)}
-          className={'w-full justify-start text-start'}
-        >
-          <div>{tag}</div>
-        </Toggle>
-      ))}
+      {habitId.map(tag => {
+        const habitReport = findHabitEntry(tag);
+        const habitConfig = getHabitConfig(tag);
+        const habitValueString = typeof habitReport?.value === 'string' ? habitReport?.value : '';
+        const inputType = habitConfig.valueType === 'numeric';
+
+        if (inputType) {
+          console.log({ habitValueString });
+        }
+
+        return (
+          <Toggle
+            key={tag}
+            variant="outline"
+            defaultPressed={Boolean(habitReport)}
+            onPressedChange={handleOnPressedChange(tag)}
+            className={'w-full justify-between text-start'}
+          >
+            <div>{tag}</div>
+            {inputType && (
+              <div
+                onClick={e => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <NumberInput
+                  className={'h-auto max-w-32 py-0'}
+                  value={habitValueString}
+                  onValueChange={(_, val) => {
+                    handleOnPressedChange(tag)(val);
+                  }}
+                />
+              </div>
+            )}
+          </Toggle>
+        );
+      })}
     </div>
   );
 }
@@ -318,8 +424,16 @@ const ReportYear: FC = () => {
         onOpenChange={() => onSelect(undefined)}
         title={`Select habits - ${selectedDate?.toDateString()}`}
       >
-        <ProfileForm date={selectedDate} entries={selectedHabits ?? []} />
+        <ReportHabit date={selectedDate} entries={selectedHabits ?? []} />
       </ReportModal>
+      <div className={'mx-auto mt-10 w-48'}>
+        <NumberInput
+          placeholder="Enter a number"
+          onValueChange={value => console.log('New value:', value)}
+          className="bg-background text-foreground"
+        />
+      </div>
+
       <Calendar data={daysByDay} year={2025} onSelectDate={onSelect} />
     </div>
   );
