@@ -34,25 +34,25 @@ function NumberInput({
   };
 
   const handleIncrement = () => {
-    inputRef.current?.focus();
+    // inputRef.current?.focus();
     const newValue = Math.min(Number(value) + step, max);
     setValue(String(newValue));
     onValueChange?.(newValue, newValue.toString(10));
-    inputRef.current?.focus();
+    // inputRef.current?.focus();
   };
 
   const handleDecrement = () => {
-    inputRef.current?.focus();
+    // inputRef.current?.focus();
     const newValue = Math.max(Number(value) - step, min);
     setValue(String(newValue));
     onValueChange?.(newValue, newValue.toString(10));
-    inputRef.current?.focus();
+    // inputRef.current?.focus();
   };
 
   return (
     <div className="relative">
       <Input
-        type="text"
+        type="number"
         inputMode="numeric"
         value={value}
         onChange={handleInputChange}

@@ -51,12 +51,7 @@ const ReportModal: FC<Props> = ({ open, title, onOpenChange, children }) => {
             Make changes to your profile here. Click save when you're done.
           </DrawerDescription>
         </DrawerHeader>
-        <div className={'px-4'}>{children}</div>
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
+        <div className={'max-h-[250px] overflow-y-auto px-4 pb-4'}>{children}</div>
       </DrawerContent>
     </Drawer>
   );

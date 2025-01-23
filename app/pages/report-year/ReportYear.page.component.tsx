@@ -389,7 +389,7 @@ function ReportHabit({ date, entries }: ProfileFormProps) {
                 }}
               >
                 <NumberInput
-                  className={'h-auto max-w-32 py-0'}
+                  className={'h-8 max-w-32 py-0'}
                   value={habitValueString}
                   onValueChange={(_, val) => {
                     handleOnPressedChange(tag)(val);
@@ -426,13 +426,6 @@ const ReportYear: FC = () => {
       >
         <ReportHabit date={selectedDate} entries={selectedHabits ?? []} />
       </ReportModal>
-      <div className={'mx-auto mt-10 w-48'}>
-        <NumberInput
-          placeholder="Enter a number"
-          onValueChange={value => console.log('New value:', value)}
-          className="bg-background text-foreground"
-        />
-      </div>
 
       <Calendar data={daysByDay} year={2025} onSelectDate={onSelect} />
     </div>
