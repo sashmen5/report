@@ -11,11 +11,10 @@ import {
 import { getRouteApi, notFound, useRouteContext, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { uid } from 'uid';
-import { getCookie } from 'vinxi/http';
 
 import { ModeToggle } from '../../features';
 import { fetchAuth } from '../../lib/route-utils';
-import { HabitConfig, HabitConfigDTO, HabitLog, HabitLogDTO, HabitTypeId } from '../../models';
+import { HabitConfigDTO, HabitLog, HabitLogDTO, HabitTypeId } from '../../models';
 import { ReportModal } from './ReportModal.component';
 
 interface CalendarProps {
@@ -160,97 +159,6 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
   );
 };
 
-const habitConfig: Record<HabitTypeId, HabitConfigDTO> = {
-  'training:gym': {
-    habitTypeId: 'training:gym',
-    name: 'Training: Gym',
-    defaultValue: false,
-    valueType: 'bool',
-    description: 'Did you go to the gym today?',
-  },
-  'training:kettlebell': {
-    habitTypeId: 'training:kettlebell',
-    name: 'Training: Kettlebell',
-    defaultValue: false,
-    valueType: 'bool',
-    description: 'Did you do kettlebell training today?',
-  },
-  weight: {
-    habitTypeId: 'weight',
-    name: 'Weight',
-    defaultValue: '',
-    valueType: 'numeric',
-    description: 'What is your weight today?',
-  },
-  '3meals': {
-    habitTypeId: '3meals',
-    name: '3 Meals',
-    defaultValue: false,
-    valueType: 'bool',
-    description: 'Did you have 3 meals today?',
-  },
-  '7hoursleep': {
-    habitTypeId: '7hoursleep',
-    name: '7 Hour Sleep',
-    defaultValue: false,
-    valueType: 'bool',
-    description: 'Did you sleep for 7 hours today?',
-  },
-  coffee: {
-    habitTypeId: 'coffee',
-    name: 'Coffee',
-    defaultValue: '',
-    valueType: 'numeric',
-    description: 'How many cups of coffee did you have today?',
-  },
-  snack: {
-    habitTypeId: 'snack',
-    name: 'Snack',
-    defaultValue: false,
-    valueType: 'bool',
-    description: 'How many snacks did you have today?',
-  },
-  steps: {
-    habitTypeId: 'steps',
-    name: 'Steps',
-    defaultValue: '',
-    valueType: 'numeric',
-    description: 'How many steps did you take today?',
-  },
-  calories: {
-    habitTypeId: 'calories',
-    name: 'Calories',
-    defaultValue: '',
-    valueType: 'numeric',
-    description: 'How many calories did you consume today?',
-  },
-  pullups: {
-    habitTypeId: 'pullups',
-    name: 'Pullups',
-    defaultValue: '',
-    valueType: 'numeric',
-    description: 'How many pullups did you do today?',
-  },
-};
-
-const writeConfig = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
-  const { user } = await fetchAuth();
-
-  if (!user) {
-    throw new Error('User not found');
-  }
-
-  const configs = Object.values(habitConfig);
-  for (const config of configs) {
-    const habit = new HabitConfig(config);
-    await habit.save();
-  }
-
-  return {
-    message: 'Config saved',
-  };
-});
-
 function dateToDayDate(val: Date | number) {
   const date = new Date(val);
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -265,7 +173,6 @@ const removeHabit = createServerFn({ method: 'POST' })
   })
   .handler(async ({ data }) => {
     const { habitId, date } = data;
-    const token = getCookie('alex-token');
     const { user } = await fetchAuth();
 
     if (!user) {
@@ -435,13 +342,6 @@ const ReportYear: FC = () => {
       >
         <ReportHabit date={selectedDate} entries={selectedHabits ?? []} />
       </ReportModal>
-      <Button
-        onClick={() => {
-          writeConfig();
-        }}
-      >
-        Save config
-      </Button>
       <Calendar data={daysByDay} year={2025} onSelectDate={onSelect} />
     </div>
   );
