@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 
 import {
+  Button,
   Day,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  Input,
   NumberInput,
   Toggle,
 } from '@sashmen5/components';
@@ -15,7 +15,7 @@ import { getCookie } from 'vinxi/http';
 
 import { ModeToggle } from '../../features';
 import { fetchAuth } from '../../lib/route-utils';
-import { HabitLog, HabitLogDTO } from '../../models';
+import { HabitConfig, HabitConfigDTO, HabitLog, HabitLogDTO, HabitTypeId } from '../../models';
 import { ReportModal } from './ReportModal.component';
 
 interface CalendarProps {
@@ -160,95 +160,96 @@ const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
   );
 };
 
-const habitId = [
-  'training:gym',
-  'training:kettlebell',
-  'weight',
-  '3meals',
-  '7hoursleep',
-  'coffee',
-  'snack',
-  'steps',
-  'calories',
-  'pullups',
-] as const;
-
-const habitValueType = ['bool', 'numeric'] as const;
-
-type HabitId = (typeof habitId)[number];
-type HabitValueType = (typeof habitValueType)[number];
-
-interface HabitConfig {
-  id: HabitId;
-  name: string;
-  valueType: HabitValueType;
-  description: string;
-}
-
-const habitConfig: Record<HabitId, HabitConfig> = {
+const habitConfig: Record<HabitTypeId, HabitConfigDTO> = {
   'training:gym': {
-    id: 'training:gym',
+    habitTypeId: 'training:gym',
     name: 'Training: Gym',
+    defaultValue: false,
     valueType: 'bool',
     description: 'Did you go to the gym today?',
   },
   'training:kettlebell': {
-    id: 'training:kettlebell',
+    habitTypeId: 'training:kettlebell',
     name: 'Training: Kettlebell',
+    defaultValue: false,
     valueType: 'bool',
     description: 'Did you do kettlebell training today?',
   },
   weight: {
-    id: 'weight',
+    habitTypeId: 'weight',
     name: 'Weight',
+    defaultValue: '',
     valueType: 'numeric',
     description: 'What is your weight today?',
   },
   '3meals': {
-    id: '3meals',
+    habitTypeId: '3meals',
     name: '3 Meals',
+    defaultValue: false,
     valueType: 'bool',
     description: 'Did you have 3 meals today?',
   },
   '7hoursleep': {
-    id: '7hoursleep',
+    habitTypeId: '7hoursleep',
     name: '7 Hour Sleep',
+    defaultValue: false,
     valueType: 'bool',
     description: 'Did you sleep for 7 hours today?',
   },
   coffee: {
-    id: 'coffee',
+    habitTypeId: 'coffee',
     name: 'Coffee',
+    defaultValue: '',
     valueType: 'numeric',
     description: 'How many cups of coffee did you have today?',
   },
   snack: {
-    id: 'snack',
+    habitTypeId: 'snack',
     name: 'Snack',
+    defaultValue: false,
     valueType: 'bool',
     description: 'How many snacks did you have today?',
   },
   steps: {
-    id: 'steps',
+    habitTypeId: 'steps',
     name: 'Steps',
+    defaultValue: '',
     valueType: 'numeric',
     description: 'How many steps did you take today?',
   },
   calories: {
-    id: 'calories',
+    habitTypeId: 'calories',
     name: 'Calories',
+    defaultValue: '',
     valueType: 'numeric',
     description: 'How many calories did you consume today?',
   },
   pullups: {
-    id: 'pullups',
+    habitTypeId: 'pullups',
     name: 'Pullups',
+    defaultValue: '',
     valueType: 'numeric',
     description: 'How many pullups did you do today?',
   },
 };
 
-const getHabitConfig = (id: HabitId) => habitConfig[id];
+const writeConfig = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
+  const { user } = await fetchAuth();
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const configs = Object.values(habitConfig);
+  for (const config of configs) {
+    const habit = new HabitConfig(config);
+    await habit.save();
+  }
+
+  return {
+    message: 'Config saved',
+  };
+});
 
 function dateToDayDate(val: Date | number) {
   const date = new Date(val);
@@ -336,6 +337,7 @@ interface ProfileFormProps {
 }
 
 function ReportHabit({ date, entries }: ProfileFormProps) {
+  const data = Route.useLoaderData();
   const router = useRouter();
 
   const findHabitEntry = (tag: string) => {
@@ -359,6 +361,14 @@ function ReportHabit({ date, entries }: ProfileFormProps) {
 
     await router.invalidate();
   };
+
+  const habitId = data.habitConfigs.configs.map(habit => habit.habitTypeId);
+  const configByHabitTypeId = {} as Record<HabitTypeId, HabitConfigDTO>;
+  data.habitConfigs.configs.forEach(habit => {
+    configByHabitTypeId[habit.habitTypeId] = habit;
+  });
+
+  const getHabitConfig = (id: HabitTypeId) => configByHabitTypeId[id];
 
   return (
     <div className={'space-y-2'}>
@@ -408,7 +418,6 @@ const Route = getRouteApi('/_authed/year');
 
 const ReportYear: FC = () => {
   const data = Route.useLoaderData();
-
   const [selectedDate, onSelect] = useState<Date | undefined>();
   const daysByDay: Record<string, HabitLogDTO> = {};
   data.days.forEach((day: HabitLogDTO) => {
@@ -426,7 +435,13 @@ const ReportYear: FC = () => {
       >
         <ReportHabit date={selectedDate} entries={selectedHabits ?? []} />
       </ReportModal>
-
+      <Button
+        onClick={() => {
+          writeConfig();
+        }}
+      >
+        Save config
+      </Button>
       <Calendar data={daysByDay} year={2025} onSelectDate={onSelect} />
     </div>
   );
