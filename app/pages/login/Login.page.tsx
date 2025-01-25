@@ -25,7 +25,6 @@ const loginServerFn = createServerFn({ method: 'POST' })
     const { email, password } = data;
 
     const user = await User.findOne({ email });
-    console.log(user);
 
     if (!user) {
       throw json({ message: 'User not found', success: false, error: 404 });
@@ -61,7 +60,6 @@ const LoginPage: FC<Props> = () => {
         <div className={'flex flex-col gap-6'}>
           <form
             onSubmit={async e => {
-              console.log('ONSUBMIT');
               e.preventDefault();
               await loginServerFn({ data: { email: username, password: password } });
               await navigate({ to: '/' });

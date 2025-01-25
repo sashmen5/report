@@ -287,10 +287,6 @@ function ReportHabit({ date, entries }: ProfileFormProps) {
         const habitValueString = typeof habitReport?.value === 'string' ? habitReport?.value : '';
         const inputType = habitConfig.valueType === 'numeric';
 
-        if (inputType) {
-          console.log({ habitValueString });
-        }
-
         return (
           <Toggle
             key={tag}
@@ -309,7 +305,7 @@ function ReportHabit({ date, entries }: ProfileFormProps) {
               >
                 <NumberInput
                   className={'h-8 max-w-32 py-0'}
-                  value={habitValueString}
+                  defaultValue={habitValueString}
                   onValueChange={(_, val) => {
                     handleOnPressedChange(tag)(val);
                   }}
@@ -329,11 +325,13 @@ const ReportYear: FC = () => {
   const data = Route.useLoaderData();
   const [selectedDate, onSelect] = useState<Date | undefined>();
   const daysByDay: Record<string, HabitLogDTO> = {};
+
   data.days.forEach((day: HabitLogDTO) => {
     daysByDay[day.date] = day;
   });
 
   const selectedHabits = (selectedDate && daysByDay[dateToDayDate(selectedDate)]?.habits) ?? [];
+  const [state, setState] = useState(0);
 
   return (
     <div>
@@ -344,6 +342,7 @@ const ReportYear: FC = () => {
       >
         <ReportHabit date={selectedDate} entries={selectedHabits ?? []} />
       </ReportModal>
+
       <Calendar data={daysByDay} year={2025} onSelectDate={onSelect} />
     </div>
   );

@@ -1,28 +1,29 @@
-'use client';
-
 import * as React from 'react';
+import { ComponentProps } from 'react';
 
 import { Minus, Plus } from 'lucide-react';
 
 import { Input } from './Input.component';
 import { cn } from './cn';
 
-interface NumberInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface NumberInputProps extends ComponentProps<'input'> {
   onValueChange?: (value: number, stringValue: string) => void;
   min?: number;
   max?: number;
   step?: number;
+  defaultValue?: string | number;
 }
 
 function NumberInput({
   className,
+  defaultValue,
   onValueChange,
   min = Number.MIN_SAFE_INTEGER,
   max = Number.MAX_SAFE_INTEGER,
   step = 1,
   ...props
 }: NumberInputProps) {
-  const [value, setValue] = React.useState<string>('');
+  const [value, setValue] = React.useState<string>(defaultValue?.toString() ?? '');
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
