@@ -243,7 +243,9 @@ interface ProfileFormProps {
   entries: HabitLogDTO['habits'];
 }
 
+const RouterAuthed = getRouteApi('/_authed');
 function ReportHabit({ date, entries }: ProfileFormProps) {
+  const { user } = RouterAuthed.useLoaderData();
   const data = Route.useLoaderData();
   const router = useRouter();
 
@@ -269,7 +271,7 @@ function ReportHabit({ date, entries }: ProfileFormProps) {
     await router.invalidate();
   };
 
-  const habitId = data.habitConfigs.configs.map(habit => habit.habitTypeId);
+  const habitId = user.habits.map(h => h.habitTypeId);
   const configByHabitTypeId = {} as Record<HabitTypeId, HabitConfigDTO>;
   data.habitConfigs.configs.forEach(habit => {
     configByHabitTypeId[habit.habitTypeId] = habit;

@@ -3,11 +3,11 @@ import { createServerFn } from '@tanstack/start';
 import jwt from 'jsonwebtoken';
 import { getCookie } from 'vinxi/http';
 
-import { UserMeta } from '../models';
+import { UserDTO } from '../models';
 
 const fetchAuth = createServerFn({ method: 'GET' }).handler(async ({ context }) => {
   const token = getCookie('alex-token');
-  const user: UserMeta | undefined = await jwt.decode(token);
+  const user: UserDTO | undefined = await jwt.decode(token);
 
   if (!user) {
     throw redirect({ to: '/login' });

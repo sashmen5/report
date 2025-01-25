@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
 
-interface UserMeta {
+import { HabitTypeId } from './habit-config';
+
+interface UserDTO {
   email: string;
   id: string;
+  habits: Array<{ habitTypeId: HabitTypeId; order: number }>;
 }
 
-interface IUser extends UserMeta, Document {
+interface IUser extends UserDTO, Document {
   password: string;
 }
 
@@ -24,9 +27,24 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a password'],
   },
+  habits: {
+    type: [
+      {
+        habitTypeId: {
+          type: String,
+          required: [true, 'Please provide habit type id'],
+        },
+        order: {
+          type: Number,
+          required: [true, 'Please provide value'],
+        },
+      },
+    ],
+    default: [],
+  },
 });
 
 const User: mongoose.Model<IUser> = mongoose.models?.Users2 || mongoose.model('Users2', userSchema);
 
 export { User };
-export type { UserMeta };
+export type { UserDTO };
