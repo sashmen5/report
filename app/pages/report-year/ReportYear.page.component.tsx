@@ -1,19 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 
-import {
-  Button,
-  Day,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  NumberInput,
-  Toggle,
-} from '@sashmen5/components';
-import { getRouteApi, notFound, useRouteContext, useRouter } from '@tanstack/react-router';
+import { Day, DropdownMenuLabel, DropdownMenuSeparator, NumberInput, Toggle } from '@sashmen5/components';
+import { getRouteApi, notFound, useRouter } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { uid } from 'uid';
 
 import { ModeToggle } from '../../features';
-import { fetchAuth } from '../../lib/route-utils';
+import { authMiddleware } from '../../lib/route-utils';
 import { HabitConfigDTO, HabitLog, HabitLogDTO, HabitTypeId } from '../../models';
 import { ReportModal } from './ReportModal.component';
 
@@ -24,7 +17,7 @@ interface CalendarProps {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
-  const { user } = useRouteContext({ from: '/_authed' });
+  const { user } = RouterAuthed.useLoaderData();
   const includesHabits = (date?: Date | number | null) => {
     if (!date) {
       return false;
@@ -165,19 +158,16 @@ function dateToDayDate(val: Date | number) {
 }
 
 const removeHabit = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
   .validator(data => {
     return {
       date: data.date as number,
       habitId: data.habitId as string,
     };
   })
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     const { habitId, date } = data;
-    const { user } = await fetchAuth();
-
-    if (!user) {
-      throw new Error('User not found');
-    }
+    const { user } = context;
 
     const habitDay = dateToDayDate(date);
 
@@ -194,6 +184,7 @@ const removeHabit = createServerFn({ method: 'POST' })
   });
 
 const updateHabit = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
   .validator(data => {
     return {
       date: data.date as string,
@@ -201,13 +192,9 @@ const updateHabit = createServerFn({ method: 'POST' })
       value: data.value as number | string,
     };
   })
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     const { habitId, date, value } = data;
-    const { user } = await fetchAuth();
-
-    if (!user) {
-      throw new Error('User not found');
-    }
+    const { user } = context;
 
     const habit = await HabitLog.findOne({ date, userId: user.id }).exec();
     if (!habit) {
@@ -331,7 +318,6 @@ const ReportYear: FC = () => {
   });
 
   const selectedHabits = (selectedDate && daysByDay[dateToDayDate(selectedDate)]?.habits) ?? [];
-  const [state, setState] = useState(0);
 
   return (
     <div>

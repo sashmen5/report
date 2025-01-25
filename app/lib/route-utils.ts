@@ -1,5 +1,5 @@
 import { redirect } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
+import { createMiddleware, createServerFn } from '@tanstack/start';
 import jwt from 'jsonwebtoken';
 import { getCookie } from 'vinxi/http';
 
@@ -18,4 +18,12 @@ const fetchAuth = createServerFn({ method: 'GET' }).handler(async ({ context }) 
   };
 });
 
-export { fetchAuth };
+const authMiddleware = createMiddleware().server(async ({ next, data }) => {
+  const user = await fetchAuth();
+  if (!user.user) {
+    throw redirect({ to: '/login' });
+  }
+  return next({ context: user });
+});
+
+export { fetchAuth, authMiddleware };

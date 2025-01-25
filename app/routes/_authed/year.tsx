@@ -1,35 +1,34 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 
-import { fetchAuth } from '../../lib/route-utils';
+import { authMiddleware } from '../../lib/route-utils';
 import { HabitConfig, HabitConfigDTO, HabitLog, HabitLogDTO } from '../../models';
 import { ReportYear } from '../../pages';
 
-const getHabitConfigs = createServerFn({ method: 'GET' }).handler(async () => {
-  const { user } = await fetchAuth();
-  if (!user) {
-    throw new Error('User not found');
-  }
+const getHabitConfigs = createServerFn({ method: 'GET' })
+  .middleware([authMiddleware])
+  .handler(async () => {
+    const habit = await HabitConfig.find<HabitConfigDTO>().exec();
 
-  const habit = await HabitConfig.find<HabitConfigDTO>().exec();
+    return {
+      configs: habit,
+    };
+  });
 
-  return {
-    configs: habit,
-  };
-});
+const getDays = createServerFn({ method: 'GET' })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const { user } = context;
 
-const getDays = createServerFn({ method: 'GET' }).handler(async ({ context }) => {
-  const { user } = await fetchAuth();
+    const days: HabitLogDTO[] = await HabitLog.find({
+      userId: user.id,
+      date: { $regex: '^2025' },
+    }).exec();
 
-  const days: HabitLogDTO[] = await HabitLog.find({
-    userId: user.id,
-    date: { $regex: '^2025' },
-  }).exec();
-
-  return {
-    days: days,
-  };
-});
+    return {
+      days: days,
+    };
+  });
 
 export const Route = createFileRoute('/_authed/year')({
   component: Home,
