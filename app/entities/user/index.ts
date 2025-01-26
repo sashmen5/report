@@ -1,7 +1,18 @@
+import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 
-const testCreateServerFN = createServerFn({ method: 'GET' }).handler(async () => {
-  return { message: 'Hello World' };
-});
+import { authMiddleware } from '../../lib/route-utils';
+import { User, UserDTO } from '../../models';
 
-export { testCreateServerFN };
+const getUser = createServerFn({ method: 'GET' })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const fullUser = await User.findOne<UserDTO>({ id: context.user.id }).exec();
+    if (!fullUser) {
+      throw notFound();
+    }
+
+    return { user: fullUser };
+  });
+
+export { getUser };

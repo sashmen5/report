@@ -1,54 +1,14 @@
 import { FC, useState } from 'react';
 
 import { Button, Input, Label } from '@sashmen5/components';
-import { notFound, useNavigate } from '@tanstack/react-router';
-import { createServerFn, json } from '@tanstack/start';
-import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { useNavigate } from '@tanstack/react-router';
 import { GalleryVerticalEnd } from 'lucide-react';
-import { setCookie } from 'vinxi/http';
 
-import { User } from '../../models';
-
-interface SignupFormData {
-  email: string;
-  password: string;
-}
+import { SignupFormData, loginServerFn } from '../../lib/auth';
 
 interface Props {
   onSubmit: (v: SignupFormData) => void;
 }
-
-const loginServerFn = createServerFn({ method: 'POST' })
-  .validator((d: SignupFormData) => d)
-  .handler(async ({ data }) => {
-    const { email, password } = data;
-
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      throw json({ message: 'User not found', success: false, error: 404 });
-    }
-
-    const validPassword = await bcryptjs.compare(password, user.password);
-    if (!validPassword) {
-      throw json({ message: 'Invalid credentials', success: false, error: 401 });
-    }
-
-    const tokenData = {
-      id: user.id,
-      email: user.email,
-    };
-
-    const token = await jwt.sign(tokenData, process.env.POKEMON, { expiresIn: '7d' });
-    const dateIn7Days = new Date();
-    dateIn7Days.setDate(dateIn7Days.getDate() + 7);
-    setCookie('alex-token', token, { expires: dateIn7Days, httpOnly: true });
-    return {
-      message: 'Login successful',
-      success: true,
-    };
-  });
 
 const LoginPage: FC<Props> = () => {
   const [username, setUsername] = useState('sashmen5@gmail.com');

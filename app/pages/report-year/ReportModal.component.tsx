@@ -1,17 +1,14 @@
 import React, { FC, PropsWithChildren, useRef } from 'react';
 
 import {
-  Button,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
 } from '@sashmen5/components';
