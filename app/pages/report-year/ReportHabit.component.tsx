@@ -2,6 +2,7 @@ import React from 'react';
 
 import { NumberInput, Toggle } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
+import debounce from 'lodash.debounce';
 
 import { removeHabit, updateHabit } from '../../entities/habit';
 import { dateToDayDate } from '../../lib/date-utils';
@@ -23,7 +24,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
     return entries.find(e => e.habitTypeId === tag);
   };
 
-  const handleOnPressedChange = (tag: string) => async (val: boolean | string) => {
+  const handleOnPressedChange = async (tag: string, val: boolean | string) => {
     if (!date) {
       return;
     }
@@ -40,6 +41,8 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
 
     await router.invalidate();
   };
+
+  const debouncedHandleOnPressedChange = debounce(handleOnPressedChange, 300);
 
   const habitId = user.habits.map(h => h.habitTypeId);
   const configByHabitTypeId = {} as Record<HabitTypeId, HabitConfigDTO>;
@@ -62,7 +65,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
             key={tag}
             variant="outline"
             defaultPressed={Boolean(habitReport)}
-            onPressedChange={handleOnPressedChange(tag)}
+            onPressedChange={v => debouncedHandleOnPressedChange(tag, v)}
             className={'w-full justify-between text-start'}
           >
             <div>{tag}</div>
@@ -77,7 +80,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
                   className={'h-8 max-w-32 py-0'}
                   defaultValue={habitValueString}
                   onValueChange={(_, val) => {
-                    handleOnPressedChange(tag)(val);
+                    debouncedHandleOnPressedChange(tag, val);
                   }}
                 />
               </div>

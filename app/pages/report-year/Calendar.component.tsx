@@ -91,6 +91,7 @@ export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) 
         ))}
         <div>
           <ModeToggle
+            initial={user.email[0].toUpperCase()}
             header={
               <>
                 <DropdownMenuLabel>{user.email}</DropdownMenuLabel>

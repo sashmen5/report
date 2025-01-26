@@ -2,6 +2,9 @@ import * as React from 'react';
 import { ReactNode, useEffect, useState } from 'react';
 
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   Button,
   DropdownMenu,
   DropdownMenuContent,
@@ -24,9 +27,10 @@ const logout = createServerFn({ method: 'POST' }).handler(async ({ data }) => {
 
 interface Props {
   header?: ReactNode;
+  initial?: string;
 }
 
-export function ModeToggle({ header }: Props) {
+export function ModeToggle({ header, initial }: Props) {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
@@ -42,10 +46,20 @@ export function ModeToggle({ header }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Menu className="h-[1.2rem] w-[1.2rem]" />
+        <Avatar
+          tabIndex={0}
+          className={
+            'ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+          }
+        >
+          <AvatarFallback>{initial}</AvatarFallback>
           <span className="sr-only">Toggle theme</span>
-        </Button>
+        </Avatar>
+
+        {/*<Button variant="outline" size="icon">*/}
+        {/*  <Menu className="h-[1.2rem] w-[1.2rem]" />*/}
+        {/*  */}
+        {/*</Button>*/}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {header}
