@@ -2,9 +2,10 @@ import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { uid } from 'uid';
 
+import { CACHE } from '../../lib/api';
 import { dateToDayDate } from '../../lib/date-utils';
 import { authMiddleware } from '../../lib/route-utils';
-import { HabitLog } from '../../models';
+import { HabitConfig, HabitConfigDTO, HabitLog, HabitLogDTO } from '../../models';
 
 const removeHabit = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
@@ -29,8 +30,11 @@ const removeHabit = createServerFn({ method: 'POST' })
       { userId: user.id, date: habitDay },
       { $pull: { habits: { habitTypeId: habitId, value: true } } },
     );
+    CACHE.clearHabits(user.id);
+
     return;
   });
+
 const updateHabit = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .validator(data => {
@@ -71,6 +75,38 @@ const updateHabit = createServerFn({ method: 'POST' })
       { $set: { 'habits.$[habit].value': value } },
       { arrayFilters: [{ 'habit.habitTypeId': habitId }], upsert: true },
     );
+    CACHE.clearHabits(user.id);
   });
 
-export { removeHabit, updateHabit };
+const getHabits = createServerFn({ method: 'GET' })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    const { user } = context;
+
+    let days = CACHE.getHabits(user.id) ?? null;
+    if (!days) {
+      days = await HabitLog.find<HabitLogDTO>({
+        userId: user.id,
+        date: { $regex: '^2025' },
+      }).exec();
+
+      days && CACHE.setHabits(user.id, days);
+    }
+
+    return { days };
+  });
+
+const getHabitConfigs = createServerFn({ method: 'GET' })
+  .middleware([authMiddleware])
+  .handler(async ({ context }) => {
+    let habit = CACHE.getHabitConfigs(context.user.id) ?? null;
+    if (!habit) {
+      habit = await HabitConfig.find<HabitConfigDTO>().exec();
+      habit && CACHE.setHabitConfigs(context.user.id, habit);
+    }
+
+    return {
+      configs: habit,
+    };
+  });
+export { removeHabit, updateHabit, getHabits, getHabitConfigs };
