@@ -7,8 +7,6 @@ import debounce from 'lodash.debounce';
 import { removeHabit, updateHabit } from '../../entities/habit';
 import { dateToDayDate } from '../../lib/date-utils';
 import { HabitConfigDTO, HabitLogDTO, HabitTypeId } from '../../models';
-import { MixedSortingDemo, createRange } from '../../routes/_authed/storybook';
-import { KanbanBoard } from '../storybook/Kanban/KanbanBoard';
 
 interface ProfileFormProps {
   date?: Date;
@@ -57,9 +55,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
   const [items, setItems] = useState(habitId.map(id => ({ id })));
 
   return (
-    <div className={'space-y-2'}>
-      {/*<KanbanBoard />*/}
-      {/*<MixedSortingDemo />*/}
+    <div className={'-ml-3 space-y-2 ring-0'}>
       <SortableList
         items={items}
         onChange={newItems => setItems(newItems)}

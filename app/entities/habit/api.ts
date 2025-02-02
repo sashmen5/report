@@ -30,7 +30,7 @@ const removeHabit = createServerFn({ method: 'POST' })
       { userId: user.id, date: habitDay },
       { $pull: { habits: { habitTypeId: habitId, value: true } } },
     );
-    CACHE.clearHabits(user.id);
+    // CACHE.clearHabits(user.id);
 
     return;
   });
@@ -75,7 +75,7 @@ const updateHabit = createServerFn({ method: 'POST' })
       { $set: { 'habits.$[habit].value': value } },
       { arrayFilters: [{ 'habit.habitTypeId': habitId }], upsert: true },
     );
-    CACHE.clearHabits(user.id);
+    // CACHE.clearHabits(user.id);
   });
 
 const getHabits = createServerFn({ method: 'GET' })
@@ -83,27 +83,25 @@ const getHabits = createServerFn({ method: 'GET' })
   .handler(async ({ context }) => {
     const { user } = context;
 
-    let days = CACHE.getHabits(user.id) ?? null;
-    if (!days) {
-      days = await HabitLog.find<HabitLogDTO>({
-        userId: user.id,
-        date: { $regex: '^2025' },
-      }).exec();
-
-      days && CACHE.setHabits(user.id, days);
-    }
+    // let days = CACHE.getHabits(user.id) ?? null;
+    const days = await HabitLog.find<HabitLogDTO>({
+      userId: user.id,
+      date: { $regex: '^2025' },
+    }).exec();
+    // if (!days) {
+    //   days && CACHE.setHabits(user.id, days);
+    // }
 
     return { days };
   });
 
 const getHabitConfigs = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
-  .handler(async ({ context }) => {
-    let habit = CACHE.getHabitConfigs(context.user.id) ?? null;
-    if (!habit) {
-      habit = await HabitConfig.find<HabitConfigDTO>().exec();
-      habit && CACHE.setHabitConfigs(context.user.id, habit);
-    }
+  .handler(async () => {
+    const habit = await HabitConfig.find<HabitConfigDTO>().exec();
+    // if (!habit) {
+    //   habit && CACHE.setHabitConfigs(context.user.id, habit);
+    // }
 
     return {
       configs: habit,
