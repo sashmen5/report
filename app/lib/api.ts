@@ -9,7 +9,7 @@ interface APICache {
 const APICache = new Map<string, APICache>();
 
 const CACHE = {
-  getUser: (id: string) => APICache.get(id)?.user,
+  getUser: (id: string) => undefined,
   setUser: (id: string, value: UserDTO) => {
     const cache = APICache.get(id) || {};
     cache.user = value;
@@ -20,7 +20,8 @@ const CACHE = {
     cache.user = undefined;
     APICache.set(id, cache);
   },
-  getHabitConfigs: (id: string) => APICache.get(id)?.habitConfigs,
+  // getHabitConfigs: (id: string) => APICache.get(id)?.habitConfigs,
+  getHabitConfigs: (id: string) => undefined,
   setHabitConfigs: (id: string, value: HabitConfigDTO[]) => {
     const cache = APICache.get(id) || {};
     cache.habitConfigs = value;
@@ -31,7 +32,7 @@ const CACHE = {
     cache.habitConfigs = undefined;
     APICache.set(id, cache);
   },
-  getHabits: (id: string) => APICache.get(id)?.habits,
+  getHabits: (id: string) => undefined,
   setHabits: (id: string, value: HabitLogDTO[]) => {
     const cache = APICache.get(id) || {};
     cache.habits = value;

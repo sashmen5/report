@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 
+import { HabitTypeId } from './habit-config';
+
 interface HabitLogDTO {
   id: string;
   userId: string;
   date: string;
   habits: {
-    habitTypeId: string;
+    habitTypeId: HabitTypeId;
     value: number | string | boolean;
   }[];
   createdAt: Date;

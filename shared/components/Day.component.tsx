@@ -8,20 +8,18 @@ interface Props extends ComponentProps<'button'> {
   includesHabits?: boolean;
 }
 
-const Day: FC<Props> = ({ className, includesHabits, toDay, ...rest }) => {
+const Day: FC<Props> = ({ children, className, includesHabits, toDay, ...rest }) => {
   return (
     <button
       {...rest}
       className={cn(
         buttonVariants({ variant: 'ghost' }),
-        'flex aspect-square w-10 items-center justify-center rounded-md border border-gray-300/50 text-gray-400',
-        {
-          'border-muted-foreground bg-muted-foreground text-primary-foreground': toDay,
-          'border-2 border-purple-400': includesHabits,
-        },
+        'flex h-10 w-10 flex-col items-center justify-start rounded-md border border-gray-300/50 p-0 text-gray-400',
         className,
       )}
-    />
+    >
+      {children}
+    </button>
   );
 };
 

@@ -2,10 +2,15 @@ import mongoose from 'mongoose';
 
 import { HabitTypeId } from './habit-config';
 
+interface UserHabit {}
+
 interface UserDTO {
   email: string;
   id: string;
-  habits: Array<{ habitTypeId: HabitTypeId; order: number }>;
+  habits: {
+    habitTypeId: HabitTypeId;
+    order: number;
+  }[];
 }
 
 interface IUser extends UserDTO, Document {
@@ -47,4 +52,4 @@ const userSchema = new mongoose.Schema({
 const User: mongoose.Model<IUser> = mongoose.models?.Users2 || mongoose.model('Users2', userSchema);
 
 export { User };
-export type { UserDTO };
+export type { UserDTO, UserHabit };

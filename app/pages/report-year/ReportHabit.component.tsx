@@ -42,7 +42,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
     await router.invalidate();
   };
 
-  const debouncedHandleOnPressedChange = debounce(handleOnPressedChange, 300);
+  const debouncedHandleOnPressedChange = debounce(handleOnPressedChange, 0);
 
   const habitId = user.habits.map(h => h.habitTypeId);
   const configByHabitTypeId = {} as Record<HabitTypeId, HabitConfigDTO>;

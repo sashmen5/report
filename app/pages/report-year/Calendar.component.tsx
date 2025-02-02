@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 
-import { Day, DropdownMenuLabel, DropdownMenuSeparator } from '@sashmen5/components';
+import { Day, DropdownMenuLabel, DropdownMenuSeparator, cn } from '@sashmen5/components';
 import { getRouteApi } from '@tanstack/react-router';
 
+import { habitEntity } from '../../entities/habit';
 import { ModeToggle } from '../../features';
 import { dateToDayDate } from '../../lib/date-utils';
 import { HabitLogDTO } from '../../models';
+import { DayColorGrid } from './DayColorGrid.component';
 
 interface CalendarProps {
   year: number;
@@ -16,14 +18,14 @@ const RouterAuthed = getRouteApi('/_authed');
 
 export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
   const { user } = RouterAuthed.useLoaderData();
-  const includesHabits = (date?: Date | number | null) => {
-    if (!date) {
-      return false;
-    }
 
+  const dayHabits = (date?: Date | number | null): HabitLogDTO['habits'] => {
+    if (!date) {
+      return [];
+    }
     const day = dateToDayDate(date);
 
-    return Boolean(data[day]?.habits?.length > 0);
+    return data[day]?.habits ?? [];
   };
 
   const getDaysInYear = (year: number): Date[] => {
@@ -103,10 +105,7 @@ export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) 
       </div>
       <div className="flex justify-center gap-1">
         {weekDays.map(d => (
-          <div
-            key={d}
-            className={'flex aspect-square w-10 items-center justify-center p-0.5 first:invisible'}
-          >
+          <div key={d} className={'flex aspect-square w-10 items-center justify-center first:invisible'}>
             <div
               className={
                 'flex size-full items-center justify-center rounded-md bg-accent text-xs font-normal text-muted-foreground'
@@ -129,21 +128,59 @@ export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) 
                 {weekIndex + 1}
               </div>
             </div>
-            {week.map((day, dayIndex) => (
-              <Day
-                id={day ? `day-${weekIndex}-${dayIndex}` : undefined}
-                includesHabits={includesHabits(day)}
-                toDay={Boolean(day && day.toDateString() === new Date().toDateString())}
-                key={dayIndex}
-                onMouseDown={() => {
-                  if (day) {
-                    onSelectDate(day);
-                  }
-                }}
-              >
-                {day ? day.getDate() : ''} {/* Show date or empty if null */}
-              </Day>
-            ))}
+            {week.map((day, dayIndex) => {
+              const habits = dayHabits(day);
+              const includesHabits = Boolean(habits?.length ?? 0 > 0);
+              const toDay = Boolean(day && day.toDateString() === new Date().toDateString());
+              return (
+                <Day
+                  id={day ? `day-${weekIndex}-${dayIndex}` : undefined}
+                  includesHabits={includesHabits}
+                  toDay={toDay}
+                  key={dayIndex}
+                  onMouseDown={() => {
+                    if (day) {
+                      onSelectDate(day);
+                    }
+                  }}
+                  className={'h-14'}
+                >
+                  <div className={'flex h-full w-full flex-col gap-[1px] p-[1px]'}>
+                    <div
+                      className={cn(
+                        'mx-auto aspect-square basis-1/4 overflow-hidden rounded-full text-[10px] font-normal',
+                        'flex items-center justify-center',
+                        { 'bg-primary text-[8px] text-primary-foreground': toDay },
+                      )}
+                    >
+                      {day?.getDate()}
+                    </div>
+                    <div className={'flex w-full flex-grow flex-col gap-[1px]'}>
+                      {habits.slice(0, 4).map(e => (
+                        <div
+                          key={e.habitTypeId}
+                          className={'w-full basis-1/4 rounded-sm bg-purple-600'}
+                          style={{
+                            backgroundColor: habitEntity.getHabitColor(e.habitTypeId),
+                          }}
+                        />
+                      ))}
+
+                      {/*<div className={'w-full basis-1/4 rounded-sm bg-purple-600'}></div>*/}
+                      {/*<div className={'w-full basis-1/4 rounded-sm bg-purple-600'}></div>*/}
+                      {/*<div className={'w-full basis-1/4 rounded-sm bg-purple-600'}></div>*/}
+                    </div>
+                  </div>
+                  {/*<div className={'w-full rounded-sm bg-purple-600'}>*/}
+                  {/*  /!*<div />*!/*/}
+                  {/*  /!*<div>{day?.getDate()}</div>*!/*/}
+                  {/*</div>*/}
+                  {/*<div className={'w-full rounded-sm bg-purple-600'}></div>*/}
+                  {/*{includesHabits ? <DayColorGrid habits={habits} /> : day?.getDate()}{' '}*/}
+                  {/* Show date or empty if null */}
+                </Day>
+              );
+            })}
           </div>
         ))}
       </div>

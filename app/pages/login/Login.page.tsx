@@ -11,8 +11,6 @@ interface Props {
 }
 
 const LoginPage: FC<Props> = () => {
-  const [username, setUsername] = useState('sashmen5@gmail.com');
-  const [password, setPassword] = useState('04091992');
   const navigate = useNavigate();
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
@@ -21,7 +19,10 @@ const LoginPage: FC<Props> = () => {
           <form
             onSubmit={async e => {
               e.preventDefault();
-              await loginServerFn({ data: { email: username, password: password } });
+              const formData = new FormData(e.target as HTMLFormElement);
+              const email = formData.get('email') as string;
+              const password = formData.get('password') as string;
+              await loginServerFn({ data: { email, password } });
               await navigate({ to: '/' });
             }}
           >
@@ -31,50 +32,19 @@ const LoginPage: FC<Props> = () => {
                   <GalleryVerticalEnd className="size-6" />
                 </div>
                 <span className="sr-only">Acme Inc.</span>
-                <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
-                <div className="text-center text-sm">
-                  Don&apos;t have an account?{' '}
-                  <a href="#" className="underline underline-offset-4">
-                    Sign up
-                  </a>
-                </div>
+                <h1 className="text-xl font-bold">Welcome to new report world</h1>
+                <div className="text-center text-sm">Hello and welcome to report world!</div>
               </div>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    required
-                    placeholder="m@example.com"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                  />
+                  <Input id="email" type="email" name="email" required placeholder="m@example.com" />
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="passowrd"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                  />
+                  <Input id="passowrd" type="password" name="password" required />
                 </div>
-                <Button
-                  className="w-full"
-                  type={'submit'}
-                  // onMouseDown={async () => {
-                  //   await loginServerFn({ data: { email: username, password: password } });
-                  //   await navigate({ to: '/' });
-                  // }}
-                  // onKeyDown={async e => {
-                  //   if (e.key === 'Enter' || e.key === ' ') {
-                  //     await loginServerFn({ data: { email: username, password: password } });
-                  //     await navigate({ to: '/' });
-                  //   }
-                  // }}
-                >
+                <Button className="w-full" type={'submit'}>
                   Login
                 </Button>
 
