@@ -1,6 +1,5 @@
 export * from './cn';
 export * from './Avatar.component';
-export * from './Sortable';
 export * from './Button.component';
 export * from './Select.component';
 export * from './Dropdown.component';

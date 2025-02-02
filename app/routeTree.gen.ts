@@ -15,7 +15,6 @@ import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/login/index'
 import { Route as AuthedYearImport } from './routes/_authed/year'
-import { Route as AuthedStorybookImport } from './routes/_authed/storybook'
 import { Route as AuthedPostsImport } from './routes/_authed/posts'
 import { Route as AuthedPostsIndexImport } from './routes/_authed/posts/index'
 import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts/$postId'
@@ -42,12 +41,6 @@ const LoginIndexRoute = LoginIndexImport.update({
 const AuthedYearRoute = AuthedYearImport.update({
   id: '/year',
   path: '/year',
-  getParentRoute: () => AuthedRoute,
-} as any)
-
-const AuthedStorybookRoute = AuthedStorybookImport.update({
-  id: '/storybook',
-  path: '/storybook',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -92,13 +85,6 @@ declare module '@tanstack/react-router' {
       path: '/posts'
       fullPath: '/posts'
       preLoaderRoute: typeof AuthedPostsImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/storybook': {
-      id: '/_authed/storybook'
-      path: '/storybook'
-      fullPath: '/storybook'
-      preLoaderRoute: typeof AuthedStorybookImport
       parentRoute: typeof AuthedImport
     }
     '/_authed/year': {
@@ -150,13 +136,11 @@ const AuthedPostsRouteWithChildren = AuthedPostsRoute._addFileChildren(
 
 interface AuthedRouteChildren {
   AuthedPostsRoute: typeof AuthedPostsRouteWithChildren
-  AuthedStorybookRoute: typeof AuthedStorybookRoute
   AuthedYearRoute: typeof AuthedYearRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedPostsRoute: AuthedPostsRouteWithChildren,
-  AuthedStorybookRoute: AuthedStorybookRoute,
   AuthedYearRoute: AuthedYearRoute,
 }
 
@@ -167,7 +151,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthedRouteWithChildren
   '/posts': typeof AuthedPostsRouteWithChildren
-  '/storybook': typeof AuthedStorybookRoute
   '/year': typeof AuthedYearRoute
   '/login': typeof LoginIndexRoute
   '/posts/$postId': typeof AuthedPostsPostIdRoute
@@ -177,7 +160,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthedRouteWithChildren
-  '/storybook': typeof AuthedStorybookRoute
   '/year': typeof AuthedYearRoute
   '/login': typeof LoginIndexRoute
   '/posts/$postId': typeof AuthedPostsPostIdRoute
@@ -189,7 +171,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/_authed/posts': typeof AuthedPostsRouteWithChildren
-  '/_authed/storybook': typeof AuthedStorybookRoute
   '/_authed/year': typeof AuthedYearRoute
   '/login/': typeof LoginIndexRoute
   '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
@@ -202,19 +183,17 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/posts'
-    | '/storybook'
     | '/year'
     | '/login'
     | '/posts/$postId'
     | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/storybook' | '/year' | '/login' | '/posts/$postId' | '/posts'
+  to: '/' | '' | '/year' | '/login' | '/posts/$postId' | '/posts'
   id:
     | '__root__'
     | '/'
     | '/_authed'
     | '/_authed/posts'
-    | '/_authed/storybook'
     | '/_authed/year'
     | '/login/'
     | '/_authed/posts/$postId'
@@ -256,7 +235,6 @@ export const routeTree = rootRoute
       "filePath": "_authed.tsx",
       "children": [
         "/_authed/posts",
-        "/_authed/storybook",
         "/_authed/year"
       ]
     },
@@ -267,10 +245,6 @@ export const routeTree = rootRoute
         "/_authed/posts/$postId",
         "/_authed/posts/"
       ]
-    },
-    "/_authed/storybook": {
-      "filePath": "_authed/storybook.tsx",
-      "parent": "/_authed"
     },
     "/_authed/year": {
       "filePath": "_authed/year.tsx",
