@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Day, DropdownMenuLabel, DropdownMenuSeparator, cn } from '@sashmen5/components';
 import { getRouteApi } from '@tanstack/react-router';
@@ -20,13 +20,23 @@ const RouterAuthed = getRouteApi('/_authed');
 export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data, selectedDate }) => {
   const { user } = RouterAuthed.useLoaderData();
 
+  const habitToOrder = useMemo(() => {
+    const order: Record<string, number> = {};
+    user.habits.forEach((habit, index) => {
+      order[habit.habitTypeId] = index;
+    });
+    return order;
+  }, [user]);
+
   const dayHabits = (date?: Date | number | null): HabitLogDTO['habits'] => {
     if (!date) {
       return [];
     }
     const day = dateToDayDate(date);
 
-    return data[day]?.habits ?? [];
+    return (data[day]?.habits ?? []).sort(
+      (a, b) => habitToOrder[a.habitTypeId] - habitToOrder[b.habitTypeId],
+    );
   };
 
   const getDaysInYear = (year: number): Date[] => {
@@ -173,19 +183,8 @@ export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data, se
                           }}
                         />
                       ))}
-
-                      {/*<div className={'w-full basis-1/4 rounded-sm bg-purple-600'}></div>*/}
-                      {/*<div className={'w-full basis-1/4 rounded-sm bg-purple-600'}></div>*/}
-                      {/*<div className={'w-full basis-1/4 rounded-sm bg-purple-600'}></div>*/}
                     </div>
                   </div>
-                  {/*<div className={'w-full rounded-sm bg-purple-600'}>*/}
-                  {/*  /!*<div />*!/*/}
-                  {/*  /!*<div>{day?.getDate()}</div>*!/*/}
-                  {/*</div>*/}
-                  {/*<div className={'w-full rounded-sm bg-purple-600'}></div>*/}
-                  {/*{includesHabits ? <DayColorGrid habits={habits} /> : day?.getDate()}{' '}*/}
-                  {/* Show date or empty if null */}
                 </Day>
               );
             })}

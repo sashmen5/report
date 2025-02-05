@@ -5,8 +5,9 @@ import { getRouteApi, useRouter } from '@tanstack/react-router';
 import debounce from 'lodash.debounce';
 
 import { removeHabit, updateHabit } from '../../entities/habit';
+import { updateHabitOrder } from '../../entities/user';
 import { dateToDayDate } from '../../lib/date-utils';
-import { HabitConfigDTO, HabitLogDTO, HabitTypeId } from '../../models';
+import { HabitConfigDTO, HabitLogDTO, HabitTypeId, UserDTO } from '../../models';
 
 interface ProfileFormProps {
   date?: Date;
@@ -44,7 +45,10 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
 
   const debouncedHandleOnPressedChange = debounce(handleOnPressedChange, 0);
 
-  const habitId = user.habits.map(h => h.habitTypeId);
+  const habitId = user.habits
+    .sort((a, b) => a.order - b.order)
+    .map(h => h.habitTypeId)
+    .map(id => ({ id }));
 
   const configByHabitTypeId = {} as Record<HabitTypeId, HabitConfigDTO>;
   data.habitConfigs.configs.forEach(habit => {
@@ -52,13 +56,25 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
   });
 
   const getHabitConfig = (id: HabitTypeId) => configByHabitTypeId[id];
-  const [items, setItems] = useState(habitId.map(id => ({ id })));
+  const [items, setItems] = useState(habitId);
+
+  const handleChangeSort = async (ids: Array<{ id: HabitTypeId }>) => {
+    setItems(ids);
+    console.log(ids);
+    const newOrder: UserDTO['habits'] = ids.map((id, index) => ({
+      order: index,
+      habitTypeId: id.id,
+    }));
+
+    await updateHabitOrder({ data: { habits: newOrder } }).then(console.log);
+    router.invalidate();
+  };
 
   return (
     <div className={'-ml-3 space-y-2 ring-0'}>
       <SortableList
         items={items}
-        onChange={newItems => setItems(newItems)}
+        onChange={handleChangeSort}
         renderItem={({ id: tag }) => {
           const habitReport = findHabitEntry(tag);
           const habitConfig = getHabitConfig(tag);
