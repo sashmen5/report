@@ -1,6 +1,7 @@
-import React, { FC, PropsWithChildren, useRef } from 'react';
+import React, { FC, PropsWithChildren, ReactNode, useRef } from 'react';
 
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -17,7 +18,7 @@ import { useMediaQuery } from '@sashmen5/hooks';
 interface Props extends PropsWithChildren {
   open: boolean;
   onOpenChange: (value: boolean) => void;
-  title?: string;
+  title?: ReactNode;
 }
 
 const ReportModal: FC<Props> = ({ open, title, onOpenChange, children }) => {
@@ -29,9 +30,6 @@ const ReportModal: FC<Props> = ({ open, title, onOpenChange, children }) => {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
           </DialogHeader>
           {children}
         </DialogContent>
@@ -44,9 +42,6 @@ const ReportModal: FC<Props> = ({ open, title, onOpenChange, children }) => {
       <DrawerContent ref={drawerRef}>
         <DrawerHeader className="text-left">
           <DrawerTitle>{title}</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DrawerDescription>
         </DrawerHeader>
         <div className={'overflow-y-auto px-4 pb-4'}>{children}</div>
       </DrawerContent>

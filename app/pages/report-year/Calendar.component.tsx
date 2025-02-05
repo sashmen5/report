@@ -13,10 +13,11 @@ interface CalendarProps {
   year: number;
   onSelectDate: (date: Date) => void;
   data: Record<string, HabitLogDTO>;
+  selectedDate?: Date;
 }
 const RouterAuthed = getRouteApi('/_authed');
 
-export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) => {
+export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data, selectedDate }) => {
   const { user } = RouterAuthed.useLoaderData();
 
   const dayHabits = (date?: Date | number | null): HabitLogDTO['habits'] => {
@@ -65,6 +66,10 @@ export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) 
 
   // Scroll to today's date when the component mounts
   useEffect(() => {
+    if (selectedDate) {
+      return;
+    }
+
     const today = new Date();
     const todayIndex = daysInYear.findIndex(
       date =>
@@ -79,6 +84,9 @@ export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data }) 
       const todayElement = document.getElementById(`day-${weekIndex}-${dayIndex}`);
       if (todayElement) {
         todayElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          todayElement.scrollIntoView({ behavior: 'auto', block: 'center' });
+        }, 500);
       }
     }
   }, [daysInYear]);
