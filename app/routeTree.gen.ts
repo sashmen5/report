@@ -14,8 +14,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/login/index'
-import { Route as AuthedYearImport } from './routes/_authed/year'
 import { Route as AuthedPostsImport } from './routes/_authed/posts'
+import { Route as AuthedYearRouteImport } from './routes/_authed/year.route'
+import { Route as AuthedSeriesRouteImport } from './routes/_authed/series.route'
+import { Route as AuthedSearchRouteImport } from './routes/_authed/search.route'
+import { Route as AuthedMoviesRouteImport } from './routes/_authed/movies.route'
 import { Route as AuthedPostsIndexImport } from './routes/_authed/posts/index'
 import { Route as AuthedPostsPostIdImport } from './routes/_authed/posts/$postId'
 
@@ -38,15 +41,33 @@ const LoginIndexRoute = LoginIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthedYearRoute = AuthedYearImport.update({
+const AuthedPostsRoute = AuthedPostsImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedYearRouteRoute = AuthedYearRouteImport.update({
   id: '/year',
   path: '/year',
   getParentRoute: () => AuthedRoute,
 } as any)
 
-const AuthedPostsRoute = AuthedPostsImport.update({
-  id: '/posts',
-  path: '/posts',
+const AuthedSeriesRouteRoute = AuthedSeriesRouteImport.update({
+  id: '/series',
+  path: '/series',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedSearchRouteRoute = AuthedSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedMoviesRouteRoute = AuthedMoviesRouteImport.update({
+  id: '/movies',
+  path: '/movies',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -80,18 +101,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedImport
       parentRoute: typeof rootRoute
     }
-    '/_authed/posts': {
-      id: '/_authed/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof AuthedPostsImport
+    '/_authed/movies': {
+      id: '/_authed/movies'
+      path: '/movies'
+      fullPath: '/movies'
+      preLoaderRoute: typeof AuthedMoviesRouteImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/search': {
+      id: '/_authed/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof AuthedSearchRouteImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/series': {
+      id: '/_authed/series'
+      path: '/series'
+      fullPath: '/series'
+      preLoaderRoute: typeof AuthedSeriesRouteImport
       parentRoute: typeof AuthedImport
     }
     '/_authed/year': {
       id: '/_authed/year'
       path: '/year'
       fullPath: '/year'
-      preLoaderRoute: typeof AuthedYearImport
+      preLoaderRoute: typeof AuthedYearRouteImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/posts': {
+      id: '/_authed/posts'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof AuthedPostsImport
       parentRoute: typeof AuthedImport
     }
     '/login/': {
@@ -135,13 +177,19 @@ const AuthedPostsRouteWithChildren = AuthedPostsRoute._addFileChildren(
 )
 
 interface AuthedRouteChildren {
+  AuthedMoviesRouteRoute: typeof AuthedMoviesRouteRoute
+  AuthedSearchRouteRoute: typeof AuthedSearchRouteRoute
+  AuthedSeriesRouteRoute: typeof AuthedSeriesRouteRoute
+  AuthedYearRouteRoute: typeof AuthedYearRouteRoute
   AuthedPostsRoute: typeof AuthedPostsRouteWithChildren
-  AuthedYearRoute: typeof AuthedYearRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedMoviesRouteRoute: AuthedMoviesRouteRoute,
+  AuthedSearchRouteRoute: AuthedSearchRouteRoute,
+  AuthedSeriesRouteRoute: AuthedSeriesRouteRoute,
+  AuthedYearRouteRoute: AuthedYearRouteRoute,
   AuthedPostsRoute: AuthedPostsRouteWithChildren,
-  AuthedYearRoute: AuthedYearRoute,
 }
 
 const AuthedRouteWithChildren =
@@ -150,8 +198,11 @@ const AuthedRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthedRouteWithChildren
+  '/movies': typeof AuthedMoviesRouteRoute
+  '/search': typeof AuthedSearchRouteRoute
+  '/series': typeof AuthedSeriesRouteRoute
+  '/year': typeof AuthedYearRouteRoute
   '/posts': typeof AuthedPostsRouteWithChildren
-  '/year': typeof AuthedYearRoute
   '/login': typeof LoginIndexRoute
   '/posts/$postId': typeof AuthedPostsPostIdRoute
   '/posts/': typeof AuthedPostsIndexRoute
@@ -160,7 +211,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthedRouteWithChildren
-  '/year': typeof AuthedYearRoute
+  '/movies': typeof AuthedMoviesRouteRoute
+  '/search': typeof AuthedSearchRouteRoute
+  '/series': typeof AuthedSeriesRouteRoute
+  '/year': typeof AuthedYearRouteRoute
   '/login': typeof LoginIndexRoute
   '/posts/$postId': typeof AuthedPostsPostIdRoute
   '/posts': typeof AuthedPostsIndexRoute
@@ -170,8 +224,11 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
+  '/_authed/movies': typeof AuthedMoviesRouteRoute
+  '/_authed/search': typeof AuthedSearchRouteRoute
+  '/_authed/series': typeof AuthedSeriesRouteRoute
+  '/_authed/year': typeof AuthedYearRouteRoute
   '/_authed/posts': typeof AuthedPostsRouteWithChildren
-  '/_authed/year': typeof AuthedYearRoute
   '/login/': typeof LoginIndexRoute
   '/_authed/posts/$postId': typeof AuthedPostsPostIdRoute
   '/_authed/posts/': typeof AuthedPostsIndexRoute
@@ -182,19 +239,34 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
-    | '/posts'
+    | '/movies'
+    | '/search'
+    | '/series'
     | '/year'
+    | '/posts'
     | '/login'
     | '/posts/$postId'
     | '/posts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/year' | '/login' | '/posts/$postId' | '/posts'
+  to:
+    | '/'
+    | ''
+    | '/movies'
+    | '/search'
+    | '/series'
+    | '/year'
+    | '/login'
+    | '/posts/$postId'
+    | '/posts'
   id:
     | '__root__'
     | '/'
     | '/_authed'
-    | '/_authed/posts'
+    | '/_authed/movies'
+    | '/_authed/search'
+    | '/_authed/series'
     | '/_authed/year'
+    | '/_authed/posts'
     | '/login/'
     | '/_authed/posts/$postId'
     | '/_authed/posts/'
@@ -234,9 +306,28 @@ export const routeTree = rootRoute
     "/_authed": {
       "filePath": "_authed.tsx",
       "children": [
-        "/_authed/posts",
-        "/_authed/year"
+        "/_authed/movies",
+        "/_authed/search",
+        "/_authed/series",
+        "/_authed/year",
+        "/_authed/posts"
       ]
+    },
+    "/_authed/movies": {
+      "filePath": "_authed/movies.route.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/search": {
+      "filePath": "_authed/search.route.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/series": {
+      "filePath": "_authed/series.route.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/year": {
+      "filePath": "_authed/year.route.tsx",
+      "parent": "/_authed"
     },
     "/_authed/posts": {
       "filePath": "_authed/posts.tsx",
@@ -245,10 +336,6 @@ export const routeTree = rootRoute
         "/_authed/posts/$postId",
         "/_authed/posts/"
       ]
-    },
-    "/_authed/year": {
-      "filePath": "_authed/year.tsx",
-      "parent": "/_authed"
     },
     "/login/": {
       "filePath": "login/index.tsx"

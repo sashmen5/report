@@ -26,7 +26,7 @@ interface HabitConfigDTO {
   defaultValue: boolean | string;
 }
 
-interface IHabitConfig extends HabitConfigDTO, Document {}
+interface IHabitConfig extends HabitConfigDTO, mongoose.Document {}
 
 const habitConfigs = new mongoose.Schema({
   habitTypeId: {

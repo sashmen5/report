@@ -2,7 +2,6 @@ import { notFound } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
 import { uid } from 'uid';
 
-import { CACHE } from '../../lib/api';
 import { dateToDayDate } from '../../lib/date-utils';
 import { authMiddleware } from '../../lib/route-utils';
 import { HabitConfig, HabitConfigDTO, HabitLog, HabitLogDTO } from '../../models';

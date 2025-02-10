@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 import { HabitTypeId } from './habit-config';
 
@@ -13,7 +13,7 @@ interface UserDTO {
   }[];
 }
 
-interface IUser extends UserDTO, Document {
+interface IUser extends UserDTO, Omit<Document, 'id'> {
   password: string;
 }
 

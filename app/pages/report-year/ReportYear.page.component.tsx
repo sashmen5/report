@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react';
 
 import { Button } from '@sashmen5/components';
+import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -8,7 +9,6 @@ import { dateToDayDate } from '../../lib/date-utils';
 import { HabitLogDTO } from '../../models';
 import { Calendar } from './Calendar.component';
 import { ReportHabit } from './ReportHabit.component';
-import { ReportModal } from './ReportModal.component';
 
 const Route = getRouteApi('/_authed/year');
 

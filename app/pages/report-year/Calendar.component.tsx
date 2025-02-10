@@ -93,9 +93,9 @@ export const Calendar: React.FC<CalendarProps> = ({ year, onSelectDate, data, se
       const dayIndex = todayIndex % 7;
       const todayElement = document.getElementById(`day-${weekIndex}-${dayIndex}`);
       if (todayElement) {
-        todayElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // todayElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         setTimeout(() => {
-          todayElement.scrollIntoView({ behavior: 'auto', block: 'center' });
+          // todayElement.scrollIntoView({ behavior: 'auto', block: 'center' });
         }, 500);
       }
     }

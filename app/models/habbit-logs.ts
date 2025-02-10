@@ -13,7 +13,7 @@ interface HabitLogDTO {
   createdAt: Date;
 }
 
-interface IHabitLog extends HabitLogDTO, Document {}
+interface IHabitLog extends HabitLogDTO, Omit<mongoose.Document, 'id'> {}
 
 const habitLogs = new mongoose.Schema({
   id: {

@@ -63,12 +63,12 @@ export function DragHandle() {
       onPointerDown={e => {
         e.stopPropagation();
         // e.preventDefault();
-        listeners.onPointerDown(e);
+        listeners?.onPointerDown(e);
       }}
       onKeyDown={e => {
         e.stopPropagation();
         // e.preventDefault();
-        listeners.onKeyDown(e);
+        listeners?.onKeyDown(e);
       }}
       ref={ref}
     >

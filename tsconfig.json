@@ -10,6 +10,7 @@
     "baseUrl": ".",
     "paths": {
       "@sashmen5/components": ["./shared/components"],
+      "@sashmen5/widgets": ["./shared/widgets"],
       "@sashmen5/hooks": ["./shared/hooks"],
     }
   }

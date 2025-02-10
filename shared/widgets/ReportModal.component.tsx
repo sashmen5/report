@@ -1,19 +1,16 @@
 import React, { FC, PropsWithChildren, ReactNode, useRef } from 'react';
 
 import {
-  Button,
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-} from '@sashmen5/components';
-import { useMediaQuery } from '@sashmen5/hooks';
+} from '../components';
+import { useMediaQuery } from '../hooks';
 
 interface Props extends PropsWithChildren {
   open: boolean;
@@ -27,7 +24,7 @@ const ReportModal: FC<Props> = ({ open, title, onOpenChange, children }) => {
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[425px]" hideClose>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>

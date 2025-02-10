@@ -1,4 +1,5 @@
 export * from './cn';
+export * from './Tabs.component';
 export * from './Avatar.component';
 export * from './Sortable';
 export * from './Button.component';
