@@ -1,0 +1,110 @@
+[{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd06b"
+  },
+  "habitTypeId": "training:gym",
+  "valueType": "bool",
+  "description": "Did you go to the gym today?",
+  "name": "Training: Gym",
+  "defaultValue": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd06d"
+  },
+  "habitTypeId": "training:kettlebell",
+  "valueType": "bool",
+  "description": "Did you do kettlebell training today?",
+  "name": "Training: Kettlebell",
+  "defaultValue": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd06f"
+  },
+  "habitTypeId": "weight",
+  "valueType": "numeric",
+  "description": "What is your weight today?",
+  "name": "Weight",
+  "defaultValue": "",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd071"
+  },
+  "habitTypeId": "3meals",
+  "valueType": "bool",
+  "description": "Did you have 3 meals today?",
+  "name": "3 Meals",
+  "defaultValue": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd073"
+  },
+  "habitTypeId": "7hoursleep",
+  "valueType": "bool",
+  "description": "Did you sleep for 7 hours today?",
+  "name": "7 Hour Sleep",
+  "defaultValue": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd075"
+  },
+  "habitTypeId": "coffee",
+  "valueType": "numeric",
+  "description": "How many cups of coffee did you have today?",
+  "name": "Coffee",
+  "defaultValue": "",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd077"
+  },
+  "habitTypeId": "snack",
+  "valueType": "bool",
+  "description": "How many snacks did you have today?",
+  "name": "Snack",
+  "defaultValue": false,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd079"
+  },
+  "habitTypeId": "steps",
+  "valueType": "numeric",
+  "description": "How many steps did you take today?",
+  "name": "Steps",
+  "defaultValue": "",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd07b"
+  },
+  "habitTypeId": "calories",
+  "valueType": "numeric",
+  "description": "How many calories did you consume today?",
+  "name": "Calories",
+  "defaultValue": "",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cc991ed0e52a567fd07d"
+  },
+  "habitTypeId": "pullups",
+  "valueType": "numeric",
+  "description": "How many pullups did you do today?",
+  "name": "Pullups",
+  "defaultValue": "",
+  "__v": 0
+}]

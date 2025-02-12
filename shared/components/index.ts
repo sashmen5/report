@@ -12,4 +12,6 @@ export * from './Label.component';
 export * from './Input.component';
 export * from './Day.component';
 export * from './Dialog.component';
+export * from './Badge.component';
+export * from './Table.component';
 export * from './Drawer.component';

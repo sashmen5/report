@@ -28,4 +28,26 @@ const updateMovieStatus = createServerFn({ method: 'POST' })
     });
   });
 
-export { addMovie, updateMovieStatus };
+const addSerie = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .validator((d: { id: number }) => d as { id: number })
+  .handler(async ({ context, data }) => {
+    const serie = await mediaManagerService.addSerie({ userId: context.user.id, id: data.id });
+    return { serie };
+  });
+
+const updateSerieStatus = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .validator(({ status, id }: { status: string; id: number }) => {
+    return { status, id: id };
+  })
+  .handler(async ({ context, data }) => {
+    const { id } = context.user;
+    return await mediaManagerService.updateSerieStatus({
+      userId: id,
+      status: data.status,
+      id: data.id,
+    });
+  });
+
+export { addMovie, updateMovieStatus, addSerie, updateSerieStatus };

@@ -1,0 +1,62 @@
+[{
+  "_id": {
+    "$oid": "678b5f82065705f4548866e2"
+  },
+  "id": "b529e0d0fdb096dd134d9",
+  "email": "sashmen5@gmail.com",
+  "password": "$2a$10$r5YB0aPuu0AIiby/kdJ86OR4NH6f634OUzHfppCYwcOgTL5hqQ73u",
+  "__v": 0,
+  "habits": [
+    {
+      "habitTypeId": "training:gym",
+      "order": 1
+    },
+    {
+      "habitTypeId": "training:kettlebell",
+      "order": 1
+    },
+    {
+      "habitTypeId": "weight",
+      "order": 1
+    },
+    {
+      "habitTypeId": "coffee",
+      "order": 1
+    },
+    {
+      "habitTypeId": "snack",
+      "order": 1
+    },
+    {
+      "habitTypeId": "steps",
+      "order": 1
+    },
+    {
+      "habitTypeId": "calories",
+      "order": 1
+    },
+    {
+      "habitTypeId": "pullups",
+      "order": 1
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "678bd72292ccdb6778a902eb"
+  },
+  "id": "501676d8eb9bb06b437e8",
+  "email": "anastasiia.hilko@gmail.com",
+  "password": "$2a$10$UinRKbY6RYsHhyn6pX5t8Oi5Cmo8myBd9FXRdDRqpLXu7LWpT91rm",
+  "__v": 0,
+  "habits": [
+    {
+      "habitTypeId": "3meals",
+      "order": 1
+    },
+    {
+      "habitTypeId": "7hoursleep",
+      "order": 1
+    }
+  ]
+}]

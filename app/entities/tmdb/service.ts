@@ -24,6 +24,22 @@ class TMDBService {
     const result = await axios.get<Promise<TMDB.Movie>>(url);
     return result.data;
   }
+
+  async searchSerieById(id: number | string, searchLanguage: SearchLanguage = SearchLanguage.EN) {
+    const url = `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.TMDB_API_KEY}&language=${searchLanguage}`;
+    const result = await axios.get<Promise<TMDB.Serie>>(url);
+    return result.data;
+  }
+
+  async searchSeasonByNumber(
+    serieId: number | string,
+    seasonNumber: number,
+    searchLanguage: SearchLanguage = SearchLanguage.EN,
+  ) {
+    const url = `https://api.themoviedb.org/3/tv/${serieId}/season/${seasonNumber}?api_key=${process.env.TMDB_API_KEY}&language=${searchLanguage}`;
+    const result = await axios.get<Promise<TMDB.Season>>(url);
+    return result.data;
+  }
 }
 
 const tmdbService = new TMDBService();

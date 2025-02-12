@@ -21,8 +21,8 @@ function AuthedComponent() {
     <div style={{ '--header-height': '56px' }}>
       <div className={'shadow-b fixed left-0 right-0 top-0 z-10 h-[--header-height] bg-background shadow-md'}>
         <div className={'inline-flex h-full w-full flex-grow justify-center px-10'}>
-          <Tabs value={state.location.pathname}>
-            <TabsList>
+          <Tabs value={state.location.pathname} className={'w-full'}>
+            <TabsList className={'w-full'}>
               <TabsTrigger asChild value="/year">
                 <Link to={'/year'}>
                   <Flag strokeWidth={2} />

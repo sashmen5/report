@@ -1,5 +1,6 @@
 import { type CollectionService, collectionService } from '../collection';
 import { type MovieService, movieService } from '../movie';
+import { type SerieService, serieService } from '../serie';
 import { type TMDBService, tmdbService } from '../tmdb';
 
 class MediaManagerService {
@@ -7,6 +8,7 @@ class MediaManagerService {
     private tmdbService: TMDBService,
     private collectionService: CollectionService,
     private movieService: MovieService,
+    private serieService: SerieService,
   ) {}
 
   async addMovie({ userId, movieId }: { userId: string; movieId: number }) {
@@ -40,7 +42,59 @@ class MediaManagerService {
       success: true,
     };
   }
+
+  async addSerie({ userId, id }: { userId: string; id: number }) {
+    let serie = await this.serieService.getById(id);
+
+    if (!serie) {
+      const tmdbSerie = await this.tmdbService.searchSerieById(id);
+      const serie = this.serieService.convertToSerie(tmdbSerie);
+      serie.creationDate = Date.now();
+      await this.serieService.add(serie);
+    }
+
+    await this.collectionService.addSerie(userId, id, 'added');
+  }
+
+  async updateSerieStatus({ userId, id, status }: { userId: string; id: number; status: string }) {
+    const serie = await this.serieService.getById(id);
+    if (!serie) {
+      return { error: 'Not serie in DB' };
+    }
+
+    const itemFromUserCollection = await this.collectionService.getByUserId(userId);
+    if (!itemFromUserCollection) {
+      await this.collectionService.addSerie(userId, id, status);
+    } else {
+      await this.collectionService.updateSerieStatus(userId, id, status);
+    }
+
+    return {
+      success: true,
+    };
+  }
+
+  async getSeasonsFromApi(serieId: number | string): Promise<TMDB.Season[]> {
+    const serie = await this.serieService.getById(serieId);
+    if (!serie) {
+      return [];
+    }
+
+    const seasonNumbers = serie.seasons.map(season => season.seasonNumber);
+    const res: TMDB.Season[] = [];
+    for (const seasonNumber of seasonNumbers) {
+      const season = await this.tmdbService.searchSeasonByNumber(serieId, seasonNumber);
+      res.push(season);
+    }
+
+    return res;
+  }
 }
 
-const mediaManagerService = new MediaManagerService(tmdbService, collectionService, movieService);
+const mediaManagerService = new MediaManagerService(
+  tmdbService,
+  collectionService,
+  movieService,
+  serieService,
+);
 export { mediaManagerService, MediaManagerService };

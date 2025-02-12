@@ -1,9 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 
 import { ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
-import { ReportModal } from '@sashmen5/widgets';
 import { useRouter } from '@tanstack/react-router';
-import { Check, ChevronRight, Circle } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 import { updateMovieStatus } from '../../entities/media-manager';
 

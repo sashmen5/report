@@ -22,12 +22,12 @@ const TabsTrigger: FC<ComponentProps<typeof TabsPrimitive.Trigger>> = ({ classNa
       className={cn(
         'relative p-1',
         'inline-flex h-full items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50',
-        'w-[110px] min-w-12 max-w-[110px]',
+        'min-w-14 max-w-[110px]',
         'data-[state=active]:text-primary',
-
+        'grow',
         'before:bg-primary',
         'before:absolute before:bottom-0 before:left-0 before:right-0 before:h-[3px] before:rounded-t-[2px]',
-        'before:translate-y-full before:transition-transform before:data-[state=active]:translate-y-0',
+        'before:translate-y-2 before:transition-transform before:data-[state=active]:translate-y-0',
         'before:duration-200 before:ease-in',
 
         'after:z-[-1] after:hover:bg-muted',

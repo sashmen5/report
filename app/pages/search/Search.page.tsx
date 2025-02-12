@@ -1,11 +1,11 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
-import { Button, Input } from '@sashmen5/components';
+import { Badge, Button, Input } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import debounce from 'lodash.debounce';
 import { Plus, Search } from 'lucide-react';
 
-import { addMovie } from '../../entities/media-manager';
+import { addMovie, addSerie } from '../../entities/media-manager';
 import { tmdbService } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
@@ -21,12 +21,13 @@ const SearchPage: FC = () => {
 
   const moviesByIds = (function () {
     const res: Record<number, boolean> = {};
-    collection?.movies?.forEach(d => {
-      if (res[d.id]) {
-        console.error('Duplicate movie id', d.id);
-      }
-      res[d.id] = true;
-    });
+    collection?.movies?.forEach(d => (res[d.id] = true));
+    return res;
+  })();
+
+  const seriesByIds = (function () {
+    const res: Record<number, boolean> = {};
+    collection?.series?.forEach(d => (res[d.id] = true));
     return res;
   })();
 
@@ -56,6 +57,14 @@ const SearchPage: FC = () => {
     router.invalidate();
   };
 
+  const handleOnAddSerie = async (movieId: number) => {
+    console.log('Add');
+    const res = await addSerie({ data: { id: movieId } });
+    console.log(res);
+    //TODO: Optimisitc update
+    router.invalidate();
+  };
+
   return (
     <div className={'py-4'}>
       <div className={'flex flex-col gap-5'}>
@@ -72,7 +81,7 @@ const SearchPage: FC = () => {
         <div className={'@container'}>
           <div className={'grid gap-5 @xs:grid-cols-3 @sm:grid-cols-3 @md:grid-cols-4'}>
             {search.results
-              ?.filter(d => d.media_type === 'movie')
+              ?.filter(d => d.media_type === 'movie' || d.media_type === 'tv')
               .map((d, index) => {
                 return (
                   <MediaCard key={d.id}>
@@ -82,16 +91,31 @@ const SearchPage: FC = () => {
                       src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
                     <div className={'flex justify-between gap-3 align-top'}>
-                      <div className={'space-y-2'}>
-                        <MediaTitle>{d.title}</MediaTitle>
-                        <MediaDescription>{formatDate(d.release_date)}</MediaDescription>
+                      <div className={'space-y-1'}>
+                        <MediaTitle>{d.title ?? d.name ?? d.original_title ?? d.original_title}</MediaTitle>
+                        <Badge variant={d.media_type === 'movie' ? 'outline' : 'secondary'}>
+                          {d.media_type}
+                        </Badge>
+                        <MediaDescription>{formatDate(d.release_date ?? d.first_air_date)}</MediaDescription>
                       </div>
-                      {!moviesByIds[d.id] && (
+
+                      {d.media_type === 'movie' && !moviesByIds[d.id] && (
                         <Button
                           size={'icon'}
                           variant={'outline'}
                           className={'mr-1 size-8 shrink-0'}
                           onClick={() => handleOnAdd(d.id)}
+                        >
+                          <Plus />
+                        </Button>
+                      )}
+
+                      {d.media_type === 'tv' && !seriesByIds[d.id] && (
+                        <Button
+                          size={'icon'}
+                          variant={'outline'}
+                          className={'mr-1 size-8 shrink-0'}
+                          onClick={() => handleOnAddSerie(d.id)}
                         >
                           <Plus />
                         </Button>

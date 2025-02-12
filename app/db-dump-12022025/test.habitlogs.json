@@ -1,0 +1,1351 @@
+[{
+  "_id": {
+    "$oid": "678b5fb0065705f4548866e7"
+  },
+  "id": "529e0d0fdb096dd134d99",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-16",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": true,
+      "_id": {
+        "$oid": "678d34f190d39e8f66bc1e38"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-18T08:00:48.691Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678b5fb8065705f4548866f1"
+  },
+  "id": "29e0d0fdb096dd134d99b",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-17",
+  "habits": [
+    {
+      "habitTypeId": "training:kettlebell",
+      "value": true,
+      "_id": {
+        "$oid": "678b5fcdc17e92825c361fbb"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "678d34ed90d39e8f66bc1e29"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-18T08:00:56.850Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678b5fbd065705f4548866f7"
+  },
+  "id": "9e0d0fdb096dd134d99b8",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-15",
+  "habits": [
+    {
+      "habitTypeId": "training:gym",
+      "value": true,
+      "_id": {
+        "$oid": "678b5fbd065705f4548866fc"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-18T08:01:01.637Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678b5fc0065705f454886703"
+  },
+  "id": "e0d0fdb096dd134d99b80",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-13",
+  "habits": [
+    {
+      "habitTypeId": "training:gym",
+      "value": true,
+      "_id": {
+        "$oid": "678b5fc1c17e92825c361f9d"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-18T08:01:04.254Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678bd8aa85ce0432bcf56067"
+  },
+  "id": "22be8019d03aa20ad419e",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-18",
+  "habits": [
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "678bd8ad85ce0432bcf56071"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": true,
+      "_id": {
+        "$oid": "678bd8c685ce0432bcf56084"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-18T16:36:58.558Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678bd961a18d8082830f6f44"
+  },
+  "id": "2d6ade47600fb42a3381b",
+  "userId": "501676d8eb9bb06b437e8",
+  "date": "2025-1-18",
+  "habits": [
+    {
+      "habitTypeId": "7hoursleep",
+      "value": true,
+      "_id": {
+        "$oid": "678bd961a18d8082830f6f45"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "678bd964a18d8082830f6f4d"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-18T16:40:01.879Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678d0a50e15b8067af8b6277"
+  },
+  "id": "36cc38bd968a78a2e6f32",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-19",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": true,
+      "_id": {
+        "$oid": "678d0a50e15b8067af8b6278"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "678d0a50e15b8067af8b627c"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-19T14:21:04.127Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678d7182766ce6353dbee4a9"
+  },
+  "id": "c3301ecb9a459623ff532",
+  "userId": "501676d8eb9bb06b437e8",
+  "date": "2025-1-19",
+  "habits": [
+    {
+      "habitTypeId": "3meals",
+      "value": true,
+      "_id": {
+        "$oid": "678d7182766ce6353dbee4aa"
+      }
+    },
+    {
+      "habitTypeId": "7hoursleep",
+      "value": true,
+      "_id": {
+        "$oid": "678d7183766ce6353dbee4b3"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "678d7189766ce6353dbee4bd"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-19T21:41:22.931Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "678eb13bac7455ba19661963"
+  },
+  "id": "470669364012c057ff3ca",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-20",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": true,
+      "_id": {
+        "$oid": "678eb13bac7455ba19661964"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "678eb13bac7455ba19661968"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-20T20:25:31.378Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67908cc20ad005c3691e2a47"
+  },
+  "id": "a226e2c59148b2665d956",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-21",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": true,
+      "_id": {
+        "$oid": "67908cc20ad005c3691e2a48"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67908cc30ad005c3691e2a59"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-22T06:14:26.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679280632326266f9478928e"
+  },
+  "id": "523b8948d5c415898b078",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-22",
+  "habits": [
+    {
+      "habitTypeId": "training:gym",
+      "value": true,
+      "_id": {
+        "$oid": "679280632326266f9478928f"
+      }
+    },
+    {
+      "habitTypeId": "pullups",
+      "value": "9",
+      "_id": {
+        "$oid": "6792806c2326266f947892a2"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679280962326266f94789357"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "4",
+      "_id": {
+        "$oid": "6792809a2326266f9478936e"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "1149",
+      "_id": {
+        "$oid": "679280f22326266f947893e1"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "12896",
+      "_id": {
+        "$oid": "6792816a2326266f9478951a"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "86.4",
+      "_id": {
+        "$oid": "679282c32326266f9478961f"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-23T17:46:11.276Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6792c26633276ca55960eff5"
+  },
+  "id": "18cff136da6e41995c74f",
+  "userId": "501676d8eb9bb06b437e8",
+  "date": "2025-1-23",
+  "habits": [
+    {
+      "habitTypeId": "7hoursleep",
+      "value": true,
+      "_id": {
+        "$oid": "6792c26633276ca55960eff6"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "6792c26a33276ca55960f001"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "6792c26d33276ca55960f00e"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "4279",
+      "_id": {
+        "$oid": "6792c27433276ca55960f01d"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-23T22:27:50.938Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6792c2a733276ca55960f08a"
+  },
+  "id": "8cff136da6e41995c74fe",
+  "userId": "501676d8eb9bb06b437e8",
+  "date": "2025-1-22",
+  "habits": [
+    {
+      "habitTypeId": "3meals",
+      "value": true,
+      "_id": {
+        "$oid": "6792c2a733276ca55960f08b"
+      }
+    },
+    {
+      "habitTypeId": "7hoursleep",
+      "value": true,
+      "_id": {
+        "$oid": "6792c2ab33276ca55960f09a"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "6792c2ae33276ca55960f0ab"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "6792c2b333276ca55960f0be"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-23T22:28:55.321Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6792c2cb33276ca55960f0cf"
+  },
+  "id": "cff136da6e41995c74fe5",
+  "userId": "501676d8eb9bb06b437e8",
+  "date": "2025-1-21",
+  "habits": [
+    {
+      "habitTypeId": "3meals",
+      "value": true,
+      "_id": {
+        "$oid": "6792c2cb33276ca55960f0d0"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "6792c2d233276ca55960f0e3"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-23T22:29:31.809Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6793cdb2ac3b49c5294fd2af"
+  },
+  "id": "e3a8b0d92d048b3baff11",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-23",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "6793cdb2ac3b49c5294fd2b0"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "6793cdb5ac3b49c5294fd2cb"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "865",
+      "_id": {
+        "$oid": "6793cdf2ac3b49c5294fd2e8"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "7733",
+      "_id": {
+        "$oid": "6793ce30ac3b49c5294fd3fc"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-24T17:28:18.154Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67952f9cdc15f85cdd8f970d"
+  },
+  "id": "c7042430b936c1ad7f910",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-24",
+  "habits": [
+    {
+      "habitTypeId": "weight",
+      "value": "86.4",
+      "_id": {
+        "$oid": "67952f9cdc15f85cdd8f970e"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "67952fa3dc15f85cdd8f97ae"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67952fa6dc15f85cdd8f9801"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "10364",
+      "_id": {
+        "$oid": "67952fb5dc15f85cdd8f982d"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "867",
+      "_id": {
+        "$oid": "67952fc3dc15f85cdd8f98a3"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-25T18:38:20.352Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67952ff16016aac8132fad36"
+  },
+  "id": "6a8ab7d4e1ab978413cd3",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-25",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "67952ff16016aac8132fad37"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67952ff26016aac8132fad64"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "86.9",
+      "_id": {
+        "$oid": "67952ff46016aac8132fad93"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "957",
+      "_id": {
+        "$oid": "67968654a6bb0eb00aeec0fa"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "16745",
+      "_id": {
+        "$oid": "67968664a6bb0eb00aeec129"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-25T18:39:45.374Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6795fa9bbaee362ee0bd54ab"
+  },
+  "id": "1510490ee617d1c0c4f92",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-27",
+  "habits": [
+    {
+      "habitTypeId": "weight",
+      "value": "87.5",
+      "_id": {
+        "$oid": "679a3142f81acff7b7f94817"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "679a3145f81acff7b7f94848"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "4496",
+      "_id": {
+        "$oid": "679a3152f81acff7b7f94882"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "744",
+      "_id": {
+        "$oid": "679a31579ca71cd6b0121c36"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-26T09:04:27.398Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679a31189ca71cd6b0121b62"
+  },
+  "id": "688d8455e12c8ba6225bb",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-26",
+  "habits": [
+    {
+      "habitTypeId": "weight",
+      "value": "88",
+      "_id": {
+        "$oid": "679a31189ca71cd6b0121b63"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "679a311e9ca71cd6b0121b8e"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679a31209ca71cd6b0121b93"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "9767",
+      "_id": {
+        "$oid": "679a312b9ca71cd6b0121b99"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "770",
+      "_id": {
+        "$oid": "679a3130f81acff7b7f947a7"
+      }
+    },
+    {
+      "habitTypeId": "training:kettlebell",
+      "value": true,
+      "_id": {
+        "$oid": "679a3139f81acff7b7f94814"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-29T13:46:00.361Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679a315f9ca71cd6b0121c6c"
+  },
+  "id": "88d8455e12c8ba6225bbb",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-28",
+  "habits": [
+    {
+      "habitTypeId": "weight",
+      "value": "87.4",
+      "_id": {
+        "$oid": "679a315f9ca71cd6b0121c6d"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "3",
+      "_id": {
+        "$oid": "679a31629ca71cd6b0121ca2"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679a31649ca71cd6b0121ca7"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "7460",
+      "_id": {
+        "$oid": "679a316b9ca71cd6b0121cad"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "790",
+      "_id": {
+        "$oid": "679a31719ca71cd6b0121d28"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-29T13:47:11.865Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679a31799ca71cd6b0121d2b"
+  },
+  "id": "8d8455e12c8ba6225bbbf",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-29",
+  "habits": [
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679a31799ca71cd6b0121d2c"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "679f27b4e700f64ab280b894"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "6628",
+      "_id": {
+        "$oid": "679f27dce700f64ab280b8db"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "705",
+      "_id": {
+        "$oid": "679f27e9bfaf259f360458c7"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-01-29T13:47:37.620Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679f27f7bfaf259f36045955"
+  },
+  "id": "770e41dc6f933f0e1351f",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-30",
+  "habits": [
+    {
+      "habitTypeId": "calories",
+      "value": "1404",
+      "_id": {
+        "$oid": "679f27f7bfaf259f36045956"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "17936",
+      "_id": {
+        "$oid": "679f2807bfaf259f360459ee"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679f280ce700f64ab280b9fd"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "679f280ee700f64ab280ba46"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-02T08:08:23.836Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679f2818e700f64ab280ba93"
+  },
+  "id": "373f3b7692edc55680c0e",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-1-31",
+  "habits": [
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679f2818e700f64ab280ba94"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "3",
+      "_id": {
+        "$oid": "679f2819e700f64ab280badd"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "8180",
+      "_id": {
+        "$oid": "679f281ebfaf259f36045adb"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "896",
+      "_id": {
+        "$oid": "679f2824bfaf259f36045c16"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-02T08:08:56.723Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679f2835e700f64ab280bb7f"
+  },
+  "id": "73f3b7692edc55680c0e3",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-1",
+  "habits": [
+    {
+      "habitTypeId": "steps",
+      "value": "13483",
+      "_id": {
+        "$oid": "679f2835e700f64ab280bb80"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "942",
+      "_id": {
+        "$oid": "679f283ae700f64ab280bcb4"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679f283ce700f64ab280bd55"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "87.4",
+      "_id": {
+        "$oid": "679fb4c58069b82d433b40fc"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-02T08:09:25.924Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "679f284be700f64ab280bda3"
+  },
+  "id": "3f3b7692edc55680c0e3d",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-2",
+  "habits": [
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "679f284be700f64ab280bda4"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "3",
+      "_id": {
+        "$oid": "679fb4b88069b82d433b4054"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "87.4",
+      "_id": {
+        "$oid": "67a0f677e8de5588107c678e"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-02T08:09:47.053Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a0f67fe8de5588107c6839"
+  },
+  "id": "72cec4b91f0da8cde14eb",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-3",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "67a0f67fe8de5588107c683a"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67a0f681e8de5588107c688e"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "85.6",
+      "_id": {
+        "$oid": "67a0fc61a33893ba19129246"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "6264",
+      "_id": {
+        "$oid": "67a2667ea184d180bb042fbf"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "929",
+      "_id": {
+        "$oid": "67a266831f53f1abd1a7d27f"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-03T17:01:51.983Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67a266921f53f1abd1a7d38c"
+  },
+  "id": "963cae7bf5b8f5cb2048b",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-4",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "67a266921f53f1abd1a7d38d"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67a266931f53f1abd1a7d3e9"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "7231",
+      "_id": {
+        "$oid": "67a266981f53f1abd1a7d444"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "753",
+      "_id": {
+        "$oid": "67a266a2a184d180bb04307e"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "85.8",
+      "_id": {
+        "$oid": "67a266c3a184d180bb0431fd"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-04T19:12:18.519Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67aa13d56b0ba619fbaafd09"
+  },
+  "id": "ac3a90d72947f4ed00b45",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-10",
+  "habits": [
+    {
+      "habitTypeId": "training:gym",
+      "value": true,
+      "_id": {
+        "$oid": "67aa13d56b0ba619fbaafd0a"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "67aa13d86b0ba619fbaafd68"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67aa13da6b0ba619fbaafdc8"
+      }
+    },
+    {
+      "habitTypeId": "pullups",
+      "value": "7",
+      "_id": {
+        "$oid": "67aa205da3f7320172a433d4"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "87.5",
+      "_id": {
+        "$oid": "67aa262626c0ceef92965a25"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-10T14:57:25.953Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67aa143b6b0ba619fbaafe27"
+  },
+  "id": "c3a90d72947f4ed00b453",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-9",
+  "habits": [
+    {
+      "habitTypeId": "steps",
+      "value": "6849",
+      "_id": {
+        "$oid": "67aa143b6b0ba619fbaafe28"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "88",
+      "_id": {
+        "$oid": "67aa14406b0ba619fbaafe98"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67aa155f6b0ba619fbab03f6"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "67aa15626b0ba619fbab046e"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "623",
+      "_id": {
+        "$oid": "67aa15696b0ba619fbab04ee"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-10T14:59:07.952Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67aa14496b0ba619fbaafefd"
+  },
+  "id": "3a90d72947f4ed00b4538",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-8",
+  "habits": [
+    {
+      "habitTypeId": "steps",
+      "value": "10814",
+      "_id": {
+        "$oid": "67aa14496b0ba619fbaafefe"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "67aa144c9d52d852cf5ca303"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67aa144e9d52d852cf5ca36c"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "87.5",
+      "_id": {
+        "$oid": "67aa14549d52d852cf5ca3d3"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "1059",
+      "_id": {
+        "$oid": "67aa15546b0ba619fbab0362"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-10T14:59:21.460Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67aa14606b0ba619fbab0026"
+  },
+  "id": "a90d72947f4ed00b45388",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-7",
+  "habits": [
+    {
+      "habitTypeId": "steps",
+      "value": "3918",
+      "_id": {
+        "$oid": "67aa14606b0ba619fbab0027"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67aa14656b0ba619fbab0093"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "67aa14666b0ba619fbab00a1"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "85.4",
+      "_id": {
+        "$oid": "67aa14689d52d852cf5ca4c5"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "728",
+      "_id": {
+        "$oid": "67aa15436b0ba619fbab02dd"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-10T14:59:44.603Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67aa14a29d52d852cf5ca5a0"
+  },
+  "id": "706c0c70a5cfdf843ca62",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-6",
+  "habits": [
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67aa14a29d52d852cf5ca5a1"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "67aa14a29d52d852cf5ca5a5"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "6732",
+      "_id": {
+        "$oid": "67aa14a59d52d852cf5ca612"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "761",
+      "_id": {
+        "$oid": "67aa14f69d52d852cf5ca88b"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "86",
+      "_id": {
+        "$oid": "67aa15376b0ba619fbab0260"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-10T15:00:50.355Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67aa14af6b0ba619fbab0180"
+  },
+  "id": "90d72947f4ed00b453880",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-5",
+  "habits": [
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67aa14af6b0ba619fbab0181"
+      }
+    },
+    {
+      "habitTypeId": "coffee",
+      "value": "1",
+      "_id": {
+        "$oid": "67aa14b09d52d852cf5ca624"
+      }
+    },
+    {
+      "habitTypeId": "steps",
+      "value": "7869",
+      "_id": {
+        "$oid": "67aa14b39d52d852cf5ca694"
+      }
+    },
+    {
+      "habitTypeId": "calories",
+      "value": "62",
+      "_id": {
+        "$oid": "67aa14ee9d52d852cf5ca803"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-10T15:01:03.866Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67ab42471d396ffc03178b1d"
+  },
+  "id": "008b98438b5916d370083",
+  "userId": "b529e0d0fdb096dd134d9",
+  "date": "2025-2-11",
+  "habits": [
+    {
+      "habitTypeId": "coffee",
+      "value": "2",
+      "_id": {
+        "$oid": "67ab42471d396ffc03178b1e"
+      }
+    },
+    {
+      "habitTypeId": "snack",
+      "value": true,
+      "_id": {
+        "$oid": "67ab42491d396ffc03178c0a"
+      }
+    },
+    {
+      "habitTypeId": "weight",
+      "value": "86.6",
+      "_id": {
+        "$oid": "67ab9d1c95d95381b87b956c"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2025-02-11T12:27:51.542Z"
+  },
+  "__v": 0
+}]

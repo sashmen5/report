@@ -1,15 +1,15 @@
 import { FC, useMemo, useState } from 'react';
 
-import { Button, Input, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
+import { Button, Input } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
-import { getRouteApi } from '@tanstack/react-router';
+import { Link, getRouteApi } from '@tanstack/react-router';
 import { Check, Clipboard, Search } from 'lucide-react';
 
 import { tmdbService } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
-import { ReportMovieStatus } from './ReportMovieStatus.component';
+import { ReportSerieStatus } from './ReportSerieStatus.component';
 
 const Route = getRouteApi('/_authed/series');
 
@@ -43,20 +43,20 @@ const statusOrder = [
 
 const SeriesPage: FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<SerieStatus>(SerieStatus.InProcess);
-  const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
+  const [activeId, setActiveId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
-  const { movies, collection } = Route.useLoaderData();
+  const { series, collection } = Route.useLoaderData();
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
-  const moviesByIds = useMemo(() => {
-    const res: Record<number, (typeof movies)['movies'][number]> = {};
-    movies?.movies?.forEach(d => (res[d.id] = d));
+  const byIds = useMemo(() => {
+    const res: Record<number, (typeof series)['series'][number]> = {};
+    series?.series?.forEach(d => (res[d.id] = d));
     return res;
-  }, [movies.movies]);
+  }, [series?.series]);
 
-  const activeMovie = typeof activeMovieId !== 'undefined' ? moviesByIds[activeMovieId.id] : undefined;
+  const active = typeof activeId !== 'undefined' ? byIds[activeId.id] : undefined;
 
-  const movieIds = collection.collection?.movies
+  const ids = collection.collection?.series
     .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
     .filter(d => d.status !== undefined)
     .filter(d => d.status.name === selectedStatus)
@@ -95,21 +95,27 @@ const SeriesPage: FC = () => {
 
           <div className={'@container'}>
             <div className={'grid gap-5 @xs:grid-cols-3 @sm:grid-cols-3 @md:grid-cols-4'}>
-              {movieIds?.map((id, index) => {
-                const d = moviesByIds[id.id];
+              {ids?.map((id, index) => {
+                const d = byIds[id.id];
+                if (!d) {
+                  return null;
+                }
                 return (
-                  <MediaCard
-                    key={d.id}
-                    onClick={() => setActiveMovieId({ id: id.id, status: id.status.name })}
-                  >
+                  <MediaCard key={d.id} onClick={() => setActiveId({ id: id.id, status: id.status.name })}>
                     <MediaImg
                       loading={'lazy'}
                       className={'aspect-[6/9]'}
-                      src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
+                      src={tmdbService.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
                     />
-                    <div>
-                      <MediaTitle>{d.title}</MediaTitle>
-                      <MediaDescription>{formatDate(d.release_date)}</MediaDescription>
+                    <div onClick={e => e.stopPropagation()}>
+                      <Link
+                        to={'/seasons/$serieId'}
+                        params={{ serieId: d.id.toString() }}
+                        preload={selectedStatus === SerieStatus.InProcess ? 'viewport' : false}
+                      >
+                        <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
+                      </Link>
+                      <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
                     </div>
                   </MediaCard>
                 );
@@ -120,16 +126,16 @@ const SeriesPage: FC = () => {
       </div>
 
       <ReportModal
-        open={Boolean(activeMovieId)}
-        onOpenChange={() => setActiveMovieId(undefined)}
+        open={Boolean(activeId)}
+        onOpenChange={() => setActiveId(undefined)}
         title={
           <div className={'grid grid-cols-[auto_40px] gap-x-3 gap-y-2'}>
-            <div>{activeMovie?.original_title}</div>
+            <div>{active?.originalName}</div>
             <Button
               size={'icon'}
               variant={'outline'}
               className={'group ml-auto size-8 md:size-6'}
-              onClick={() => copyToClipboard(activeMovie?.original_title ?? '')}
+              onClick={() => copyToClipboard(active?.originalName ?? '')}
             >
               {isCopied ? (
                 <Check className={'text-muted-foreground'} />
@@ -137,14 +143,14 @@ const SeriesPage: FC = () => {
                 <Clipboard className={'text-muted-foreground'} />
               )}
             </Button>
-            {activeMovie?.original_title !== activeMovie?.title && (
+            {active?.originalName !== active?.name && (
               <>
-                <div className={'text-sm text-muted-foreground'}>{activeMovie?.title}</div>
+                <div className={'text-sm text-muted-foreground'}>{active?.name}</div>
                 <Button
                   size={'icon'}
                   variant={'outline'}
                   className={'group ml-auto size-8 md:size-6'}
-                  onClick={() => copyToClipboard(activeMovie?.title ?? '')}
+                  onClick={() => copyToClipboard(active?.name ?? '')}
                 >
                   {isCopied ? (
                     <Check className={'text-muted-foreground'} />
@@ -157,12 +163,12 @@ const SeriesPage: FC = () => {
           </div>
         }
       >
-        {activeMovie && (
-          <ReportMovieStatus
-            id={activeMovie.id}
+        {active && (
+          <ReportSerieStatus
+            id={active.id}
             orders={statusOrder}
-            defaultStatus={activeMovieId?.status ?? ''}
-            onStatusChange={() => setActiveMovieId(undefined)}
+            defaultStatus={activeId?.status ?? ''}
+            onStatusChange={() => setActiveId(undefined)}
           />
         )}
       </ReportModal>

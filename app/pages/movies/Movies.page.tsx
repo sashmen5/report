@@ -86,6 +86,9 @@ const MoviesPage: FC = () => {
             <div className={'grid gap-5 @xs:grid-cols-3 @sm:grid-cols-3 @md:grid-cols-4'}>
               {movieIds?.map((id, index) => {
                 const d = moviesByIds[id.id];
+                if (!d) {
+                  return null;
+                }
                 return (
                   <MediaCard
                     key={d.id}
