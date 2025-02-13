@@ -84,7 +84,7 @@ const SearchPage: FC = () => {
               ?.filter(d => d.media_type === 'movie' || d.media_type === 'tv')
               .map((d, index) => {
                 return (
-                  <MediaCard key={d.id}>
+                  <MediaCard key={d.id} className={'overflow-hidden ring-2'}>
                     <MediaImg
                       loading={'lazy'}
                       className={'aspect-[6/9]'}
@@ -92,7 +92,13 @@ const SearchPage: FC = () => {
                     />
                     <div className={'flex justify-between gap-3 align-top'}>
                       <div className={'space-y-1'}>
-                        <MediaTitle>{d.title ?? d.name ?? d.original_title ?? d.original_title}</MediaTitle>
+                        <MediaTitle
+                          style={{
+                            wordBreak: 'break-word',
+                          }}
+                        >
+                          {d.title ?? d.name ?? d.original_title ?? d.original_title}
+                        </MediaTitle>
                         <Badge variant={d.media_type === 'movie' ? 'outline' : 'secondary'}>
                           {d.media_type}
                         </Badge>
