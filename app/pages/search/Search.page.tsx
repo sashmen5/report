@@ -84,15 +84,24 @@ const SearchPage: FC = () => {
               ?.filter(d => d.media_type === 'movie' || d.media_type === 'tv')
               .map((d, index) => {
                 return (
-                  <MediaCard key={d.id} className={'overflow-hidden ring-2'}>
+                  <MediaCard
+                    key={d.id}
+                    className={'overflow-hidden'}
+                    style={{
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, .1)',
+                      border: '1px solid #e3e3e3',
+                      borderRadius: '16px',
+                    }}
+                  >
                     <MediaImg
                       loading={'lazy'}
                       className={'aspect-[6/9]'}
                       src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
-                    <div className={'flex justify-between gap-3 align-top'}>
+                    <div className={'flex justify-between gap-3 p-3 align-top'}>
                       <div className={'space-y-1'}>
                         <MediaTitle
+                          className={'line-clamp-2'}
                           style={{
                             wordBreak: 'break-word',
                           }}
@@ -109,7 +118,7 @@ const SearchPage: FC = () => {
                         <Button
                           size={'icon'}
                           variant={'outline'}
-                          className={'mr-1 size-8 shrink-0'}
+                          className={'size-8 shrink-0'}
                           onClick={() => handleOnAdd(d.id)}
                         >
                           <Plus />
