@@ -101,10 +101,14 @@ const SeriesPage: FC = () => {
                   return null;
                 }
                 return (
-                  <MediaCard key={d.id} onClick={() => setActiveId({ id: id.id, status: id.status.name })}>
+                  <MediaCard
+                    key={d.id}
+                    onClick={() => setActiveId({ id: id.id, status: id.status.name })}
+                    className={'gap-3'}
+                  >
                     <MediaImg
                       loading={'lazy'}
-                      className={'aspect-[6/9]'}
+                      className={'aspect-[6/9] rounded-2xl'}
                       src={tmdbService.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
                     />
                     <div onClick={e => e.stopPropagation()}>

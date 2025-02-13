@@ -93,12 +93,13 @@ const MoviesPage: FC = () => {
                 }
                 return (
                   <MediaCard
+                    className={'gap-3'}
                     key={d.id}
                     onClick={() => setActiveMovieId({ id: id.id, status: id.status.name })}
                   >
                     <MediaImg
                       loading={'lazy'}
-                      className={'aspect-[6/9]'}
+                      className={'aspect-[6/9] rounded-2xl'}
                       src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
                     <div>
