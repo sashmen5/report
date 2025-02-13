@@ -8,7 +8,7 @@ const getMovies = createServerFn({ method: 'GET' })
   .handler(async () => {
     const movies = await movieService.getMovies();
     return {
-      movies: movies,
+      movies: movies.slice(0, 10),
     };
   });
 
