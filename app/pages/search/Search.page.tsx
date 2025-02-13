@@ -79,7 +79,7 @@ const SearchPage: FC = () => {
         </div>
 
         <div className={'@container'}>
-          <div className={'grid gap-5 @xs:grid-cols-3 @sm:grid-cols-3 @md:grid-cols-4'}>
+          <div className={'grid gap-3 @xs:grid-cols-3 @md:grid-cols-4'}>
             {search.results
               ?.filter(d => d.media_type === 'movie' || d.media_type === 'tv')
               .map((d, index) => {
@@ -108,7 +108,10 @@ const SearchPage: FC = () => {
                         >
                           {d.title ?? d.name ?? d.original_title ?? d.original_title}
                         </MediaTitle>
-                        <Badge variant={d.media_type === 'movie' ? 'outline' : 'secondary'}>
+                        <Badge
+                          className={'truncate'}
+                          variant={d.media_type === 'movie' ? 'outline' : 'secondary'}
+                        >
                           {d.media_type}
                         </Badge>
                         <MediaDescription>{formatDate(d.release_date ?? d.first_air_date)}</MediaDescription>

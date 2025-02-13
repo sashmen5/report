@@ -39,18 +39,29 @@ const MoviesPage: FC = () => {
   const { movies, collection } = loaderdata;
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
-  const moviesByIds = useMemo(() => {
+  const byIds = useMemo(() => {
     const res: Record<number, (typeof movies)['movies'][number]> = {};
     movies?.movies?.forEach(d => (res[d.id] = d));
     return res;
   }, [movies.movies]);
 
-  const activeMovie = typeof activeMovieId !== 'undefined' ? moviesByIds[activeMovieId.id] : undefined;
-
+  const activeMovie = typeof activeMovieId !== 'undefined' ? byIds[activeMovieId.id] : undefined;
+  const lowerSearch = search.toLowerCase();
   const movieIds = collection.collection?.movies
     .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
     .filter(d => d.status !== undefined)
     .filter(d => d.status.name === selectedStatus)
+    .filter(d => {
+      if (!search) {
+        return true;
+      }
+      const serie = byIds[d.id];
+      if (!serie) {
+        return false;
+      }
+      const name = byIds[d.id].title ?? byIds[d.id].original_title ?? '';
+      return name.toLowerCase().includes(lowerSearch);
+    })
     .sort((a, b) => b.status.date - a.status.date);
 
   const handleChangeSearch = (value: string) => {
@@ -87,7 +98,7 @@ const MoviesPage: FC = () => {
           <div className={'@container'}>
             <div className={'grid gap-5 @xs:grid-cols-3 @sm:grid-cols-3 @md:grid-cols-4'}>
               {movieIds?.map((id, index) => {
-                const d = moviesByIds[id.id];
+                const d = byIds[id.id];
                 if (!d) {
                   return null;
                 }

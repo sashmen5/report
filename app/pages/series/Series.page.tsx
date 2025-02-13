@@ -33,8 +33,8 @@ const statusLabels: Record<SerieStatus, string> = {
 
 const getStatusLabel = (status: SerieStatus) => statusLabels[status];
 const statusOrder = [
-  SerieStatus.ForFuture,
   SerieStatus.InProcess,
+  SerieStatus.ForFuture,
   SerieStatus.WaitingForSeason,
   SerieStatus.Finished,
   SerieStatus.Removed,
@@ -55,11 +55,22 @@ const SeriesPage: FC = () => {
   }, [series?.series]);
 
   const active = typeof activeId !== 'undefined' ? byIds[activeId.id] : undefined;
-
+  const lowerSearch = search.toLowerCase();
   const ids = collection.collection?.series
     .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
     .filter(d => d.status !== undefined)
     .filter(d => d.status.name === selectedStatus)
+    .filter(d => {
+      if (!search) {
+        return true;
+      }
+      const serie = byIds[d.id];
+      if (!serie) {
+        return false;
+      }
+      const name = byIds[d.id].name ?? byIds[d.id].originalName ?? '';
+      return name.toLowerCase().includes(lowerSearch);
+    })
     .sort((a, b) => b.status.date - a.status.date);
 
   const handleChangeSearch = (value: string) => {
