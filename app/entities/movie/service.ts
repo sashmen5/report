@@ -4,7 +4,18 @@ class MovieService {
   constructor() {}
 
   async getMovies(): Promise<MovieSchema[]> {
-    return await MovieTable.find().exec();
+    return await MovieTable.find<TMDB.Movie>(
+      {},
+      {
+        id: 1,
+        backdrop_path: 1,
+        poster_path: 1,
+        release_date: 1,
+        original_title: 1,
+        title: 1,
+        _id: 0, // explicitly exclude _id field
+      },
+    ).exec();
   }
 
   async getMovie(id: number | string): Promise<MovieSchema | null> {
