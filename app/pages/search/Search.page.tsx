@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
-import { Badge, Button, Input } from '@sashmen5/components';
+import { Badge, Button, Input, cn } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import debounce from 'lodash.debounce';
 import { Plus, Search } from 'lucide-react';
@@ -100,14 +100,32 @@ const SearchPage: FC = () => {
                     />
                     <div className={'flex justify-between gap-3 p-3 align-top'}>
                       <div className={'space-y-1'}>
-                        <MediaTitle
-                          className={'line-clamp-2'}
-                          style={{
-                            wordBreak: 'break-word',
-                          }}
-                        >
-                          {d.title ?? d.name ?? d.original_title ?? d.original_title}
-                        </MediaTitle>
+                        <div className={'flex gap-2'}>
+                          <MediaTitle className={'line-clamp-2'} style={{ wordBreak: 'break-word' }}>
+                            {d.title ?? d.name ?? d.original_title ?? d.original_title}
+                          </MediaTitle>
+                          {d.media_type === 'movie' && !moviesByIds[d.id] && (
+                            <Button
+                              size={'icon'}
+                              variant={'outline'}
+                              className={'size-8 shrink-0'}
+                              onClick={() => handleOnAdd(d.id)}
+                            >
+                              <Plus />
+                            </Button>
+                          )}
+
+                          {d.media_type === 'tv' && !seriesByIds[d.id] && (
+                            <Button
+                              size={'icon'}
+                              variant={'outline'}
+                              className={'mr-1 size-8 shrink-0'}
+                              onClick={() => handleOnAddSerie(d.id)}
+                            >
+                              <Plus />
+                            </Button>
+                          )}
+                        </div>
                         <Badge
                           className={'truncate'}
                           variant={d.media_type === 'movie' ? 'outline' : 'secondary'}
@@ -116,28 +134,6 @@ const SearchPage: FC = () => {
                         </Badge>
                         <MediaDescription>{formatDate(d.release_date ?? d.first_air_date)}</MediaDescription>
                       </div>
-
-                      {d.media_type === 'movie' && !moviesByIds[d.id] && (
-                        <Button
-                          size={'icon'}
-                          variant={'outline'}
-                          className={'size-8 shrink-0'}
-                          onClick={() => handleOnAdd(d.id)}
-                        >
-                          <Plus />
-                        </Button>
-                      )}
-
-                      {d.media_type === 'tv' && !seriesByIds[d.id] && (
-                        <Button
-                          size={'icon'}
-                          variant={'outline'}
-                          className={'mr-1 size-8 shrink-0'}
-                          onClick={() => handleOnAddSerie(d.id)}
-                        >
-                          <Plus />
-                        </Button>
-                      )}
                     </div>
                   </MediaCard>
                 );
