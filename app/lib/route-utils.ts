@@ -20,7 +20,6 @@ const fetchAuth = createServerFn({ method: 'GET' }).handler(async ({ context }) 
 
 const authMiddleware = createMiddleware().server(async ({ next, data }) => {
   const user = await fetchAuth();
-  console.log('I am on server');
   if (!user.user) {
     throw redirect({ to: '/login' });
   }

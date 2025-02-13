@@ -34,7 +34,9 @@ const MoviesPage: FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<MovieStatus>(MovieStatus.ADDED);
   const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
-  const { movies, collection } = Route.useLoaderData();
+  const loaderdata = Route.useLoaderData();
+  console.log({ loaderdata, useLoaderData: Route.useLoaderData, Route });
+  const { movies, collection } = loaderdata;
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const moviesByIds = useMemo(() => {

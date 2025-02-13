@@ -15,8 +15,6 @@ export const Route = createFileRoute('/_authed')({
 function AuthedComponent() {
   const state = useRouterState();
 
-  console.log('Render [I am on client]');
-
   return (
     <div style={{ '--header-height': '56px' }}>
       <div className={'shadow-b fixed left-0 right-0 top-0 z-10 h-[--header-height] bg-background shadow-md'}>

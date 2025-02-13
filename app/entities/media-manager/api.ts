@@ -7,7 +7,6 @@ const addMovie = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .validator((d: { id: number }) => d as { id: number })
   .handler(async ({ context, data }) => {
-    console.log('data', data);
     const movie = await mediaManagerService.addMovie({ userId: context.user.id, movieId: data.id });
     return {
       movie: movie,

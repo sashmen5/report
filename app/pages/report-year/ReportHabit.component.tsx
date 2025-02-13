@@ -60,7 +60,6 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
 
   const handleChangeSort = async (ids: Array<{ id: HabitTypeId }>) => {
     setItems(ids);
-    console.log(ids);
     const newOrder: UserDTO['habits'] = ids.map((id, index) => ({
       order: index,
       habitTypeId: id.id,

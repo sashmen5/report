@@ -14,15 +14,6 @@ interface Props {
 }
 
 const ReportMovieStatus: FC<Props> = ({ onStatusChange, id, orders, defaultStatus }) => {
-  console.log(defaultStatus);
-
-  useEffect(() => {
-    console.log('ReportMovieStatus mounted');
-    return () => {
-      console.log('ReportMovieStatus unmounted');
-    };
-  }, []);
-
   const route = useRouter();
   const [state, setState] = useState<string>(defaultStatus);
   const handleStatusChange = async (status: string) => {
@@ -31,8 +22,6 @@ const ReportMovieStatus: FC<Props> = ({ onStatusChange, id, orders, defaultStatu
     onStatusChange();
     route.invalidate();
   };
-
-  console.log('[ReportMovieStatus render]', state);
 
   return (
     <ToggleGroup orientation={'vertical'} type={'single'} value={state} onValueChange={handleStatusChange}>

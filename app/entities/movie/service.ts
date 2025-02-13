@@ -4,7 +4,6 @@ class MovieService {
   constructor() {}
 
   async getMovies(): Promise<MovieSchema[]> {
-    console.log('[getMovies]');
     return await MovieTable.find().exec();
   }
 
