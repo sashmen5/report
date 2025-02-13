@@ -79,7 +79,7 @@ const SearchPage: FC = () => {
         </div>
 
         <div className={'@container'}>
-          <div className={'grid gap-3 @xs:grid-cols-3 @md:grid-cols-4'}>
+          <div className={'grid gap-3 @xs:grid-cols-2 @md:grid-cols-4'}>
             {search.results
               ?.filter(d => d.media_type === 'movie' || d.media_type === 'tv')
               .map((d, index) => {
