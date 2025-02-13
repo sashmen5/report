@@ -8,6 +8,7 @@ import { getUser } from '../entities/user';
 
 const MemoAuthedComponent = memo(AuthedComponent);
 export const Route = createFileRoute('/_authed')({
+  ssr: false,
   loader: async () => await getUser(),
   component: MemoAuthedComponent,
 });
