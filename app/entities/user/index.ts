@@ -1,5 +1,6 @@
-import { notFound } from '@tanstack/react-router';
+import { redirect } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/start';
+import { deleteCookie } from 'vinxi/http';
 
 import { authMiddleware } from '../../lib/route-utils';
 import { User, UserDTO } from '../../models';
@@ -10,7 +11,8 @@ const getUser = createServerFn({ method: 'GET' })
     const user = await User.findOne<UserDTO>({ id: context.user.id }).exec();
 
     if (!user) {
-      throw notFound();
+      deleteCookie('alex-token');
+      throw redirect({ to: '/login' });
     }
 
     return { user };

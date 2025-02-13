@@ -41,7 +41,7 @@ window.$RefreshSig$ = () => (type) => type`,
   }),
 
   component: RootComponent,
-  notFoundComponent: () => <div>NotFound</div>,
+  notFoundComponent: () => <div>[NotFound]</div>,
 });
 
 function RootComponent() {
@@ -65,9 +65,8 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           storageKey={'theme'}
           disableTransitionOnChange
         >
-          <div data-vaul-drawer-wrapper={''} className={'bg-background'}>
-            {children}
-          </div>
+          {/*<div data-vaul-drawer-wrapper={''} className={'bg-background'}>*/}
+          <div className={'bg-background'}>{children}</div>
           <ScrollRestoration />
           <Scripts />
         </ThemeProvider>

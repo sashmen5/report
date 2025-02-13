@@ -35,7 +35,7 @@ const ReportModal: FC<Props> = ({ open, title, onOpenChange, children }) => {
   }
 
   return (
-    <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground>
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent ref={drawerRef}>
         <DrawerHeader className="text-left">
           <DrawerTitle>{title}</DrawerTitle>

@@ -1,7 +1,7 @@
 import { redirect } from '@tanstack/react-router';
 import { createMiddleware, createServerFn } from '@tanstack/start';
 import jwt from 'jsonwebtoken';
-import { getCookie } from 'vinxi/http';
+import { deleteCookie, getCookie } from 'vinxi/http';
 
 import { UserDTO } from '../models';
 
@@ -10,6 +10,7 @@ const fetchAuth = createServerFn({ method: 'GET' }).handler(async ({ context }) 
   const user: UserDTO | undefined = await jwt.decode(token);
 
   if (!user) {
+    deleteCookie('alex-token');
     throw redirect({ to: '/login' });
   }
 

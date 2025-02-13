@@ -95,13 +95,13 @@ const SearchPage: FC = () => {
                   >
                     <MediaImg
                       loading={'lazy'}
-                      className={'aspect-[6/9]'}
+                      className={'aspect-[105/150]'}
                       src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
                     <div className={'flex justify-between gap-3 p-3 align-top'}>
-                      <div className={'space-y-1'}>
-                        <div className={'flex gap-2'}>
-                          <MediaTitle className={'line-clamp-2'} style={{ wordBreak: 'break-word' }}>
+                      <div className={'grow space-y-1'}>
+                        <div className={'flex justify-between gap-2'}>
+                          <MediaTitle className={'line-clamp-3'} style={{ wordBreak: 'break-word' }}>
                             {d.title ?? d.name ?? d.original_title ?? d.original_title}
                           </MediaTitle>
                           {d.media_type === 'movie' && !moviesByIds[d.id] && (
@@ -111,7 +111,7 @@ const SearchPage: FC = () => {
                               className={'size-8 shrink-0'}
                               onClick={() => handleOnAdd(d.id)}
                             >
-                              <Plus />
+                              <Plus className={'stroke-muted-foreground'} />
                             </Button>
                           )}
 
@@ -122,12 +122,12 @@ const SearchPage: FC = () => {
                               className={'mr-1 size-8 shrink-0'}
                               onClick={() => handleOnAddSerie(d.id)}
                             >
-                              <Plus />
+                              <Plus className={'stroke-muted-foreground'} />
                             </Button>
                           )}
                         </div>
                         <Badge
-                          className={'truncate'}
+                          className={'-ml-1 truncate'}
                           variant={d.media_type === 'movie' ? 'outline' : 'secondary'}
                         >
                           {d.media_type}
