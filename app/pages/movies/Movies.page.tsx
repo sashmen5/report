@@ -102,7 +102,7 @@ const MoviesPage: FC = () => {
                       src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
                     <div>
-                      <MediaTitle>{d.title}</MediaTitle>
+                      <MediaTitle className={'break-words'}>{d.title}</MediaTitle>
                       <MediaDescription>{formatDate(d.release_date)}</MediaDescription>
                     </div>
                   </MediaCard>

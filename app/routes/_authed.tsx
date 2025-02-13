@@ -18,7 +18,9 @@ function AuthedComponent() {
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
   const state = useRouterState();
+
   if (!isMounted) {
     return null;
   }

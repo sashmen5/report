@@ -3,8 +3,8 @@ import { FC, useState } from 'react';
 import { Button } from '@sashmen5/components';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
-import { formatDate } from 'app/lib/date-utils';
-import { Check, Eye } from 'lucide-react';
+import { formatDate, getDaysToDate, isToday, isTomorrow, isYesterday } from 'app/lib/date-utils';
+import { Check, Dot, Eye } from 'lucide-react';
 
 import { dewatchEpisode, watchEpisode } from '../../entities/season';
 
@@ -38,8 +38,28 @@ const SeriePage: FC = () => {
 
   console.log(seasonsStatus.seasonStatuses);
 
+  const getDateValue = (date: string) => {
+    const days = getDaysToDate(date);
+    const daysLabel = days > 0 ? `(${days})` : '';
+    switch (true) {
+      case isToday(date):
+        return 'Today';
+      case isYesterday(date):
+        return 'Yesterday';
+      case isTomorrow(date):
+        return 'Tomorrow';
+      default:
+        return `${formatDate(date)} ${daysLabel}`;
+    }
+  };
+
   return (
     <div className={'space-y-4 py-4'}>
+      <div className={'flex items-center'}>
+        <div className={'text-lg font-bold'}>{serie?.originalName}</div>
+        <Dot />
+        <div className={'text-muted-foreground'}>{serie?.name}</div>
+      </div>
       <div className={'flex flex-wrap gap-x-3 gap-y-2'}>
         {seasons.map((d, i) => (
           <Button
@@ -58,7 +78,7 @@ const SeriePage: FC = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[20px] text-center">#</TableHead>
-              <TableHead className="w-[100px] md:w-[120px]">Date</TableHead>
+              <TableHead className="w-[130px] md:w-[150px]">Date</TableHead>
               <TableHead>Name</TableHead>
               <TableHead className="w-[50px]">Status</TableHead>
             </TableRow>
@@ -67,13 +87,13 @@ const SeriePage: FC = () => {
             {episodes.map(d => (
               <TableRow key={d.id}>
                 <TableCell className="px-2 text-center font-medium">{d.episode_number}</TableCell>
-                <TableCell>{formatDate(d.air_date)}</TableCell>
+                <TableCell>{getDateValue(d.air_date)}</TableCell>
                 <TableCell>{d.name}</TableCell>
                 <TableCell className={'flex-center'}>
                   {isWatchedEpisode(currentSeason!.id, d.id) ? (
                     <Button
                       size={'icon'}
-                      variant={'outline'}
+                      variant={'ghost'}
                       className={'[&_svg]:size-6'}
                       onClick={async () => {
                         await dewatchEpisode({
@@ -83,7 +103,7 @@ const SeriePage: FC = () => {
                         router.invalidate();
                       }}
                     >
-                      <Check className={'text-success size-5'} />
+                      <Check strokeWidth={1.6} className={'size-5 stroke-muted-foreground'} />
                     </Button>
                   ) : (
                     <Button
@@ -98,7 +118,7 @@ const SeriePage: FC = () => {
                         router.invalidate();
                       }}
                     >
-                      <Eye className={'size-5'} />
+                      <Eye strokeWidth={1.5} className={'size-5 stroke-muted-foreground'} />
                     </Button>
                   )}
                 </TableCell>
