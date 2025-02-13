@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger } from '@sashmen5/components';
 import { Link, Outlet, createFileRoute, useRouterState } from '@tanstack/react-router';
@@ -13,7 +13,15 @@ export const Route = createFileRoute('/_authed')({
 });
 
 function AuthedComponent() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const state = useRouterState();
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div style={{ '--header-height': '56px' }}>
