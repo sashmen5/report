@@ -81,6 +81,14 @@ class MediaManagerService {
     };
   }
 
+  async refreshSerie(id: number) {
+    const tmdbSerie = await this.tmdbService.searchSerieById(id);
+    tmdbSerie.creationDate = Date.now();
+    await this.serieService.delete(id);
+    const serie = this.serieService.convertToSerie(tmdbSerie);
+    await this.serieService.add(serie);
+  }
+
   async getSeasonsFromApi(serieId: number | string): Promise<TMDB.Season[]> {
     const serie = await this.serieService.getById(serieId);
     if (!serie) {

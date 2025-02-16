@@ -17,6 +17,7 @@ import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import { ReportSerieStatus } from './ReportSerieStatus.component';
+import { SerieCard } from './SerieCard.component';
 
 const Route = getRouteApi('/_authed/series');
 
@@ -120,44 +121,14 @@ const SeriesPage: FC = () => {
                 if (!d) {
                   return null;
                 }
+
                 return (
-                  <MediaCard
-                    key={d.id}
+                  <SerieCard
+                    key={index}
+                    serie={d}
                     onClick={() => setActiveId({ id: id.id, status: id.status.name })}
-                    className={'relative gap-3'}
-                  >
-                    <div className={'absolute right-0 top-0 m-4'}>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                            <path
-                              id="circle-more"
-                              d="M16,4A12,12,0,1,0,28,16,12.01312,12.01312,0,0,0,16,4ZM10,18a2,2,0,1,1,2-2A2.00006,2.00006,0,0,1,10,18Zm6,0a2,2,0,1,1,2-2A2.00006,2.00006,0,0,1,16,18Zm6,0a2,2,0,1,1,2-2A2.00006,2.00006,0,0,1,22,18Z"
-                              fill="rgba(255,255,255,0.8)"
-                            />
-                          </svg>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align={'end'} side={'right'}>
-                          <DropdownMenuItem>Refresh</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                    <MediaImg
-                      loading={'lazy'}
-                      className={'aspect-[6/9] rounded-2xl'}
-                      src={tmdbEntity.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
-                    />
-                    <div onClick={e => e.stopPropagation()}>
-                      <Link
-                        to={'/seasons/$serieId'}
-                        params={{ serieId: d.id.toString() }}
-                        preload={selectedStatus === SerieStatus.InProcess ? 'viewport' : false}
-                      >
-                        <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
-                      </Link>
-                      <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
-                    </div>
-                  </MediaCard>
+                    preload={selectedStatus === SerieStatus.InProcess ? 'viewport' : false}
+                  />
                 );
               })}
             </div>

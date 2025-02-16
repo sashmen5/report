@@ -15,6 +15,10 @@ class SerieService {
     return await new SerieTable(serie).save();
   }
 
+  async delete(id: number) {
+    return await SerieTable.deleteOne({ id: id }).exec();
+  }
+
   convertToSerie(tmdbSerie: TMDB.Serie): Serie {
     return {
       creationDate: tmdbSerie.creationDate,

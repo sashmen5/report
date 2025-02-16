@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { ComponentProps, FC, useState } from 'react';
 
 import {
   DropdownMenu,
@@ -7,22 +7,25 @@ import {
   DropdownMenuTrigger,
   cn,
 } from '@sashmen5/components';
+import { Link } from '@tanstack/react-router';
 
 import { PendingRoundedIcon } from '../../../shared/components/Icons';
-import { refreshMovie } from '../../entities/media-manager';
+import { refreshMovie, refreshSerie } from '../../entities/media-manager';
 import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
+import { Serie } from '../../models/serie.schema';
 
 interface Props {
-  movie: TMDB.Movie;
+  serie: Serie;
   onClick: () => void;
+  preload: ComponentProps<typeof Link>['preload'];
 }
 
-const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
+const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
   const [open, setOpen] = useState(false);
   return (
-    <MediaCard className={'relative gap-3'} key={d.id} onClick={() => setActiveMovieId()}>
+    <MediaCard key={d.id} onClick={onClick} className={'relative gap-3'}>
       <div
         className={cn(
           'absolute inset-0 overflow-hidden rounded-2xl bg-black/10 backdrop-blur-2xl',
@@ -48,7 +51,7 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
               className={'cursor-pointer'}
               onClick={e => {
                 e.stopPropagation();
-                refreshMovie({ data: { id: d.id } });
+                refreshSerie({ data: { id: d.id } });
               }}
             >
               Refresh
@@ -56,18 +59,19 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
       <MediaImg
         loading={'lazy'}
         className={'aspect-[6/9] rounded-2xl'}
-        src={tmdbEntity.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
+        src={tmdbEntity.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
       />
-      <div>
-        <MediaTitle className={'break-words'}>{d.title}</MediaTitle>
-        <MediaDescription>{formatDate(d.release_date)}</MediaDescription>
+      <div onClick={e => e.stopPropagation()}>
+        <Link to={'/seasons/$serieId'} params={{ serieId: d.id.toString() }} preload={preload}>
+          <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
+        </Link>
+        <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
       </div>
     </MediaCard>
   );
 };
 
-export { MovieCard };
+export { SerieCard };

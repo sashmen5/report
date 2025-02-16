@@ -55,4 +55,12 @@ const updateSerieStatus = createServerFn({ method: 'POST' })
     });
   });
 
-export { addMovie, updateMovieStatus, addSerie, updateSerieStatus, refreshMovie };
+const refreshSerie = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .validator((d: { id: number }) => d as { id: number })
+  .handler(async ({ data }) => {
+    await mediaManagerService.refreshSerie(data.id);
+    return { message: 'Serie refreshed' };
+  });
+
+export { addMovie, updateMovieStatus, addSerie, updateSerieStatus, refreshMovie, refreshSerie };
