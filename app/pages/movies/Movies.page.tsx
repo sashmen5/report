@@ -4,9 +4,19 @@ import { Button, Input, ToggleGroup, ToggleGroupItem } from '@sashmen5/component
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
-import { Check, Clipboard, Search } from 'lucide-react';
+import {
+  CalendarArrowDown,
+  CalendarArrowUp,
+  Check,
+  Clipboard,
+  Monitor,
+  Search,
+  Smartphone,
+  Star,
+  Tablet,
+} from 'lucide-react';
 
-import { tmdbEntity, tmdbService } from '../../entities/tmdb';
+import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import { ReportMovieStatus } from './ReportMovieStatus.component';
@@ -27,6 +37,14 @@ const movieStatusLabels: Record<MovieStatus, string> = {
   [MovieStatus.FAVORITE]: 'Favorite',
 };
 
+const SORT_TYPE = {
+  dateup: 'dateup',
+  datedown: 'datedown',
+  rating: 'rating',
+} as const;
+
+type SortType = keyof typeof SORT_TYPE;
+
 const getMovieStatusLabel = (status: MovieStatus) => movieStatusLabels[status];
 const statusOrder = [MovieStatus.ADDED, MovieStatus.WATCHED, MovieStatus.REMOVED, MovieStatus.FAVORITE];
 
@@ -34,8 +52,11 @@ const MoviesPage: FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<MovieStatus>(MovieStatus.ADDED);
   const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
+  const [sortType, setSortType] = useState<SortType | undefined>();
   const loaderdata = Route.useLoaderData();
+
   console.log({ loaderdata, useLoaderData: Route.useLoaderData, Route });
+
   const { movies, collection } = loaderdata;
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
@@ -62,7 +83,36 @@ const MoviesPage: FC = () => {
       const name = byIds[d.id].title ?? byIds[d.id].original_title ?? '';
       return name.toLowerCase().includes(lowerSearch);
     })
-    .sort((a, b) => b.status.date - a.status.date);
+    .sort((a, b) => {
+      const aD = byIds[a.id];
+      const bD = byIds[b.id];
+
+      if (!sortType) {
+        return b.status.date - a.status.date;
+      }
+
+      if (sortType === 'rating') {
+        if (!bD.vote_average) return -1;
+        if (!aD.vote_average) return 1;
+        return bD.vote_average - aD.vote_average;
+      }
+
+      const aTime = aD.release_date;
+      const bTime = bD.release_date;
+
+      if (!aTime) return 1;
+      if (!bTime) return -1;
+
+      if (sortType === 'dateup') {
+        return new Date(aTime).getTime() - new Date(bTime).getTime();
+      }
+
+      if (sortType === 'datedown') {
+        return new Date(bTime).getTime() - new Date(aTime).getTime();
+      }
+
+      return b.status.date - a.status.date;
+    });
 
   const handleChangeSearch = (value: string) => {
     setSearch(value);
@@ -72,15 +122,49 @@ const MoviesPage: FC = () => {
     <>
       <div className={'py-4'}>
         <div className={'flex flex-col gap-5'}>
-          <div className="relative">
-            <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={e => handleChangeSearch(e.target.value)}
-              placeholder="Search"
-              className="pl-8"
-            />
+          <div className={'flex gap-3'}>
+            <div className="relative grow">
+              <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={e => handleChangeSearch(e.target.value)}
+                placeholder="Search"
+                className="pl-8"
+              />
+            </div>
+            <div className="items-center gap-1.5 rounded-md border p-[2px] shadow-none lg:flex">
+              <ToggleGroup
+                type="single"
+                style={{ '--toggle-size': '34px' }}
+                onValueChange={value => {
+                  setSortType(value as SortType);
+                }}
+              >
+                <ToggleGroupItem
+                  value="datedown"
+                  className="h-[var(--toggle-size)] w-[var(--toggle-size)] min-w-0 rounded-sm p-0"
+                  title="DateDown"
+                >
+                  <CalendarArrowDown className="h-3.5 w-3.5" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="dateup"
+                  className="h-[var(--toggle-size)] w-[var(--toggle-size)] min-w-0 rounded-sm p-0"
+                  title="DateUp"
+                >
+                  <CalendarArrowUp className="h-3.5 w-3.5" />
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                  value="rating"
+                  className="h-[var(--toggle-size)] w-[var(--toggle-size)] min-w-0 rounded-sm p-0"
+                  title="Rating"
+                >
+                  <Star className="h-3.5 w-3.5" />
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
           </div>
+
           <div className={'-mt-3 flex flex-wrap gap-2'}>
             {statusOrder.map(status => (
               <Button

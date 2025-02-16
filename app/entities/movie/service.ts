@@ -9,6 +9,7 @@ class MovieService {
       {
         id: 1,
         backdrop_path: 1,
+        vote_average: 1,
         poster_path: 1,
         release_date: 1,
         original_title: 1,
