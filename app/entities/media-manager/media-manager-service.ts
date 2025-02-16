@@ -23,6 +23,13 @@ class MediaManagerService {
     await this.collectionService.addMovie(userId, movieId, 'added');
   }
 
+  async refreshMovie(id: number) {
+    const movie = await this.tmdbService.searchMovieById(id);
+    movie.creationDate = Date.now();
+    await this.movieService.deleteMovie(id);
+    await this.movieService.addMovie(movie);
+  }
+
   async updateMovieStatus({ userId, movieId, status }: { userId: string; movieId: number; status: string }) {
     const movie = await this.movieService.getMovie(movieId);
     if (!movie) {

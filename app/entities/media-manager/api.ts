@@ -8,9 +8,15 @@ const addMovie = createServerFn({ method: 'POST' })
   .validator((d: { id: number }) => d as { id: number })
   .handler(async ({ context, data }) => {
     const movie = await mediaManagerService.addMovie({ userId: context.user.id, movieId: data.id });
-    return {
-      movie: movie,
-    };
+    return { movie: movie };
+  });
+
+const refreshMovie = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .validator((d: { id: number }) => d as { id: number })
+  .handler(async ({ data }) => {
+    await mediaManagerService.refreshMovie(data.id);
+    return { message: 'Movie refreshed' };
   });
 
 const updateMovieStatus = createServerFn({ method: 'POST' })
@@ -49,4 +55,4 @@ const updateSerieStatus = createServerFn({ method: 'POST' })
     });
   });
 
-export { addMovie, updateMovieStatus, addSerie, updateSerieStatus };
+export { addMovie, updateMovieStatus, addSerie, updateSerieStatus, refreshMovie };

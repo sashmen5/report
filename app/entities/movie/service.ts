@@ -3,7 +3,7 @@ import { MovieSchema, MovieTable } from '../../models/movie.schema';
 class MovieService {
   constructor() {}
 
-  async getMovies(): Promise<MovieSchema[]> {
+  async getMovies(): Promise<TMDB.Movie[]> {
     return await MovieTable.find<TMDB.Movie>(
       {},
       {
@@ -25,6 +25,10 @@ class MovieService {
 
   async addMovie(movie: MovieSchema): Promise<MovieSchema> {
     return await new MovieTable(movie).save();
+  }
+
+  async deleteMovie(id: number) {
+    return await MovieTable.deleteOne({ id: id }).exec();
   }
 }
 

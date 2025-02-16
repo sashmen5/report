@@ -1,6 +1,13 @@
 import { FC, useMemo, useState } from 'react';
 
-import { Button, Input } from '@sashmen5/components';
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Input,
+} from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { Link, getRouteApi } from '@tanstack/react-router';
@@ -68,8 +75,10 @@ const SeriesPage: FC = () => {
       if (!serie) {
         return false;
       }
-      const name = byIds[d.id].name ?? byIds[d.id].originalName ?? '';
-      return name.toLowerCase().includes(lowerSearch);
+      return (
+        byIds[d.id].name?.toLowerCase().includes(lowerSearch) ||
+        byIds[d.id].originalName?.toLowerCase().includes(lowerSearch)
+      );
     })
     .sort((a, b) => b.status.date - a.status.date);
 
@@ -115,8 +124,24 @@ const SeriesPage: FC = () => {
                   <MediaCard
                     key={d.id}
                     onClick={() => setActiveId({ id: id.id, status: id.status.name })}
-                    className={'gap-3'}
+                    className={'relative gap-3'}
                   >
+                    <div className={'absolute right-0 top-0 m-4'}>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                            <path
+                              id="circle-more"
+                              d="M16,4A12,12,0,1,0,28,16,12.01312,12.01312,0,0,0,16,4ZM10,18a2,2,0,1,1,2-2A2.00006,2.00006,0,0,1,10,18Zm6,0a2,2,0,1,1,2-2A2.00006,2.00006,0,0,1,16,18Zm6,0a2,2,0,1,1,2-2A2.00006,2.00006,0,0,1,22,18Z"
+                              fill="rgba(255,255,255,0.8)"
+                            />
+                          </svg>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align={'end'} side={'right'}>
+                          <DropdownMenuItem>Refresh</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                     <MediaImg
                       loading={'lazy'}
                       className={'aspect-[6/9] rounded-2xl'}

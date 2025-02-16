@@ -1,6 +1,16 @@
 import { FC, useMemo, useState } from 'react';
 
-import { Button, Input, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Input,
+  ToggleGroup,
+  ToggleGroupItem,
+  cn,
+} from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
@@ -19,6 +29,7 @@ import {
 import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
+import { MovieCard } from './MovieCard.component';
 import { ReportMovieStatus } from './ReportMovieStatus.component';
 
 const Route = getRouteApi('/_authed/movies');
@@ -61,62 +72,69 @@ const MoviesPage: FC = () => {
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const byIds = useMemo(() => {
-    const res: Record<number, (typeof movies)['movies'][number]> = {};
+    const res: Record<number, TMDB.Movie> = {};
     movies?.movies?.forEach(d => (res[d.id] = d));
     return res;
   }, [movies.movies]);
 
   const activeMovie = typeof activeMovieId !== 'undefined' ? byIds[activeMovieId.id] : undefined;
   const lowerSearch = search.toLowerCase();
-  const movieIds = collection.collection?.movies
-    .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
-    .filter(d => d.status !== undefined)
-    .filter(d => d.status.name === selectedStatus)
-    .filter(d => {
-      if (!search) {
-        return true;
-      }
-      const serie = byIds[d.id];
-      if (!serie) {
-        return false;
-      }
-      const name = byIds[d.id].title ?? byIds[d.id].original_title ?? '';
-      return name.toLowerCase().includes(lowerSearch);
-    })
-    .sort((a, b) => {
-      const aD = byIds[a.id];
-      const bD = byIds[b.id];
+  const movieIds =
+    collection.collection?.movies
+      .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
+      .filter(d => d.status !== undefined)
+      .filter(d => d.status.name === selectedStatus)
+      .filter(d => {
+        if (!search) {
+          return true;
+        }
+        const movie = byIds[d.id];
+        if (!movie) {
+          return false;
+        }
+        return (
+          byIds[d.id].title?.toLowerCase().includes(lowerSearch) ||
+          byIds[d.id].original_title?.toLowerCase().includes(lowerSearch) ||
+          false
+        );
+      })
+      .sort((a, b) => {
+        const aD = byIds[a.id];
+        const bD = byIds[b.id];
 
-      if (!sortType) {
+        if (!sortType) {
+          return b.status.date - a.status.date;
+        }
+
+        if (sortType === 'rating') {
+          if (!bD.vote_average) return -1;
+          if (!aD.vote_average) return 1;
+          return bD.vote_average - aD.vote_average;
+        }
+
+        const aTime = aD.release_date;
+        const bTime = bD.release_date;
+
+        if (!aTime) return 1;
+        if (!bTime) return -1;
+
+        if (sortType === 'dateup') {
+          return new Date(aTime).getTime() - new Date(bTime).getTime();
+        }
+
+        if (sortType === 'datedown') {
+          return new Date(bTime).getTime() - new Date(aTime).getTime();
+        }
+
         return b.status.date - a.status.date;
-      }
-
-      if (sortType === 'rating') {
-        if (!bD.vote_average) return -1;
-        if (!aD.vote_average) return 1;
-        return bD.vote_average - aD.vote_average;
-      }
-
-      const aTime = aD.release_date;
-      const bTime = bD.release_date;
-
-      if (!aTime) return 1;
-      if (!bTime) return -1;
-
-      if (sortType === 'dateup') {
-        return new Date(aTime).getTime() - new Date(bTime).getTime();
-      }
-
-      if (sortType === 'datedown') {
-        return new Date(bTime).getTime() - new Date(aTime).getTime();
-      }
-
-      return b.status.date - a.status.date;
-    });
+      }) ?? [];
 
   const handleChangeSearch = (value: string) => {
     setSearch(value);
   };
+
+  const movies2 = movieIds.map(id => byIds[id.id]);
+  console.log({ movies2: movies2 });
 
   return (
     <>
@@ -186,22 +204,13 @@ const MoviesPage: FC = () => {
                 if (!d) {
                   return null;
                 }
+
                 return (
-                  <MediaCard
-                    className={'gap-3'}
+                  <MovieCard
                     key={d.id}
+                    movie={d}
                     onClick={() => setActiveMovieId({ id: id.id, status: id.status.name })}
-                  >
-                    <MediaImg
-                      loading={'lazy'}
-                      className={'aspect-[6/9] rounded-2xl'}
-                      src={tmdbEntity.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
-                    />
-                    <div>
-                      <MediaTitle className={'break-words'}>{d.title}</MediaTitle>
-                      <MediaDescription>{formatDate(d.release_date)}</MediaDescription>
-                    </div>
-                  </MediaCard>
+                  />
                 );
               })}
             </div>
