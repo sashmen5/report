@@ -236,23 +236,6 @@ const MoviesPage: FC = () => {
                 <Clipboard className={'text-muted-foreground'} />
               )}
             </Button>
-            {activeMovie?.original_title !== activeMovie?.title && (
-              <>
-                <div className={'text-sm text-muted-foreground'}>{activeMovie?.title}</div>
-                <Button
-                  size={'icon'}
-                  variant={'outline'}
-                  className={'group ml-auto size-8 md:size-6'}
-                  onClick={() => copyToClipboard(activeMovie?.title ?? '')}
-                >
-                  {isCopied ? (
-                    <Check className={'text-muted-foreground'} />
-                  ) : (
-                    <Clipboard className={'text-muted-foreground'} />
-                  )}
-                </Button>
-              </>
-            )}
           </div>
         }
       >

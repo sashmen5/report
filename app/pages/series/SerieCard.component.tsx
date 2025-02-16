@@ -1,4 +1,5 @@
 import { ComponentProps, FC, useState } from 'react';
+import * as React from 'react';
 
 import {
   DropdownMenu,
@@ -8,6 +9,7 @@ import {
   cn,
 } from '@sashmen5/components';
 import { Link } from '@tanstack/react-router';
+import { RefreshCcw } from 'lucide-react';
 
 import { PendingRoundedIcon } from '../../../shared/components/Icons';
 import { refreshSerie } from '../../entities/media-manager';
@@ -48,12 +50,15 @@ const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent align={'center'} side={'bottom'}>
             <DropdownMenuItem
-              className={'cursor-pointer'}
+              className={'cursor-pointer pl-8'}
               onClick={e => {
                 e.stopPropagation();
                 refreshSerie({ data: { id: d.id } });
               }}
             >
+              <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                <RefreshCcw className="h-4 w-4" />
+              </span>
               Refresh
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -64,26 +69,13 @@ const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
         className={'aspect-[6/9] rounded-2xl'}
         src={tmdbEntity.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
       />
-      <div
-        onClick={e => {
-          console.log('click');
-          // e.preventDefault();
-          // e.stopPropagation();
-        }}
-        className={open ? 'z-0' : 'z-10'}
-      >
-        <Link
-          // onClick={e => {
-          //   e.preventDefault();
-          //   e.stopPropagation();
-          // }}
-          to={'/seasons/$serieId'}
-          params={{ serieId: d.id.toString() }}
-          preload={preload}
-        >
-          <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
-        </Link>
-        <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
+      <div className={'mx-1'}>
+        <div onClick={e => e.stopPropagation()} className={open ? 'z-0' : 'z-10'}>
+          <Link to={'/seasons/$serieId'} params={{ serieId: d.id.toString() }} preload={preload}>
+            <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
+          </Link>
+          <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
+        </div>
       </div>
     </MediaCard>
   );
