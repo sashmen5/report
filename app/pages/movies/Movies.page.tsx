@@ -6,7 +6,7 @@ import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
 import { Check, Clipboard, Search } from 'lucide-react';
 
-import { tmdbService } from '../../entities/tmdb';
+import { tmdbEntity, tmdbService } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import { ReportMovieStatus } from './ReportMovieStatus.component';
@@ -111,7 +111,7 @@ const MoviesPage: FC = () => {
                     <MediaImg
                       loading={'lazy'}
                       className={'aspect-[6/9] rounded-2xl'}
-                      src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
+                      src={tmdbEntity.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
                     <div>
                       <MediaTitle className={'break-words'}>{d.title}</MediaTitle>

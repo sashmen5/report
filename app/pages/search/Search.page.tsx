@@ -7,8 +7,7 @@ import { Plus, Search } from 'lucide-react';
 
 import { getCollection } from '../../entities/collection';
 import { addMovie, addSerie } from '../../entities/media-manager';
-import { tmdbService } from '../../entities/tmdb';
-import { fetchSearch } from '../../entities/tmdb/api';
+import { fetchSearch, tmdbEntity, tmdbService } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import { Collection } from '../../models/collecton.schema';
@@ -21,13 +20,16 @@ const SearchPage: FC = () => {
   const [value, setValue] = useState(query);
   const [collection, setCollection] = useState<Collection | null>(null);
   const [search, setSearch] = useState<TMDB.MultiSearchResult[]>([]);
-  useEffect(() => {
+
+  const reFetch = () => {
     getCollection().then(res => {
       if (res.collection) {
         setCollection(res.collection);
       }
     });
-  }, []);
+  };
+
+  useEffect(() => reFetch(), []);
 
   useEffect(() => {
     if (!query) {
@@ -51,11 +53,6 @@ const SearchPage: FC = () => {
     return res;
   })();
 
-  console.log('[collection?.movies.length]', collection?.movies, moviesByIds);
-
-  console.log(Object.keys(moviesByIds).length);
-  console.log(Object.keys(moviesByIds).length);
-
   const debounceSearch = useCallback(
     debounce((value: string) => {
       console.log('Debounced called with', value);
@@ -72,17 +69,18 @@ const SearchPage: FC = () => {
   const handleOnAdd = async (movieId: number) => {
     console.log('Add');
     const res = await addMovie({ data: { id: movieId } });
+
     console.log(res);
+    reFetch();
     //TODO: Optimisitc update
-    router.invalidate();
   };
 
   const handleOnAddSerie = async (movieId: number) => {
     console.log('Add');
     const res = await addSerie({ data: { id: movieId } });
     console.log(res);
+    reFetch();
     //TODO: Optimisitc update
-    router.invalidate();
   };
 
   return (
@@ -126,7 +124,7 @@ const SearchPage: FC = () => {
                     <MediaImg
                       loading={'lazy'}
                       className={'aspect-[105/150]'}
-                      src={tmdbService.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
+                      src={tmdbEntity.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
                     <div className={'flex justify-between gap-3 p-3 align-top'}>
                       <div className={'grow space-y-1'}>

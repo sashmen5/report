@@ -6,7 +6,7 @@ import { ReportModal } from '@sashmen5/widgets';
 import { Link, getRouteApi } from '@tanstack/react-router';
 import { Check, Clipboard, Search } from 'lucide-react';
 
-import { tmdbService } from '../../entities/tmdb';
+import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import { ReportSerieStatus } from './ReportSerieStatus.component';
@@ -120,7 +120,7 @@ const SeriesPage: FC = () => {
                     <MediaImg
                       loading={'lazy'}
                       className={'aspect-[6/9] rounded-2xl'}
-                      src={tmdbService.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
+                      src={tmdbEntity.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
                     />
                     <div onClick={e => e.stopPropagation()}>
                       <Link
