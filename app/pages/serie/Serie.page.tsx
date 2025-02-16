@@ -20,11 +20,6 @@ const SeriePage: FC = () => {
     .filter(d => d.season_number !== 0)
     .sort((a, b) => a.season_number - b.season_number);
 
-  const [selectedSeason, setSelectedSeason] = useState(seasons[0].season_number);
-  const currentSeason = seasons.find(d => d.season_number === selectedSeason);
-
-  const episodes = seasons.find(d => d.season_number === selectedSeason)?.episodes || [];
-
   const isWatchedEpisode = (seasonId: number, episodeId: number) => {
     const season = seasonsStatus.seasonStatuses.find(el => el.id === seasonId);
     if (!season) {
@@ -32,11 +27,23 @@ const SeriePage: FC = () => {
     }
 
     const isWatched = season.episodes?.[episodeId];
-    console.log(isWatched);
     return Boolean(isWatched);
   };
 
-  console.log(seasonsStatus.seasonStatuses);
+  const [selectedSeason, setSelectedSeason] = useState(() => {
+    for (const season of seasons) {
+      for (const episode of season.episodes) {
+        const isWatched = isWatchedEpisode(season.id, episode.id);
+        if (!isWatched) {
+          return season.season_number;
+        }
+      }
+    }
+    return seasons.at(-1)?.season_number ?? seasons.length - 1;
+  });
+  const currentSeason = seasons.find(d => d.season_number === selectedSeason);
+
+  const episodes = seasons.find(d => d.season_number === selectedSeason)?.episodes || [];
 
   const getDateValue = (date: string) => {
     const days = getDaysToDate(date);
@@ -57,8 +64,12 @@ const SeriePage: FC = () => {
     <div className={'space-y-4 py-4'}>
       <div className={'flex items-center'}>
         <div className={'text-lg font-bold'}>{serie?.originalName}</div>
-        <Dot />
-        <div className={'text-muted-foreground'}>{serie?.name}</div>
+        {serie?.originalName !== serie?.name && (
+          <>
+            <Dot />
+            <div className={'text-muted-foreground'}>{serie?.name}</div>
+          </>
+        )}
       </div>
       <div className={'flex flex-wrap gap-x-3 gap-y-2'}>
         {seasons.map((d, i) => (

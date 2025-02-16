@@ -13,17 +13,7 @@ export const Route = createFileRoute('/_authed')({
 });
 
 function AuthedComponent() {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   const state = useRouterState();
-
-  if (!isMounted) {
-    return null;
-  }
 
   return (
     <div style={{ '--header-height': '56px' }}>
