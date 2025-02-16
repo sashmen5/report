@@ -10,7 +10,7 @@ import {
 import { Link } from '@tanstack/react-router';
 
 import { PendingRoundedIcon } from '../../../shared/components/Icons';
-import { refreshMovie, refreshSerie } from '../../entities/media-manager';
+import { refreshSerie } from '../../entities/media-manager';
 import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
@@ -19,18 +19,18 @@ import { Serie } from '../../models/serie.schema';
 interface Props {
   serie: Serie;
   onClick: () => void;
-  preload: ComponentProps<typeof Link>['preload'];
+  preload?: ComponentProps<typeof Link>['preload'];
 }
 
 const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
   const [open, setOpen] = useState(false);
   return (
-    <MediaCard key={d.id} onClick={onClick} className={'relative gap-3'}>
+    <MediaCard onClick={onClick} key={d.id} className={'relative gap-3'}>
       <div
         className={cn(
           'absolute inset-0 overflow-hidden rounded-2xl bg-black/10 backdrop-blur-2xl',
           'transition-opacity duration-500',
-          open ? 'opacity-100' : 'opacity-0',
+          open ? 'z-10 opacity-100' : 'z-0 opacity-0',
         )}
       />
       <div className={'absolute right-0 top-0 m-2'}>
@@ -64,8 +64,23 @@ const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
         className={'aspect-[6/9] rounded-2xl'}
         src={tmdbEntity.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
       />
-      <div onClick={e => e.stopPropagation()}>
-        <Link to={'/seasons/$serieId'} params={{ serieId: d.id.toString() }} preload={preload}>
+      <div
+        onClick={e => {
+          console.log('click');
+          // e.preventDefault();
+          // e.stopPropagation();
+        }}
+        className={open ? 'z-0' : 'z-10'}
+      >
+        <Link
+          // onClick={e => {
+          //   e.preventDefault();
+          //   e.stopPropagation();
+          // }}
+          to={'/seasons/$serieId'}
+          params={{ serieId: d.id.toString() }}
+          preload={preload}
+        >
           <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
         </Link>
         <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
