@@ -102,7 +102,7 @@ export function Sortable4() {
       <h1>My Tasks ✅</h1>
       <Input onSubmit={addTask} />
       <DndContext sensors={sensors} collisionDetection={closestCorners} onDragEnd={handleDragEnd}>
-        <Column id="toDo" tasks={tasks} />
+        <Column tasks={tasks} />
       </DndContext>
     </div>
   );

@@ -11,6 +11,7 @@ const habitTypeId = [
   'steps',
   'calories',
   'pullups',
+  'hookah',
 ] as const;
 
 const habitValueType = ['bool', 'numeric'] as const;

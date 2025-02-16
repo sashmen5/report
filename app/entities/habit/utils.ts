@@ -14,6 +14,7 @@ const colorsById: Record<HabitTypeId, string> = {
   steps: colors[7],
   calories: colors[8],
   pullups: colors[9],
+  hookah: colors[0],
 };
 
 const getHabitColor = (habitTypeId: HabitTypeId): string => colorsById[habitTypeId];
