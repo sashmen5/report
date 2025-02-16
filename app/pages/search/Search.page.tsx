@@ -1,14 +1,17 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Badge, Button, Input, cn } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import debounce from 'lodash.debounce';
 import { Plus, Search } from 'lucide-react';
 
+import { getCollection } from '../../entities/collection';
 import { addMovie, addSerie } from '../../entities/media-manager';
 import { tmdbService } from '../../entities/tmdb';
+import { fetchSearch } from '../../entities/tmdb/api';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
+import { Collection } from '../../models/collecton.schema';
 
 const Route = getRouteApi('/_authed/search');
 
@@ -16,7 +19,24 @@ const SearchPage: FC = () => {
   const navigate = Route.useNavigate();
   const { query } = Route.useSearch();
   const [value, setValue] = useState(query);
-  const { search, collection } = Route.useLoaderData();
+  const [collection, setCollection] = useState<Collection | null>(null);
+  const [search, setSearch] = useState<TMDB.MultiSearchResult[]>([]);
+  useEffect(() => {
+    getCollection().then(res => {
+      if (res.collection) {
+        setCollection(res.collection);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!query) {
+      setSearch([]);
+    }
+    fetchSearch({ data: { query: query ?? '' } }).then(res => setSearch(res.search.results ?? []));
+  }, [query]);
+
+  // const { search, collection } = Route.useLoaderData();
   const router = useRouter();
 
   const moviesByIds = (function () {
@@ -71,6 +91,7 @@ const SearchPage: FC = () => {
         <div className="relative">
           <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
+            autoFocus
             value={value}
             onChange={e => handleChangeSearch(e.target.value)}
             placeholder="Search"
@@ -80,8 +101,17 @@ const SearchPage: FC = () => {
 
         <div className={'@container'}>
           <div className={'grid gap-3 @xs:grid-cols-2 @md:grid-cols-4'}>
-            {search.results
+            {search
               ?.filter(d => d.media_type === 'movie' || d.media_type === 'tv')
+              ?.sort((a, b) => {
+                const aTime = a.release_date ?? a.first_air_date;
+                const bTime = b.release_date ?? b.first_air_date;
+                // Handle cases where either date is undefined or null
+                if (!aTime) return 1; // a goes after b
+                if (!bTime) return -1; // b goes after a
+
+                return new Date(bTime).getTime() - new Date(aTime).getTime();
+              })
               .map((d, index) => {
                 return (
                   <MediaCard
