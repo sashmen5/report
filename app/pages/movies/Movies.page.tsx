@@ -93,8 +93,10 @@ const MoviesPage: FC = () => {
         const aTime = aD.release_date;
         const bTime = bD.release_date;
 
+        console.log(aTime);
+
         if (!aTime) return 1;
-        if (!bTime) return -1;
+        if (!bTime) return 1;
 
         if (sortType === 'dateup') {
           return new Date(aTime).getTime() - new Date(bTime).getTime();
@@ -110,9 +112,6 @@ const MoviesPage: FC = () => {
   const handleChangeSearch = (value: string) => {
     setSearch(value);
   };
-
-  const movies2 = movieIds.map(id => byIds[id.id]);
-  console.log({ movies2: movies2 });
 
   return (
     <>
