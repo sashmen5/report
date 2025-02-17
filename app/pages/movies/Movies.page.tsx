@@ -1,34 +1,11 @@
 import { FC, useMemo, useState } from 'react';
 
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Input,
-  ToggleGroup,
-  ToggleGroupItem,
-  cn,
-} from '@sashmen5/components';
+import { Button, Input, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
-import {
-  CalendarArrowDown,
-  CalendarArrowUp,
-  Check,
-  Clipboard,
-  Monitor,
-  Search,
-  Smartphone,
-  Star,
-  Tablet,
-} from 'lucide-react';
+import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Search, Star } from 'lucide-react';
 
-import { tmdbEntity } from '../../entities/tmdb';
-import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
-import { formatDate } from '../../lib/date-utils';
 import { MovieCard } from './MovieCard.component';
 import { ReportMovieStatus } from './ReportMovieStatus.component';
 
@@ -64,11 +41,8 @@ const MoviesPage: FC = () => {
   const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState<SortType | undefined>();
-  const loaderdata = Route.useLoaderData();
+  const { movies, collection } = Route.useLoaderData();
 
-  console.log({ loaderdata, useLoaderData: Route.useLoaderData, Route });
-
-  const { movies, collection } = loaderdata;
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const byIds = useMemo(() => {
