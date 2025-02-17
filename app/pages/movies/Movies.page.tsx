@@ -102,6 +102,10 @@ const MoviesPage: FC = () => {
         const aD = byIds[a.id];
         const bD = byIds[b.id];
 
+        if (!aD || !bD) {
+          return 0;
+        }
+
         if (!sortType) {
           return b.status.date - a.status.date;
         }
