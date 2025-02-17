@@ -79,3 +79,15 @@ input[type=number] {
         @apply bg-muted;
     }
 }
+
+.box::before {
+    visibility: hidden;
+    --_br: 1rem;
+    --_size: var(--_br);
+    content: "";
+    position: absolute;
+    width: var(--_size);
+    aspect-ratio: 1;
+    background-image: radial-gradient(circle at 100% 100%, transparent var(--_size), var(--_corner-color, white) calc(var(--_size) + 1px));
+    rotate: -90deg;
+}

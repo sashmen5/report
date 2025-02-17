@@ -126,32 +126,44 @@ const SearchPage: FC = () => {
                       className={'aspect-[105/150]'}
                       src={tmdbEntity.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
                     />
-                    <div className={'flex justify-between gap-3 p-3 align-top'}>
+                    <div className={'relative flex justify-between gap-3 p-3 align-top'}>
                       <div className={'grow space-y-1'}>
                         <div className={'flex justify-between gap-2'}>
                           <MediaTitle className={'line-clamp-3'} style={{ wordBreak: 'break-word' }}>
                             {d.title ?? d.name ?? d.original_title ?? d.original_title}
                           </MediaTitle>
                           {d.media_type === 'movie' && !moviesByIds[d.id] && (
-                            <Button
-                              size={'icon'}
-                              variant={'outline'}
-                              className={'size-8 shrink-0'}
-                              onClick={() => handleOnAdd(d.id)}
+                            <div
+                              className={cn(
+                                'box absolute right-4 top-1 -translate-y-3/4 rounded-xl bg-background px-1.5 pb-0 pt-1.5',
+                              )}
                             >
-                              <Plus className={'stroke-muted-foreground'} />
-                            </Button>
+                              <Button
+                                size={'icon'}
+                                variant={'outline'}
+                                className={'size-8 shrink-0'}
+                                onClick={() => handleOnAdd(d.id)}
+                              >
+                                <Plus className={'stroke-muted-foreground'} />
+                              </Button>
+                            </div>
                           )}
 
                           {d.media_type === 'tv' && !seriesByIds[d.id] && (
-                            <Button
-                              size={'icon'}
-                              variant={'outline'}
-                              className={'mr-1 size-8 shrink-0'}
-                              onClick={() => handleOnAddSerie(d.id)}
+                            <div
+                              className={cn(
+                                'box absolute right-4 top-1 -translate-y-3/4 rounded-xl bg-background px-1.5 pb-0 pt-1.5',
+                              )}
                             >
-                              <Plus className={'stroke-muted-foreground'} />
-                            </Button>
+                              <Button
+                                size={'icon'}
+                                variant={'outline'}
+                                className={'mr-1 size-8 shrink-0'}
+                                onClick={() => handleOnAddSerie(d.id)}
+                              >
+                                <Plus className={'stroke-muted-foreground'} />
+                              </Button>
+                            </div>
                           )}
                         </div>
                         <Badge

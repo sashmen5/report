@@ -6,6 +6,7 @@ import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
 import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Search, Star } from 'lucide-react';
 
+import { formatDate } from '../../lib/date-utils';
 import { MovieCard } from './MovieCard.component';
 import { ReportMovieStatus } from './ReportMovieStatus.component';
 
@@ -210,11 +211,16 @@ const MoviesPage: FC = () => {
         onOpenChange={() => setActiveMovieId(undefined)}
         title={
           <div className={'grid grid-cols-[auto_40px] items-center gap-x-3 gap-y-2'}>
-            <div>{activeMovie?.original_title}</div>
+            <div className={'space-y-0.5'}>
+              <div>{activeMovie?.original_title}</div>
+              <div className={'text-sm font-normal text-muted-foreground'}>
+                {formatDate(activeMovie?.release_date)}
+              </div>
+            </div>
             <Button
               size={'icon'}
               variant={'outline'}
-              className={'group ml-auto size-8 md:size-6'}
+              className={'group ml-auto size-8 self-baseline md:size-6'}
               onClick={() => copyToClipboard(activeMovie?.original_title ?? '')}
             >
               {isCopied ? (
