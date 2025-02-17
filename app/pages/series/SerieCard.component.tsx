@@ -69,13 +69,11 @@ const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
         className={'aspect-[6/9] rounded-2xl'}
         src={tmdbEntity.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
       />
-      <div className={'mx-1'}>
-        <div onClick={e => e.stopPropagation()} className={open ? 'z-0' : 'z-10'}>
-          <Link to={'/seasons/$serieId'} params={{ serieId: d.id.toString() }} preload={preload}>
-            <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
-          </Link>
-          <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
-        </div>
+      <div onClick={e => e.stopPropagation()} className={cn('mx-1', open ? 'z-0' : 'z-10')}>
+        <Link to={'/seasons/$serieId'} params={{ serieId: d.id.toString() }} preload={preload}>
+          <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
+        </Link>
+        <MediaDescription>{formatDate(d.firstAirDate)}</MediaDescription>
       </div>
     </MediaCard>
   );
