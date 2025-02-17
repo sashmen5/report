@@ -56,29 +56,39 @@ const MoviesPage: FC = () => {
   const movieIds =
     collection.collection?.movies
       .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
+      .filter(d => Boolean(byIds[d.id]))
       .filter(d => d.status !== undefined)
       .filter(d => d.status.name === selectedStatus)
       .filter(d => {
         if (!search) {
           return true;
         }
-        const movie = byIds[d.id];
-        if (!movie) {
-          return false;
-        }
+
         return (
           byIds[d.id].title?.toLowerCase().includes(lowerSearch) ||
           byIds[d.id].original_title?.toLowerCase().includes(lowerSearch) ||
           false
         );
       })
+      .filter(a => {
+        if (!sortType) {
+          return true;
+        }
+
+        switch (sortType) {
+          case 'dateup':
+          case 'datedown':
+            return Boolean(byIds[a.id].release_date);
+
+          case 'rating':
+            return Boolean(byIds[a.id].vote_average);
+          default:
+            return true;
+        }
+      })
       .sort((a, b) => {
         const aD = byIds[a.id];
         const bD = byIds[b.id];
-
-        if (!aD || !bD) {
-          return 0;
-        }
 
         if (!sortType) {
           return b.status.date - a.status.date;
