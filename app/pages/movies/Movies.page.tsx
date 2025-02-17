@@ -185,7 +185,7 @@ const MoviesPage: FC = () => {
           </div>
 
           <div className={'@container'}>
-            <div className={'grid gap-5 @xs:grid-cols-3 @sm:grid-cols-3 @md:grid-cols-4'}>
+            <div className={'grid grid-cols-1 gap-5 @xs:grid-cols-2 @md:grid-cols-4'}>
               {movieIds?.map((id, index) => {
                 const d = byIds[id.id];
                 if (!d) {
