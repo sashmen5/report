@@ -25,7 +25,7 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
     <MediaCard className={'relative gap-3'} key={d.id} onClick={() => setActiveMovieId()}>
       <div
         className={cn(
-          'absolute inset-0 overflow-hidden rounded-2xl bg-black/10 backdrop-blur-2xl',
+          'absolute inset-0 overflow-hidden rounded-2xl bg-black/10 backdrop-blur-lg',
           'transition-opacity duration-500',
           open ? 'opacity-100' : 'opacity-0',
         )}

@@ -209,7 +209,7 @@ const MoviesPage: FC = () => {
         open={Boolean(activeMovieId)}
         onOpenChange={() => setActiveMovieId(undefined)}
         title={
-          <div className={'grid grid-cols-[auto_40px] gap-x-3 gap-y-2'}>
+          <div className={'grid grid-cols-[auto_40px] items-center gap-x-3 gap-y-2'}>
             <div>{activeMovie?.original_title}</div>
             <Button
               size={'icon'}
