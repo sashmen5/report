@@ -23,22 +23,22 @@ function AuthedComponent() {
             <TabsList className={'w-full'}>
               <TabsTrigger asChild value="/year">
                 <Link to={'/year'}>
-                  <Flag strokeWidth={2} />
+                  <Flag strokeWidth={2} className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/movies">
                 <Link to={'/movies'}>
-                  <Clapperboard />
+                  <Clapperboard className={'group-data-[state="active"]:last:*:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/series">
                 <Link to={'/series'}>
-                  <TvMinimalPlay />
+                  <TvMinimalPlay className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/search">
                 <Link to={'/search'}>
-                  <Search />
+                  <Search className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
             </TabsList>

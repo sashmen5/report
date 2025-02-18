@@ -20,7 +20,7 @@ const TabsTrigger: FC<ComponentProps<typeof TabsPrimitive.Trigger>> = ({ classNa
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        'relative p-1',
+        'group relative p-1',
         'inline-flex h-full items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50',
         'min-w-14 max-w-[110px]',
         'data-[state=active]:text-primary',
