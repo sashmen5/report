@@ -17,6 +17,8 @@ import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import { Serie } from '../../models/serie.schema';
+import { StatusBar } from './StatusBar.component';
+import { StatusIcon } from './StatusIcon.component';
 
 interface Props {
   serie: Serie;
@@ -26,15 +28,18 @@ interface Props {
 
 const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
   const [open, setOpen] = useState(false);
+
+  console.log(d.status);
+
   return (
     <MediaCard onClick={onClick} key={d.id} className={'relative gap-3'}>
-      <div
-        className={cn(
-          'absolute inset-0 overflow-hidden rounded-2xl bg-black/10 backdrop-blur-2xl',
-          'transition-opacity duration-500',
-          open ? 'z-10 opacity-100' : 'z-0 opacity-0',
-        )}
-      />
+      {/*<div*/}
+      {/*  className={cn(*/}
+      {/*    'absolute inset-0 overflow-hidden rounded-2xl bg-black/10 backdrop-blur-2xl',*/}
+      {/*    'transition-opacity duration-500',*/}
+      {/*    open ? 'z-10 opacity-100' : 'z-0 opacity-0',*/}
+      {/*  )}*/}
+      {/*/>*/}
       <div className={'absolute right-0 top-0 m-2'}>
         <DropdownMenu open={open} onOpenChange={setOpen}>
           <DropdownMenuTrigger
@@ -69,6 +74,9 @@ const SerieCard: FC<Props> = ({ preload, onClick, serie: d }) => {
         className={'aspect-[6/9] rounded-2xl'}
         src={tmdbEntity.buildPosterImgPath(d.posterPath ?? d.backdropPath ?? '', '400')}
       />
+      <div className={'-mb-1.5'}>
+        <StatusBar serie={d} />
+      </div>
       <div onClick={e => e.stopPropagation()} className={cn('mx-1', open ? 'z-0' : 'z-10')}>
         <Link to={'/seasons/$serieId'} params={{ serieId: d.id.toString() }} preload={preload}>
           <MediaTitle>{d.name ?? d.originalName}</MediaTitle>
