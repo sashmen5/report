@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Badge, Button, Input, cn } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
@@ -7,7 +7,7 @@ import { Plus, Search } from 'lucide-react';
 
 import { getCollection } from '../../entities/collection';
 import { addMovie, addSerie } from '../../entities/media-manager';
-import { fetchSearch, tmdbEntity, tmdbService } from '../../entities/tmdb';
+import { fetchSearch, tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import { Collection } from '../../models/collecton.schema';
@@ -39,7 +39,6 @@ const SearchPage: FC = () => {
   }, [query]);
 
   // const { search, collection } = Route.useLoaderData();
-  const router = useRouter();
 
   const moviesByIds = (function () {
     const res: Record<number, boolean> = {};
@@ -110,7 +109,7 @@ const SearchPage: FC = () => {
 
                 return new Date(bTime).getTime() - new Date(aTime).getTime();
               })
-              .map((d, index) => {
+              .map(d => {
                 return (
                   <MediaCard
                     key={d.id}

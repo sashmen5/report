@@ -1,7 +1,10 @@
+import { MovieSchema } from '../../models';
 import { type CollectionService, collectionService } from '../collection';
 import { type MovieService, movieService } from '../movie';
+import { type OMDBService, omdbService } from '../omdb';
 import { type SerieService, serieService } from '../serie';
 import { type TMDBService, tmdbService } from '../tmdb';
+import { toRating } from './utils';
 
 class MediaManagerService {
   constructor(
@@ -9,23 +12,51 @@ class MediaManagerService {
     private collectionService: CollectionService,
     private movieService: MovieService,
     private serieService: SerieService,
+    private omdbService: OMDBService,
   ) {}
+
+  async completeData(imdbId?: string): Promise<{ ratings: MovieSchema['ratings'] }> {
+    let ratings: MovieSchema['ratings'] = [];
+    if (!imdbId) {
+      return { ratings };
+    }
+
+    const res: OMDB.Movie = await this.omdbService.search(imdbId);
+    ratings = toRating(res.Ratings ?? []);
+
+    return {
+      ratings,
+    };
+  }
 
   async addMovie({ userId, movieId }: { userId: string; movieId: number }) {
     let movie = await this.movieService.getMovie(movieId);
+    let tmdbMovie: TMDB.Movie;
 
     if (!movie) {
-      movie = await this.tmdbService.searchMovieById(movieId);
-      movie.creationDate = Date.now();
-      await this.movieService.addMovie(movie);
+      tmdbMovie = await this.tmdbService.searchMovieById(movieId);
+      tmdbMovie.creationDate = Date.now();
+      movie = tmdbMovie;
     }
 
+    movie = {
+      ...movie,
+      ratings: await this.completeData(movie?.imdb_id).then(d => d.ratings),
+    };
+
+    await this.movieService.addMovie(movie);
     await this.collectionService.addMovie(userId, movieId, 'added');
   }
 
   async refreshMovie(id: number) {
-    const movie = await this.tmdbService.searchMovieById(id);
-    movie.creationDate = Date.now();
+    const tmdbMovie = await this.tmdbService.searchMovieById(id);
+    tmdbMovie.creationDate = Date.now();
+
+    const movie: MovieSchema = {
+      ...tmdbMovie,
+      ratings: await this.completeData(tmdbMovie.imdb_id).then(d => d.ratings),
+    };
+
     await this.movieService.deleteMovie(id);
     await this.movieService.addMovie(movie);
   }
@@ -111,5 +142,6 @@ const mediaManagerService = new MediaManagerService(
   collectionService,
   movieService,
   serieService,
+  omdbService,
 );
 export { mediaManagerService, MediaManagerService };

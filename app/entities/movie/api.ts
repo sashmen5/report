@@ -7,6 +7,7 @@ const getMovies = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
   .handler(async () => {
     const movies = await movieService.getMovies();
+
     return {
       movies: movies,
     };

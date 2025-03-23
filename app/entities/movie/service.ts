@@ -1,17 +1,19 @@
-import { MovieSchema, MovieTable } from '../../models/movie.schema';
+import { type MovieSchema, MovieTable } from '../../models/movie.schema';
 
 class MovieService {
   constructor() {}
 
-  async getMovies(): Promise<TMDB.Movie[]> {
-    return await MovieTable.find<TMDB.Movie>(
+  async getMovies(): Promise<MovieSchema[]> {
+    return await MovieTable.find<MovieSchema>(
       {},
       {
         id: 1,
         backdrop_path: 1,
+        ratings: 1,
         vote_average: 1,
         poster_path: 1,
         release_date: 1,
+        imdb_id: 1,
         original_title: 1,
         title: 1,
         _id: 0, // explicitly exclude _id field

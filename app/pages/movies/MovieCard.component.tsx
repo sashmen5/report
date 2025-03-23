@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
   cn,
 } from '@sashmen5/components';
+import { useRouter } from '@tanstack/react-router';
 
 import { PendingRoundedIcon } from '../../../shared/components/Icons';
 import { refreshMovie } from '../../entities/media-manager';
@@ -21,6 +22,8 @@ interface Props {
 
 const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
   const [open, setOpen] = useState(false);
+  const route = useRouter();
+
   return (
     <MediaCard className={'relative gap-3'} key={d.id} onClick={() => setActiveMovieId()}>
       <div
@@ -49,6 +52,7 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
               onClick={e => {
                 e.stopPropagation();
                 refreshMovie({ data: { id: d.id } });
+                route.invalidate();
               }}
             >
               Refresh

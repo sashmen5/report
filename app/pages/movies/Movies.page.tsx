@@ -1,12 +1,13 @@
 import { FC, useMemo, useState } from 'react';
 
-import { Button, Input, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
+import { Button, Input, ToggleGroup, ToggleGroupItem, cn } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
 import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Search, Star } from 'lucide-react';
 
 import { formatDate } from '../../lib/date-utils';
+import type { MovieSchema } from '../../models';
 import { MovieCard } from './MovieCard.component';
 import { ReportMovieStatus } from './ReportMovieStatus.component';
 
@@ -43,11 +44,10 @@ const MoviesPage: FC = () => {
   const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState<SortType | undefined>();
   const { movies, collection } = Route.useLoaderData();
-
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const byIds = useMemo(() => {
-    const res: Record<number, TMDB.Movie> = {};
+    const res: Record<number, MovieSchema> = {};
     movies?.movies?.forEach(d => (res[d.id] = d));
     return res;
   }, [movies.movies]);
@@ -181,6 +181,13 @@ const MoviesPage: FC = () => {
                 className={'h-auto px-2 py-1'}
               >
                 {getMovieStatusLabel(status)}
+                <span
+                  className={cn({
+                    'text-muted-foreground': selectedStatus !== status,
+                  })}
+                >
+                  {collection.counts?.movies[status]}
+                </span>
               </Button>
             ))}
           </div>

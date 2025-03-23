@@ -11,7 +11,26 @@ const getCollection = createServerFn({ method: 'GET' })
     if (!collection) {
       return { error: 'Collection not found' };
     }
-    return { collection };
+
+    const counts = {
+      movies: {},
+      series: {},
+    };
+    collection.movies.forEach(movie => {
+      const status = movie.statuses.at(-1)?.name;
+      if (status) {
+        counts.movies[status] = (counts.movies[status] || 0) + 1;
+      }
+    });
+
+    collection.series.forEach(serie => {
+      const status = serie.statuses.at(-1)?.name;
+      if (status) {
+        counts.series[status] = (counts.series[status] || 0) + 1;
+      }
+    });
+
+    return { collection, counts };
   });
 
 export { getCollection };

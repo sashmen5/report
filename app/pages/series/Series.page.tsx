@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   Input,
+  cn,
 } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
@@ -110,6 +111,13 @@ const SeriesPage: FC = () => {
                 className={'h-auto px-2 py-1'}
               >
                 {getStatusLabel(status)}
+                <span
+                  className={cn({
+                    'text-muted-foreground': selectedStatus !== status,
+                  })}
+                >
+                  {collection.counts?.series[status]}
+                </span>
               </Button>
             ))}
           </div>
