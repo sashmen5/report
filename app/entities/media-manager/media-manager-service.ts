@@ -1,6 +1,6 @@
 import { MovieSchema } from '../../models';
 import { type CollectionService, collectionService } from '../collection';
-import { type MovieService, movieService } from '../movie';
+import { type MovieService, MovieStatus, movieService } from '../movie';
 import { type OMDBService, omdbService } from '../omdb';
 import { type SerieService, serieService } from '../serie';
 import { type TMDBService, tmdbService } from '../tmdb';
@@ -134,6 +134,37 @@ class MediaManagerService {
     }
 
     return res;
+  }
+
+  async getMovies({ userId, filter }: { userId: string; filter: { status: MovieStatus } }) {
+    const [movies, collection] = await Promise.all([
+      this.movieService.getMovies(),
+      this.collectionService.getByUserId(userId),
+    ]);
+
+    const status = filter.status;
+    const movieIds =
+      collection?.movies
+        .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
+        .filter(d => d.status !== undefined)
+        .filter(d => d.status.name === status) ?? [];
+
+    const moviesByIds: Record<string, MovieSchema> = {};
+    movies.forEach(movie => {
+      moviesByIds[movie.id] = movie;
+    });
+
+    const moviesFiltered: (MovieSchema & { status: MovieStatus })[] = movieIds.map(id => ({
+      ...moviesByIds[id.id],
+      status: id.status.name as MovieStatus,
+    }));
+
+    console.log('[status]', status);
+
+    return {
+      movies: [...moviesFiltered],
+      collection,
+    };
   }
 }
 

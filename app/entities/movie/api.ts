@@ -5,7 +5,7 @@ import { movieService } from './service';
 
 const getMovies = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
-  .handler(async () => {
+  .handler(async ({ data }) => {
     const movies = await movieService.getMovies();
 
     return {

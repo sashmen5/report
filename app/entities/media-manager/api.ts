@@ -1,6 +1,7 @@
 import { createServerFn } from '@tanstack/start';
 
 import { authMiddleware } from '../../lib/route-utils';
+import { MovieStatus, movieService } from '../movie';
 import { mediaManagerService } from './media-manager-service';
 
 const addMovie = createServerFn({ method: 'POST' })
@@ -63,4 +64,45 @@ const refreshSerie = createServerFn({ method: 'POST' })
     return { message: 'Serie refreshed' };
   });
 
-export { addMovie, updateMovieStatus, addSerie, updateSerieStatus, refreshMovie, refreshSerie };
+interface GetMoviesParams {
+  filter?: {
+    status?: MovieStatus;
+  };
+}
+
+const getMovies = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .validator((d: GetMoviesParams) => ({ filter: d.filter }))
+  .handler(async ({ data, context }) => {
+    const result = await mediaManagerService.getMovies({
+      userId: context.user.id,
+      filter: { status: data.filter?.status ?? 'added' },
+    });
+    const { collection } = result;
+
+    const counts = {
+      movies: {},
+      series: {},
+    };
+    collection?.movies.forEach(movie => {
+      const status = movie.statuses.at(-1)?.name;
+      if (status) {
+        counts.movies[status] = (counts.movies[status] || 0) + 1;
+      }
+    });
+
+    collection?.series.forEach(serie => {
+      const status = serie.statuses.at(-1)?.name;
+      if (status) {
+        counts.series[status] = (counts.series[status] || 0) + 1;
+      }
+    });
+
+    return {
+      movies: result.movies,
+      collection: result.collection,
+      counts,
+    };
+  });
+
+export { addMovie, updateMovieStatus, addSerie, updateSerieStatus, refreshMovie, refreshSerie, getMovies };
