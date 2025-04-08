@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { getMovies } from '../../entities/media-manager';
+import { getMovies, getMoviesAndFilter } from '../../entities/media-manager';
 import { MovieStatus, movieEntity } from '../../entities/movie';
 import { MoviesPage } from '../../pages/movies';
 

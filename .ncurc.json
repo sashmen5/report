@@ -1,0 +1,9 @@
+{
+  "upgrade": false,
+  "reject": [
+    "eslint",
+    "**tailwind**",
+    "**bcryptjs**"
+  ]
+}
+

@@ -154,15 +154,17 @@ class MediaManagerService {
       moviesByIds[movie.id] = movie;
     });
 
-    const moviesFiltered: (MovieSchema & { status: MovieStatus })[] = movieIds.map(id => ({
-      ...moviesByIds[id.id],
+    const moviesFiltered: { status: MovieStatus; movie: MovieSchema }[] = movieIds.map(id => ({
+      movie: moviesByIds[id.id],
       status: id.status.name as MovieStatus,
     }));
 
     console.log('[status]', status);
 
     return {
-      movies: [...moviesFiltered],
+      movies: Object.values(moviesByIds),
+      moviesFiltered: moviesFiltered,
+      movieIds: movieIds,
       collection,
     };
   }

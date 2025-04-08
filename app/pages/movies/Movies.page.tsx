@@ -45,7 +45,7 @@ const MoviesPage: FC = () => {
   const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState<SortType | undefined>();
-  const { movies, collection, counts } = Route.useLoaderData();
+  const { movies, moviesFiltered, collection, counts } = Route.useLoaderData();
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   // console.log(movies);
@@ -202,12 +202,13 @@ const MoviesPage: FC = () => {
 
           <div className={'@container'}>
             <div className={'grid grid-cols-1 gap-5 @xs:grid-cols-2 @md:grid-cols-4'}>
-              {movies?.map((d, index) => {
+              {moviesFiltered?.map((b, index) => {
+                const d = b.movie;
                 return (
                   <MovieCard
                     key={d.id + index}
                     movie={d}
-                    onClick={() => setActiveMovieId({ id: d.id, status: d.status })}
+                    onClick={() => setActiveMovieId({ id: d.id, status: d.status ?? '' })}
                   />
                 );
               })}
