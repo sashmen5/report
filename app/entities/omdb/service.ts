@@ -4,7 +4,6 @@ class OMDBService {
   constructor() {}
 
   async search(imdbId: string) {
-    // http://www.omdbapi.com/?i=tt3896198&apikey=d1f9210e
     const url = `http://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&i=${imdbId}`;
     const result = await axios.get<OMDB.Movie>(url);
     return result.data;
