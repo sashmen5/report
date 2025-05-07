@@ -204,6 +204,10 @@ const MoviesPage: FC = () => {
             <div className={'grid grid-cols-1 gap-5 @xs:grid-cols-2 @md:grid-cols-4'}>
               {moviesFiltered?.map((b, index) => {
                 const d = b.movie;
+                if (!d) {
+                  console.warn('[Euuuuuu]', 'broken movie', b);
+                  return null;
+                }
                 return (
                   <MovieCard
                     key={d.id + index}
