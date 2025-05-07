@@ -38,7 +38,6 @@ window.$RefreshSig$ = () => (type) => type`,
       ];
     })(),
   }),
-
   component: RootComponent,
   notFoundComponent: () => <div>[NotFound]</div>,
 });

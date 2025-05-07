@@ -7,7 +7,15 @@ const MediaCard: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
 };
 
 const MediaImg: FC<ComponentProps<'img'>> = ({ className, alt, ...props }) => {
-  return <img {...props} alt={alt} className={cn('border-none object-cover', className)} />;
+  return (
+    <img
+      loading={'lazy'}
+      decoding={'async'}
+      {...props}
+      alt={alt}
+      className={cn('border-none object-cover', className)}
+    />
+  );
 };
 
 const MediaTitle: FC<ComponentProps<'div'>> = ({ className, ...props }) => {
