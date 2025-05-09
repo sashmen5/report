@@ -1,8 +1,7 @@
 // app/routes/__root.tsx
 import { ReactNode } from 'react';
 
-import { Outlet, ScrollRestoration, createRootRoute } from '@tanstack/react-router';
-import { Meta, Scripts } from '@tanstack/start';
+import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
 import { ThemeProvider } from 'next-themes';
 
 import appCss from '../styles/app.css?url';
@@ -55,8 +54,8 @@ function RootComponent() {
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html suppressHydrationWarning>
-      <head>
-        <Meta />
+      <head title={'Report'}>
+        <HeadContent />
       </head>
       <body>
         <ThemeProvider
@@ -67,7 +66,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         >
           {/*<div data-vaul-drawer-wrapper={''} className={'bg-background'}>*/}
           <div className={'bg-background'}>{children}</div>
-          <ScrollRestoration />
           <Scripts />
         </ThemeProvider>
       </body>

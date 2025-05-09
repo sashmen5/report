@@ -1,5 +1,5 @@
 import { redirect } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
+import { createServerFn } from '@tanstack/react-start';
 import { deleteCookie } from 'vinxi/http';
 
 import { authMiddleware } from '../../lib/route-utils';

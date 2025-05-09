@@ -1,5 +1,5 @@
 import { redirect } from '@tanstack/react-router';
-import { createServerFn, json } from '@tanstack/start';
+import { createServerFn, json } from '@tanstack/react-start';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { uid } from 'uid';
