@@ -5,8 +5,6 @@ import { routeTree } from './routeTree.gen';
 
 export function createRouter() {
   return createTanStackRouter({
-    defaultPendingMinMs: 0,
-    defaultPendingMs: 0,
     routeTree,
   });
 }
