@@ -1,5 +1,5 @@
 import { notFound } from '@tanstack/react-router';
-import { createServerFn } from '@tanstack/start';
+import { createServerFn } from '@tanstack/react-start';
 import { uid } from 'uid';
 
 import { dateToDayDate } from '../../lib/date-utils';
