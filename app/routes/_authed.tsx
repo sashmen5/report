@@ -7,7 +7,6 @@ import { Clapperboard, Flag, Search, TvMinimalPlay } from 'lucide-react';
 import { getUser } from '../entities/user';
 
 export const Route = createFileRoute('/_authed')({
-  ssr: false,
   loader: async () => await getUser(),
   component: AuthedComponent,
 });

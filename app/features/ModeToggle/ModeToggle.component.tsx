@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@sashmen5/components';
 import { useNavigate } from '@tanstack/react-router';
-import { createServerFn, json } from '@tanstack/start';
+import { createServerFn, json } from '@tanstack/react-start';
 import { Menu, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { deleteCookie } from 'vinxi/http';
