@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 
 import { Badge, Button, Input, cn } from '@sashmen5/components';
-import { getRouteApi, useRouter } from '@tanstack/react-router';
+import { getRouteApi } from '@tanstack/react-router';
 import debounce from 'lodash.debounce';
 import { Plus, Search } from 'lucide-react';
 
@@ -17,7 +17,7 @@ const Route = getRouteApi('/_authed/search');
 const SearchPage: FC = () => {
   const navigate = Route.useNavigate();
   const { query } = Route.useSearch();
-  const [value, setValue] = useState(query);
+  const [value, setValue] = useState(query ?? '');
   const [collection, setCollection] = useState<Collection | null>(null);
   const [search, setSearch] = useState<TMDB.MultiSearchResult[]>([]);
 
@@ -54,7 +54,6 @@ const SearchPage: FC = () => {
 
   const debounceSearch = useCallback(
     debounce((value: string) => {
-      console.log('Debounced called with', value);
       navigate({ search: { query: value }, replace: true });
     }, 500),
     [],
@@ -66,18 +65,14 @@ const SearchPage: FC = () => {
   };
 
   const handleOnAdd = async (movieId: number) => {
-    console.log('Add');
     const res = await addMovie({ data: { id: movieId } });
 
-    console.log(res);
     reFetch();
     //TODO: Optimisitc update
   };
 
   const handleOnAddSerie = async (movieId: number) => {
-    console.log('Add');
     const res = await addSerie({ data: { id: movieId } });
-    console.log(res);
     reFetch();
     //TODO: Optimisitc update
   };

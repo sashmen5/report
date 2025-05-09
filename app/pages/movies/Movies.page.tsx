@@ -104,8 +104,6 @@ const MoviesPage: FC = () => {
         const aTime = aD.release_date;
         const bTime = bD.release_date;
 
-        console.log(aTime);
-
         if (!aTime) return 1;
         if (!bTime) return 1;
 
