@@ -7,6 +7,7 @@ import { Clapperboard, Flag, Search, TvMinimalPlay } from 'lucide-react';
 import { getUser } from '../entities/user';
 
 export const Route = createFileRoute('/_authed')({
+  ssr: false,
   loader: async () => await getUser(),
   component: AuthedComponent,
 });
@@ -26,7 +27,7 @@ function AuthedComponent() {
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/movies">
-                <Link to={'/movies'} search={{ status: 'added' }}>
+                <Link to={'/movies'}>
                   <Clapperboard className={'group-data-[state="active"]:last:*:fill-current'} />
                 </Link>
               </TabsTrigger>

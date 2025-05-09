@@ -3,7 +3,7 @@ import { FC, useMemo, useState } from 'react';
 import { Button, Input, ToggleGroup, ToggleGroupItem, cn } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
-import { getRouteApi, useSearch } from '@tanstack/react-router';
+import { getRouteApi } from '@tanstack/react-router';
 import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Search, Star } from 'lucide-react';
 
 import { formatDate } from '../../lib/date-utils';
@@ -39,27 +39,23 @@ const getMovieStatusLabel = (status: MovieStatus) => movieStatusLabels[status];
 const statusOrder = [MovieStatus.ADDED, MovieStatus.WATCHED, MovieStatus.REMOVED, MovieStatus.FAVORITE];
 
 const MoviesPage: FC = () => {
-  const { status } = Route.useSearch();
-  const navigate = Route.useNavigate();
-  const selectedStatus = status;
+  const [selectedStatus, setSelectedStatus] = useState<MovieStatus>(MovieStatus.ADDED);
   const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState<SortType | undefined>();
-  const { movies, collection, counts } = Route.useLoaderData();
+  const { movies, collection } = Route.useLoaderData();
   const { isCopied, copyToClipboard } = useCopyToClipboard();
-
-  // console.log(movies);
 
   const byIds = useMemo(() => {
     const res: Record<number, MovieSchema> = {};
-    movies?.forEach(d => (res[d.id] = d));
+    movies?.movies?.forEach(d => (res[d.id] = d));
     return res;
-  }, [movies]);
+  }, [movies.movies]);
 
   const activeMovie = typeof activeMovieId !== 'undefined' ? byIds[activeMovieId.id] : undefined;
   const lowerSearch = search.toLowerCase();
   const movieIds =
-    collection?.movies
+    collection.collection?.movies
       .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
       .filter(d => Boolean(byIds[d.id]))
       .filter(d => d.status !== undefined)
@@ -181,11 +177,7 @@ const MoviesPage: FC = () => {
                 size={'sm'}
                 key={status}
                 variant={selectedStatus === status ? 'default' : 'secondary'}
-                onClick={() =>
-                  navigate({
-                    search: d => ({ ...d, status: status }),
-                  })
-                }
+                onClick={() => setSelectedStatus(status)}
                 className={'h-auto px-2 py-1'}
               >
                 {getMovieStatusLabel(status)}
@@ -194,7 +186,7 @@ const MoviesPage: FC = () => {
                     'text-muted-foreground': selectedStatus !== status,
                   })}
                 >
-                  {counts?.movies[status]}
+                  {collection.counts?.movies[status]}
                 </span>
               </Button>
             ))}
@@ -202,12 +194,17 @@ const MoviesPage: FC = () => {
 
           <div className={'@container'}>
             <div className={'grid grid-cols-1 gap-5 @xs:grid-cols-2 @md:grid-cols-4'}>
-              {movies?.map((d, index) => {
+              {movieIds?.map((id, index) => {
+                const d = byIds[id.id];
+                if (!d) {
+                  return null;
+                }
+
                 return (
                   <MovieCard
-                    key={d.id + index}
+                    key={d.id}
                     movie={d}
-                    onClick={() => setActiveMovieId({ id: d.id, status: d.status })}
+                    onClick={() => setActiveMovieId({ id: id.id, status: id.status.name })}
                   />
                 );
               })}
