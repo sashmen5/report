@@ -7,7 +7,6 @@ import { ThemeProvider } from 'next-themes';
 import appCss from '../styles/app.css?url';
 
 export const Route = createRootRoute({
-  ssr: false,
   head: () => ({
     meta: [
       {
