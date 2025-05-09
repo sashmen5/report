@@ -1,8 +1,6 @@
 import { createServerFn } from '@tanstack/start';
 
 import { authMiddleware } from '../../lib/route-utils';
-import { MovieSchema } from '../../models';
-import { collectionService } from '../collection';
 import { MovieStatus, movieService } from '../movie';
 import { mediaManagerService } from './media-manager-service';
 
@@ -72,76 +70,10 @@ interface GetMoviesParams {
   };
 }
 
-const getMoviesAndFilter = createServerFn({ method: 'POST' })
-  .middleware([authMiddleware])
-  .validator((d: GetMoviesParams) => ({ filter: d.filter }))
-  .handler(async ({ data, context }) => {
-    const [movies, collection] = await Promise.all([
-      movieService.getMovies(),
-      collectionService.getByUserId(context.user.id),
-    ]);
-
-    const status = data.filter?.status ?? 'added';
-    const movieIds =
-      collection?.movies
-        .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
-        .filter(d => d.status !== undefined)
-        .filter(d => d.status.name === status) ?? [];
-
-    const moviesByIds: Record<string, MovieSchema> = {};
-    movies.forEach(movie => {
-      moviesByIds[movie.id] = movie;
-    });
-
-    const moviesFiltered: (MovieSchema & { status: MovieStatus })[] = movieIds.map(id => ({
-      ...moviesByIds[id.id],
-      status: id.status.name as MovieStatus,
-    }));
-
-    console.log('[status]', status);
-
-    return {
-      movies: [...moviesFiltered],
-      collection,
-    };
-  });
-
-async function getAndFilterMyMovies({ userId, filter }: { userId: string; filter: { status: MovieStatus } }) {
-  const [movies, collection] = await Promise.all([
-    movieService.getMovies(),
-    collectionService.getByUserId(userId),
-  ]);
-
-  const status = filter.status;
-  const movieIds =
-    collection?.movies
-      .map(d => ({ id: d.id, status: d.statuses[d.statuses.length - 1] }))
-      .filter(d => d.status !== undefined)
-      .filter(d => d.status.name === status) ?? [];
-
-  const moviesByIds: Record<string, MovieSchema> = {};
-  movies.forEach(movie => {
-    moviesByIds[movie.id] = movie;
-  });
-
-  const moviesFiltered: (MovieSchema & { status: MovieStatus })[] = movieIds.map(id => ({
-    ...moviesByIds[id.id],
-    status: id.status.name as MovieStatus,
-  }));
-
-  console.log('[status]', status);
-
-  return {
-    movies: [...moviesFiltered],
-    collection,
-  };
-}
-
 const getMovies = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .validator((d: GetMoviesParams) => ({ filter: d.filter }))
   .handler(async ({ data, context }) => {
-    // const result = await getAndFilterMyMovies({
     const result = await mediaManagerService.getMovies({
       userId: context.user.id,
       filter: { status: data.filter?.status ?? 'added' },
@@ -169,19 +101,8 @@ const getMovies = createServerFn({ method: 'POST' })
     return {
       movies: result.movies,
       collection: result.collection,
-      moviesFiltered: result.moviesFiltered,
-      movieIds: result.movieIds,
       counts,
     };
   });
 
-export {
-  addMovie,
-  updateMovieStatus,
-  getMoviesAndFilter,
-  addSerie,
-  updateSerieStatus,
-  refreshMovie,
-  refreshSerie,
-  getMovies,
-};
+export { addMovie, updateMovieStatus, addSerie, updateSerieStatus, refreshMovie, refreshSerie, getMovies };
