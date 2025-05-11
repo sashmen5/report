@@ -1,11 +1,15 @@
 import React, { ComponentProps, FC } from 'react';
 
 import { Button, cn } from '@sashmen5/components';
+import { getRouteApi } from '@tanstack/react-router';
 
 import { MovieAtom } from '../../entities/movie';
 import { useMoviesRouter } from './use-movies-router.hook';
 
+const Route = getRouteApi('/_authed/movies');
+
 const StatusSelector: FC<ComponentProps<'div'>> = ({ ...rest }) => {
+  const { collection } = Route.useLoaderData();
   const {
     queryParams: { status: selectedStatus },
     setQueryParams,
@@ -26,7 +30,7 @@ const StatusSelector: FC<ComponentProps<'div'>> = ({ ...rest }) => {
               'text-muted-foreground': selectedStatus !== status,
             })}
           >
-            {22}
+            {collection.counts?.movies[status]}
           </span>
         </Button>
       ))}
