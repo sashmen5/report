@@ -4,10 +4,6 @@ import { getCollection } from '../../entities/collection';
 import { MovieAtom, MovieStatus, getMovies } from '../../entities/movie';
 import { MoviesPage } from '../../pages/movies';
 
-interface SearchParams {
-  status: MovieStatus;
-}
-
 export const Route = createFileRoute('/_authed/movies')({
   loader: async () => {
     //rewrite with promise.all
