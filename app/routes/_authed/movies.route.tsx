@@ -1,8 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { getCollection } from '../../entities/collection';
-import { getMovies } from '../../entities/movie';
+import { MovieAtom, MovieStatus, getMovies } from '../../entities/movie';
 import { MoviesPage } from '../../pages/movies';
+
+interface SearchParams {
+  status: MovieStatus;
+}
 
 export const Route = createFileRoute('/_authed/movies')({
   loader: async () => {
@@ -10,6 +14,11 @@ export const Route = createFileRoute('/_authed/movies')({
     const [movies, collection] = await Promise.all([getMovies(), getCollection()]);
 
     return { movies, collection };
+  },
+  validateSearch: ({ status }) => {
+    return {
+      status: MovieAtom.isStatus(status) ? status : MovieAtom.DefaultStatus,
+    };
   },
   component: MoviesPage,
 });

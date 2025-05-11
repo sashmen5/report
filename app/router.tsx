@@ -7,6 +7,9 @@ export function createRouter() {
   return createTanStackRouter({
     routeTree,
     scrollRestoration: true,
+    defaultPendingMinMs: 0,
+    defaultPendingMs: 0,
+    defaultPendingComponent: () => <div>{'Loading'}</div>,
   });
 }
 
