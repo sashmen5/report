@@ -1,57 +1,22 @@
 import { FC, useMemo, useState } from 'react';
 
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Input,
-  cn,
-} from '@sashmen5/components';
+import { Button, Input } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
-import { Link, getRouteApi } from '@tanstack/react-router';
+import { getRouteApi } from '@tanstack/react-router';
 import { Check, Clipboard, Search } from 'lucide-react';
 
-import { tmdbEntity } from '../../entities/tmdb';
-import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
-import { formatDate } from '../../lib/date-utils';
+import { SerieAtom } from '../../entities/serie';
 import { ReportSerieStatus } from './ReportSerieStatus.component';
 import { SerieCard } from './SerieCard.component';
+import { StatusSelector } from './StatusSelector.component';
+import { useSeriesRouter } from './use-series-router.hook';
 
 const Route = getRouteApi('/_authed/series');
 
-export enum SerieStatus {
-  InProcess = 'watching',
-  Finished = 'finished',
-  ForFuture = 'added',
-  WaitingForSeason = 'waiting',
-  Removed = 'removed',
-  Later = 'later',
-}
-
-const statusLabels: Record<SerieStatus, string> = {
-  [SerieStatus.InProcess]: 'In process',
-  [SerieStatus.Finished]: 'Finished',
-  [SerieStatus.ForFuture]: 'For future',
-  [SerieStatus.WaitingForSeason]: 'Waiting for season',
-  [SerieStatus.Removed]: 'Removed',
-  [SerieStatus.Later]: 'Later',
-};
-
-const getStatusLabel = (status: SerieStatus) => statusLabels[status];
-const statusOrder = [
-  SerieStatus.InProcess,
-  SerieStatus.ForFuture,
-  SerieStatus.WaitingForSeason,
-  SerieStatus.Finished,
-  SerieStatus.Removed,
-  SerieStatus.Later,
-];
-
 const SeriesPage: FC = () => {
-  const [selectedStatus, setSelectedStatus] = useState<SerieStatus>(SerieStatus.InProcess);
+  const { queryParams } = useSeriesRouter();
+  const selectedStatus = queryParams.status;
   const [activeId, setActiveId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
   const { series, collection } = Route.useLoaderData();
@@ -101,26 +66,7 @@ const SeriesPage: FC = () => {
               className="pl-8"
             />
           </div>
-          <div className={'-mt-3 flex flex-wrap gap-2'}>
-            {statusOrder.map(status => (
-              <Button
-                size={'sm'}
-                key={status}
-                variant={selectedStatus === status ? 'default' : 'secondary'}
-                onClick={() => setSelectedStatus(status)}
-                className={'h-auto px-2 py-1'}
-              >
-                {getStatusLabel(status)}
-                <span
-                  className={cn({
-                    'text-muted-foreground': selectedStatus !== status,
-                  })}
-                >
-                  {collection.counts?.series[status]}
-                </span>
-              </Button>
-            ))}
-          </div>
+          <StatusSelector className={'-mt-3 flex flex-wrap gap-2'} />
 
           <div className={'@container'}>
             <div className={'grid grid-cols-1 gap-5 @xs:grid-cols-2 @md:grid-cols-4'}>
@@ -135,7 +81,7 @@ const SeriesPage: FC = () => {
                     key={index}
                     serie={d}
                     onClick={() => setActiveId({ id: id.id, status: id.status.name })}
-                    preload={selectedStatus === SerieStatus.InProcess ? 'viewport' : false}
+                    preload={selectedStatus === SerieAtom.Statuses.InProcess ? 'viewport' : false}
                   />
                 );
               })}
@@ -168,7 +114,7 @@ const SeriesPage: FC = () => {
         {active && (
           <ReportSerieStatus
             id={active.id}
-            orders={statusOrder}
+            orders={SerieAtom.statusOrder}
             defaultStatus={activeId?.status ?? ''}
             onStatusChange={() => setActiveId(undefined)}
           />
