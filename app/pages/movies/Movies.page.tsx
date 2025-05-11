@@ -1,31 +1,20 @@
 import { FC, useMemo, useState } from 'react';
 
-import { Button, Input, ToggleGroup, ToggleGroupItem, cn } from '@sashmen5/components';
+import { Button, Input, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
 import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Search, Star } from 'lucide-react';
 
+import { MovieAtom } from '../../entities/movie';
 import { formatDate } from '../../lib/date-utils';
 import type { MovieSchema } from '../../models';
 import { MovieCard } from './MovieCard.component';
 import { ReportMovieStatus } from './ReportMovieStatus.component';
+import { StatusSelector } from './StatusSelector.component';
+import { useMoviesRouter } from './use-movies-router.hook';
 
 const Route = getRouteApi('/_authed/movies');
-
-export enum MovieStatus {
-  ADDED = 'added',
-  WATCHED = 'watched',
-  REMOVED = 'removed',
-  FAVORITE = 'favorite',
-}
-
-const movieStatusLabels: Record<MovieStatus, string> = {
-  [MovieStatus.ADDED]: 'For future',
-  [MovieStatus.WATCHED]: 'Watched',
-  [MovieStatus.REMOVED]: 'Removed',
-  [MovieStatus.FAVORITE]: 'Favorite',
-};
 
 const SORT_TYPE = {
   dateup: 'dateup',
@@ -35,11 +24,9 @@ const SORT_TYPE = {
 
 type SortType = keyof typeof SORT_TYPE;
 
-const getMovieStatusLabel = (status: MovieStatus) => movieStatusLabels[status];
-const statusOrder = [MovieStatus.ADDED, MovieStatus.WATCHED, MovieStatus.REMOVED, MovieStatus.FAVORITE];
-
 const MoviesPage: FC = () => {
-  const [selectedStatus, setSelectedStatus] = useState<MovieStatus>(MovieStatus.ADDED);
+  const { queryParams } = useMoviesRouter();
+  const selectedStatus = queryParams.status ?? MovieAtom.DefaultStatus;
   const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
   const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState<SortType | undefined>();
@@ -169,30 +156,11 @@ const MoviesPage: FC = () => {
             </div>
           </div>
 
-          <div className={'-mt-3 flex flex-wrap gap-2'}>
-            {statusOrder.map(status => (
-              <Button
-                size={'sm'}
-                key={status}
-                variant={selectedStatus === status ? 'default' : 'secondary'}
-                onClick={() => setSelectedStatus(status)}
-                className={'h-auto px-2 py-1'}
-              >
-                {getMovieStatusLabel(status)}
-                <span
-                  className={cn({
-                    'text-muted-foreground': selectedStatus !== status,
-                  })}
-                >
-                  {collection.counts?.movies[status]}
-                </span>
-              </Button>
-            ))}
-          </div>
+          <StatusSelector className={'-mt-3 flex flex-wrap gap-2'} />
 
           <div className={'@container'}>
             <div className={'grid grid-cols-1 gap-5 @xs:grid-cols-2 @md:grid-cols-4'}>
-              {movieIds?.map((id, index) => {
+              {movieIds?.map(id => {
                 const d = byIds[id.id];
                 if (!d) {
                   return null;
@@ -240,7 +208,7 @@ const MoviesPage: FC = () => {
         {activeMovie && (
           <ReportMovieStatus
             id={activeMovie.id}
-            orders={statusOrder}
+            orders={MovieAtom.statusOrder}
             defaultStatus={activeMovieId?.status ?? ''}
             onStatusChange={() => setActiveMovieId(undefined)}
           />
