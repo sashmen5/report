@@ -21,22 +21,22 @@ function AuthedComponent() {
           <Tabs value={state.location.pathname} className={'w-full'}>
             <TabsList className={'w-full'}>
               <TabsTrigger asChild value="/year">
-                <Link to={'/year'}>
+                <Link to={'/year'} preload={'viewport'}>
                   <Flag strokeWidth={2} className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/movies">
-                <Link to={'/movies'}>
+                <Link to={'/movies'} preload={'viewport'}>
                   <Clapperboard className={'group-data-[state="active"]:last:*:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/series">
-                <Link to={'/series'}>
+                <Link to={'/series'} preload={'viewport'}>
                   <TvMinimalPlay className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/search">
-                <Link to={'/search'}>
+                <Link to={'/search'} preload={'viewport'}>
                   <Search className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
