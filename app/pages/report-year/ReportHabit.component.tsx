@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { NumberInput, SortableList, Toggle } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
@@ -43,7 +43,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
     await router.invalidate();
   };
 
-  const debouncedHandleOnPressedChange = debounce(handleOnPressedChange, 0);
+  const debouncedHandleOnPressedChange = debounce(handleOnPressedChange, 2_500);
 
   const habitId = user.habits
     .sort((a, b) => a.order - b.order)

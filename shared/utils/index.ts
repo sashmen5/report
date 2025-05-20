@@ -66,4 +66,17 @@ function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(callback:
   };
 }
 
-export { isString, isNumber, cleanEmptyParams, isEmpty, debounce };
+function keyBy<T extends Record<string, any>, K extends keyof T>(array: T[], key: K): Record<T[K], T> {
+  return array.reduce(
+    (acc, item) => {
+      const keyValue = item[key];
+      if (keyValue !== undefined) {
+        acc[keyValue] = item;
+      }
+      return acc;
+    },
+    {} as Record<T[K], T>,
+  );
+}
+
+export { isString, isNumber, cleanEmptyParams, isEmpty, debounce, keyBy };

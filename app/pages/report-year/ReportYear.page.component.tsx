@@ -5,7 +5,7 @@ import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
-import { dateToDayDate } from '../../lib/date-utils';
+import { dateToDayDate, isToday, isYesterday } from '../../lib/date-utils';
 import { HabitLogDTO } from '../../models';
 import { Calendar } from './Calendar.component';
 import { ReportHabit } from './ReportHabit.component';
@@ -52,7 +52,13 @@ const ReportYear: FC = () => {
             >
               <ChevronLeft />
             </Button>
-            <div>{selectedDate?.toDateString()}</div>
+            <div className={'grid gap-2 text-center'}>
+              <div>{selectedDate?.toDateString()}</div>
+              {isToday(selectedDate) && <div className={'text-sm text-muted-foreground'}>{'Today'}</div>}
+              {isYesterday(selectedDate) && (
+                <div className={'text-sm text-muted-foreground'}>{'Yesterday'}</div>
+              )}
+            </div>
             <Button
               variant={'outline'}
               size={'icon'}

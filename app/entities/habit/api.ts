@@ -8,7 +8,7 @@ import { HabitConfig, HabitConfigDTO, HabitLog, HabitLogDTO } from '../../models
 
 const removeHabit = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .validator(data => {
+  .validator((data: Record<string, string | number>) => {
     return {
       date: data.date as number,
       habitId: data.habitId as string,
@@ -36,7 +36,7 @@ const removeHabit = createServerFn({ method: 'POST' })
 
 const updateHabit = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
-  .validator(data => {
+  .validator((data: Record<string, string | number | boolean>) => {
     return {
       date: data.date as string,
       habitId: data.habitId as string,
