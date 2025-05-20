@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from '@sashmen5/components';
 import { Link, Outlet, createFileRoute, useRouterState } from '@tanstack/react-router';
 import { Clapperboard, Flag, Search, TvMinimalPlay } from 'lucide-react';
 
+import { MovieAtom } from '../entities/movie';
 import { getUser } from '../entities/user';
 
 export const Route = createFileRoute('/_authed')({

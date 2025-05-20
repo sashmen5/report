@@ -2,8 +2,13 @@ import { createFileRoute } from '@tanstack/react-router';
 import { isString } from 'shared/utils';
 
 import { getCollection } from '../../entities/collection';
-import { SerieAtom, getSeries } from '../../entities/serie';
+import { SerieAtom, SerieStatus, getSeries } from '../../entities/serie';
 import { SeriesPage } from '../../pages/series';
+
+interface SearchParams {
+  status?: SerieStatus;
+  search?: string;
+}
 
 export const Route = createFileRoute('/_authed/series')({
   loader: async () => {
@@ -12,7 +17,7 @@ export const Route = createFileRoute('/_authed/series')({
 
     return { series, collection };
   },
-  validateSearch: ({ status, search }) => {
+  validateSearch: ({ status, search }): SearchParams => {
     return {
       status: SerieAtom.isStatus(status) ? status : SerieAtom.DefaultStatus,
       search: isString(search) ? search : undefined,
