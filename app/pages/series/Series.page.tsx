@@ -1,10 +1,10 @@
 import { FC, useMemo, useState } from 'react';
 
-import { Button, Input } from '@sashmen5/components';
+import { Button, SearchField } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
-import { Check, Clipboard, Search } from 'lucide-react';
+import { Check, Clipboard } from 'lucide-react';
 
 import { SerieAtom } from '../../entities/serie';
 import { ReportSerieStatus } from './ReportSerieStatus.component';
@@ -16,9 +16,9 @@ const Route = getRouteApi('/_authed/series');
 
 const SeriesPage: FC = () => {
   const { queryParams } = useSeriesRouter();
+  const search = queryParams.search ?? '';
   const selectedStatus = queryParams.status;
   const [activeId, setActiveId] = useState<{ id: number; status: string } | undefined>();
-  const [search, setSearch] = useState('');
   const { series, collection } = Route.useLoaderData();
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
@@ -49,23 +49,11 @@ const SeriesPage: FC = () => {
     })
     .sort((a, b) => b.status.date - a.status.date);
 
-  const handleChangeSearch = (value: string) => {
-    setSearch(value);
-  };
-
   return (
     <>
       <div className={'py-4'}>
         <div className={'flex flex-col gap-5'}>
-          <div className="relative">
-            <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={e => handleChangeSearch(e.target.value)}
-              placeholder="Search"
-              className="pl-8"
-            />
-          </div>
+          <SearchField />
           <StatusSelector className={'-mt-3 flex flex-wrap gap-2'} />
 
           <div className={'@container'}>

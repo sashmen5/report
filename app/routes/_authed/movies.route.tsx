@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { isString } from 'shared/utils';
 
 import { getCollection } from '../../entities/collection';
 import { MovieAtom, MovieStatus, getMovies } from '../../entities/movie';
@@ -11,9 +12,10 @@ export const Route = createFileRoute('/_authed/movies')({
 
     return { movies, collection };
   },
-  validateSearch: ({ status }) => {
+  validateSearch: ({ status, search }) => {
     return {
       status: MovieAtom.isStatus(status) ? status : MovieAtom.DefaultStatus,
+      search: isString(search) ? search : undefined,
     };
   },
   component: MoviesPage,

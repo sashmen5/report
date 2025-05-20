@@ -15,3 +15,4 @@ export * from './Dialog.component';
 export * from './Badge.component';
 export * from './Table.component';
 export * from './Drawer.component';
+export * from './SearchField.component';
