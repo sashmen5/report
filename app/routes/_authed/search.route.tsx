@@ -3,15 +3,11 @@ import { createFileRoute } from '@tanstack/react-router';
 import { searchParamsValidate } from '../../lib/search-param-validators';
 import { SearchPage } from '../../pages';
 
-interface SearchParams {
-  query?: string;
-}
-
 export const Route = createFileRoute('/_authed/search')({
   component: SearchPage,
-  validateSearch: (params: Record<string, unknown>): SearchParams => {
+  validateSearch: (params: Record<string, unknown>) => {
     return {
-      query: searchParamsValidate.string(params.query),
+      search: searchParamsValidate.string(params.search),
     };
   },
 });

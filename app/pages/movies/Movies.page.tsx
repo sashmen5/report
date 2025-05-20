@@ -1,10 +1,10 @@
 import { FC, useMemo, useState } from 'react';
 
-import { Button, Input, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
+import { Button, SearchField, ToggleGroup, ToggleGroupItem } from '@sashmen5/components';
 import { useCopyToClipboard } from '@sashmen5/hooks';
 import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
-import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Search, Star } from 'lucide-react';
+import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Star } from 'lucide-react';
 
 import { MovieAtom } from '../../entities/movie';
 import { formatDate } from '../../lib/date-utils';
@@ -26,9 +26,9 @@ type SortType = keyof typeof SORT_TYPE;
 
 const MoviesPage: FC = () => {
   const { queryParams } = useMoviesRouter();
+  const search = queryParams.search ?? '';
   const selectedStatus = queryParams.status ?? MovieAtom.DefaultStatus;
   const [activeMovieId, setActiveMovieId] = useState<{ id: number; status: string } | undefined>();
-  const [search, setSearch] = useState('');
   const [sortType, setSortType] = useState<SortType | undefined>();
   const { movies, collection } = Route.useLoaderData();
   const { isCopied, copyToClipboard } = useCopyToClipboard();
@@ -105,24 +105,12 @@ const MoviesPage: FC = () => {
         return b.status.date - a.status.date;
       }) ?? [];
 
-  const handleChangeSearch = (value: string) => {
-    setSearch(value);
-  };
-
   return (
     <>
       <div className={'py-4'}>
         <div className={'flex flex-col gap-5'}>
           <div className={'flex gap-3'}>
-            <div className="relative grow">
-              <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={search}
-                onChange={e => handleChangeSearch(e.target.value)}
-                placeholder="Search"
-                className="pl-8"
-              />
-            </div>
+            <SearchField />
             <div className="items-center gap-1.5 rounded-md border p-[2px] shadow-none lg:flex">
               <ToggleGroup
                 type="single"
