@@ -1,9 +1,11 @@
+import { waitFor } from '../../../shared/utils';
 import { MovieSchema } from '../../models';
 import { type CollectionService, collectionService } from '../collection';
 import { type MovieService, movieService } from '../movie';
 import { type OMDBService, omdbService } from '../omdb';
 import { type SerieService, serieService } from '../serie';
 import { type TMDBService, tmdbService } from '../tmdb';
+import { fetchFromPopcornmeter } from './scrap-popcornemeter';
 import { toRating } from './utils';
 
 class MediaManagerService {
@@ -55,6 +57,20 @@ class MediaManagerService {
     tmdbMovie.creationDate = Date.now();
 
     const complete = await this.completeData(tmdbMovie.imdb_id);
+    if (complete.tomatoURL) {
+      try {
+        const popcorn = await fetchFromPopcornmeter(complete.tomatoURL);
+        if (popcorn) {
+          complete.ratings = [
+            ...(complete.ratings ?? []),
+            {
+              source: 'popcornmeter',
+              value: popcorn,
+            },
+          ];
+        }
+      } catch (e) {}
+    }
 
     const movie: MovieSchema = {
       ...tmdbMovie,
@@ -138,6 +154,27 @@ class MediaManagerService {
     }
 
     return res;
+  }
+
+  async refreshAllMovies() {
+    console.log('[Refresh] Starting refresh of all movies...');
+    const movies = await this.movieService.getMovies();
+    console.log(`[Refresh] Found ${movies.length} movies to refresh.`);
+
+    for (const [index, movie] of movies.entries()) {
+      const logIndex = `${index + 1}/${movies.length}`;
+      console.log(`[${logIndex}] [Start]: ${movie.title} (ID: ${movie.id})`);
+      try {
+        await this.refreshMovie(movie.id);
+        console.log(`[${logIndex}] [Finished]: ${movie.title} (ID: ${movie.id})`);
+      } catch (error) {
+        console.error(`[${logIndex}] !!!Failed to refresh!!!: ${movie.title} (ID: ${movie.id})`, error);
+      }
+
+      await waitFor({ minMs: 300, maxMs: 2_000 });
+    }
+
+    console.log('[Refresh] All movies refresh process completed.');
   }
 }
 

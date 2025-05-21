@@ -6,6 +6,7 @@ import { ReportModal } from '@sashmen5/widgets';
 import { getRouteApi } from '@tanstack/react-router';
 import { CalendarArrowDown, CalendarArrowUp, Check, Clipboard, Star } from 'lucide-react';
 
+import { refreshAllMovies } from '../../entities/media-manager';
 import { MovieAtom } from '../../entities/movie';
 import { formatDate } from '../../lib/date-utils';
 import type { MovieSchema } from '../../models';
@@ -109,6 +110,9 @@ const MoviesPage: FC = () => {
     <>
       <div className={'py-4'}>
         <div className={'flex flex-col gap-5'}>
+          {/*<div className={'p-3'}>*/}
+          {/*  <Button onClick={() => refreshAllMovies()}>{'Refresh all movies'}</Button>*/}
+          {/*</div>*/}
           <div className={'flex gap-3'}>
             <SearchField />
             <div className="items-center gap-1.5 rounded-md border p-[2px] shadow-none lg:flex">

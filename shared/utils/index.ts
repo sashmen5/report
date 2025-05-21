@@ -79,4 +79,9 @@ function keyBy<T extends Record<string, any>, K extends keyof T>(array: T[], key
   );
 }
 
-export { isString, isNumber, cleanEmptyParams, isEmpty, debounce, keyBy };
+function waitFor({ minMs = 0, maxMs = 0 }) {
+  const ms = Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export { isString, waitFor, isNumber, cleanEmptyParams, isEmpty, debounce, keyBy };

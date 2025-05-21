@@ -19,6 +19,13 @@ const refreshMovie = createServerFn({ method: 'POST' })
     return { message: 'Movie refreshed' };
   });
 
+const refreshAllMovies = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware])
+  .handler(async () => {
+    await mediaManagerService.refreshAllMovies();
+    return { message: 'Movies started to refreshe' };
+  });
+
 const updateMovieStatus = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .validator(({ status, movieId }: { status: string; movieId: number }) => {
@@ -63,4 +70,12 @@ const refreshSerie = createServerFn({ method: 'POST' })
     return { message: 'Serie refreshed' };
   });
 
-export { addMovie, updateMovieStatus, addSerie, updateSerieStatus, refreshMovie, refreshSerie };
+export {
+  addMovie,
+  updateMovieStatus,
+  addSerie,
+  updateSerieStatus,
+  refreshMovie,
+  refreshSerie,
+  refreshAllMovies,
+};

@@ -19,6 +19,7 @@ import { formatDate } from '../../lib/date-utils';
 import type { MovieSchema } from '../../models';
 import TomatoImg from './fresh-tomamot.png';
 import ImdbImg from './imdb-mini.png';
+import PopcornImg from './popcorn.svg';
 
 interface Props {
   movie: MovieSchema;
@@ -74,7 +75,7 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
         className={'aspect-[6/9] rounded-2xl'}
         src={tmdbEntity.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
       />
-      <div className={'grid grid-cols-2 grid-rows-[20px] pb-1 pl-0.5 pt-1.5 text-sm font-bold'}>
+      <div className={'grid grid-cols-3 grid-rows-[20px] pb-1 pl-0.5 pt-1.5 text-sm font-bold'}>
         {byRatings['imdb'] && (
           <div className={'mx-auto inline-flex w-full items-center gap-1'}>
             <img src={ImdbImg} alt="Tomato" />
@@ -85,6 +86,12 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
           <div className={'mx-auto inline-flex w-full items-center gap-1'}>
             <img src={TomatoImg} alt="Tomato" />
             <div>{byRatings['rotten_tomatoes']?.value}</div>
+          </div>
+        )}
+        {byRatings['popcornmeter'] && (
+          <div className={'mx-auto inline-flex w-full items-center gap-1'}>
+            <img src={PopcornImg} className={'size-5'} alt="Popcorn" />
+            <div>{byRatings['popcornmeter']?.value}</div>
           </div>
         )}
       </div>
