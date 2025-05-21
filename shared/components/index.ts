@@ -9,6 +9,7 @@ export * from './Toggle.component';
 export * from './ToggleGroup.component';
 export * from './NumericInput.component';
 export * from './Label.component';
+export * from './Toaster.component';
 export * from './Input.component';
 export * from './Day.component';
 export * from './Dialog.component';

@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { NumberInput, SortableList, Toggle } from '@sashmen5/components';
 import { getRouteApi, useRouter } from '@tanstack/react-router';
 import debounce from 'lodash.debounce';
 
-import { removeHabit, updateHabit } from '../../entities/habit';
 import { updateHabitOrder } from '../../entities/user';
-import { dateToDayDate } from '../../lib/date-utils';
 import { HabitConfigDTO, HabitLogDTO, HabitTypeId, UserDTO } from '../../models';
 
 interface ProfileFormProps {
-  date?: Date;
   entries: HabitLogDTO['habits'];
+  onChange: (tag: string, val: boolean | string) => void;
 }
 const RouterAuthed = getRouteApi('/_authed');
 const Route = getRouteApi('/_authed/year');
 
-export function ReportHabit({ date, entries }: ProfileFormProps) {
+export function ReportHabit({ entries, onChange }: ProfileFormProps) {
   const { user } = RouterAuthed.useLoaderData();
   const data = Route.useLoaderData();
   const router = useRouter();
@@ -25,25 +23,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
     return entries.find(e => e.habitTypeId === tag);
   };
 
-  const handleOnPressedChange = async (tag: string, val: boolean | string) => {
-    if (!date) {
-      return;
-    }
-
-    if (val) {
-      await updateHabit({
-        data: { date: dateToDayDate(date), habitId: tag, value: val },
-      });
-    } else {
-      await removeHabit({
-        data: { date: dateToDayDate(date), habitId: tag },
-      });
-    }
-
-    await router.invalidate();
-  };
-
-  const debouncedHandleOnPressedChange = debounce(handleOnPressedChange, 2_500);
+  const debouncedHandleOnPressedChange = debounce(onChange, 0);
 
   const habitId = user.habits
     .sort((a, b) => a.order - b.order)
@@ -66,7 +46,7 @@ export function ReportHabit({ date, entries }: ProfileFormProps) {
     }));
 
     await updateHabitOrder({ data: { habits: newOrder } }).then(console.log);
-    router.invalidate();
+    await router.invalidate();
   };
 
   return (

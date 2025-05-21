@@ -2,9 +2,11 @@ import React, { FC, useState } from 'react';
 
 import { Button } from '@sashmen5/components';
 import { ReportModal } from '@sashmen5/widgets';
-import { getRouteApi } from '@tanstack/react-router';
+import { getRouteApi, useRouter } from '@tanstack/react-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { toast } from 'sonner';
 
+import { removeHabit, updateHabit } from '../../entities/habit';
 import { dateToDayDate, isToday, isYesterday } from '../../lib/date-utils';
 import { HabitLogDTO } from '../../models';
 import { Calendar } from './Calendar.component';
@@ -13,6 +15,7 @@ import { ReportHabit } from './ReportHabit.component';
 const Route = getRouteApi('/_authed/year');
 
 const ReportYear: FC = () => {
+  const router = useRouter();
   const data = Route.useLoaderData();
   const [selectedDate, onSelect] = useState<Date | undefined>();
   const daysByDay: Record<string, HabitLogDTO> = {};
@@ -36,6 +39,26 @@ const ReportYear: FC = () => {
   });
 
   const selectedHabits = (selectedDate && daysByDay[dateToDayDate(selectedDate)]?.habits) ?? [];
+
+  const handleOnPressedChange = async (tag: string, val: boolean | string) => {
+    const date = selectedDate;
+    if (!date) {
+      return;
+    }
+
+    if (val) {
+      await updateHabit({
+        data: { date: dateToDayDate(date), habitId: tag, value: val },
+      });
+    } else {
+      await removeHabit({
+        data: { date: dateToDayDate(date), habitId: tag },
+      });
+    }
+
+    toast.success('Saved', { duration: 1000 });
+    await router.invalidate();
+  };
 
   return (
     <div>
@@ -70,7 +93,11 @@ const ReportYear: FC = () => {
           </div>
         }
       >
-        <ReportHabit key={selectedDate?.toDateString()} date={selectedDate} entries={selectedHabits ?? []} />
+        <ReportHabit
+          key={selectedDate?.toDateString()}
+          entries={selectedHabits ?? []}
+          onChange={handleOnPressedChange}
+        />
       </ReportModal>
 
       <Calendar data={daysByDay} year={2025} onSelectDate={onSelect} selectedDate={selectedDate} />

@@ -1,6 +1,8 @@
 // app/routes/__root.tsx
 import { ReactNode } from 'react';
 
+import { Portal } from '@radix-ui/react-portal';
+import { PortalToaster } from '@sashmen5/components';
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
 import { ThemeProvider } from 'next-themes';
 
@@ -66,7 +68,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         >
           {/*<div data-vaul-drawer-wrapper={''} className={'bg-background'}>*/}
           <div className={'bg-background'}>{children}</div>
+          <div id={'drawer-container'} />
+
           <Scripts />
+          <PortalToaster />
         </ThemeProvider>
       </body>
     </html>
