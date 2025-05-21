@@ -26,18 +26,18 @@ function AuthedComponent() {
                   <Flag strokeWidth={2} className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
-              <TabsTrigger asChild value="/movies" preload={'render'}>
-                <Link to={'/movies'}>
+              <TabsTrigger asChild value="/movies">
+                <Link to={'/movies'} preload={'render'}>
                   <Clapperboard className={'group-data-[state="active"]:last:*:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/series">
-                <Link to={'/series'}>
+                <Link to={'/series'} preload={'render'}>
                   <TvMinimalPlay className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>
               <TabsTrigger asChild value="/search">
-                <Link to={'/search'}>
+                <Link to={'/search'} preload={'render'}>
                   <Search className={'group-data-[state="active"]:fill-current'} />
                 </Link>
               </TabsTrigger>

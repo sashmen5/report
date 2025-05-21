@@ -36,5 +36,6 @@ declare namespace OMDB {
     Production: string;
     Website: string;
     Response: string;
+    tomatoURL?: string;
   }
 }

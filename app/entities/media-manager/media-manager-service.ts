@@ -15,7 +15,7 @@ class MediaManagerService {
     private omdbService: OMDBService,
   ) {}
 
-  async completeData(imdbId?: string): Promise<{ ratings: MovieSchema['ratings'] }> {
+  async completeData(imdbId?: string): Promise<{ ratings: MovieSchema['ratings']; tomatoURL?: string }> {
     let ratings: MovieSchema['ratings'] = [];
     if (!imdbId) {
       return { ratings };
@@ -26,6 +26,7 @@ class MediaManagerService {
 
     return {
       ratings,
+      tomatoURL: res.tomatoURL,
     };
   }
 
@@ -39,9 +40,10 @@ class MediaManagerService {
       movie = tmdbMovie;
     }
 
+    const complete = await this.completeData(movie.imdb_id);
     movie = {
       ...movie,
-      ratings: await this.completeData(movie?.imdb_id).then(d => d.ratings),
+      ...complete,
     };
 
     await this.movieService.addMovie(movie);
@@ -52,9 +54,11 @@ class MediaManagerService {
     const tmdbMovie = await this.tmdbService.searchMovieById(id);
     tmdbMovie.creationDate = Date.now();
 
+    const complete = await this.completeData(tmdbMovie.imdb_id);
+
     const movie: MovieSchema = {
       ...tmdbMovie,
-      ratings: await this.completeData(tmdbMovie.imdb_id).then(d => d.ratings),
+      ...complete,
     };
 
     await this.movieService.deleteMovie(id);

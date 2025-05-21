@@ -39,6 +39,7 @@ export interface MovieSchema {
   vote_count?: number;
   creationDate: number;
   ratings?: IRating[];
+  tomatoURL?: string;
 
   // Methods
   // addRating(source: RatingSource, value: string): Promise<IMovie>;
@@ -69,6 +70,7 @@ const MovieSchema2 = new Schema<IMovie>({
   video: { type: Boolean },
   vote_average: { type: Number },
   vote_count: { type: Number },
+  tomatoURL: { type: String },
   creationDate: { type: Number, required: true },
   ratings: [
     {
