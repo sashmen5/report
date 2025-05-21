@@ -13,6 +13,7 @@ const Toaster: FC<ComponentProps<typeof Sonner>> = ({ ...props }) => {
 
   return (
     <Sonner
+      duration={1_000}
       position={'bottom-center'}
       theme={theme as ToasterProps['theme']}
       className="toaster group"

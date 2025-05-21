@@ -56,7 +56,7 @@ const ReportYear: FC = () => {
       });
     }
 
-    toast.success('Saved', { duration: 1000 });
+    toast.success('Done');
     await router.invalidate();
   };
 

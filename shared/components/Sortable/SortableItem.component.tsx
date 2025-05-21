@@ -7,8 +7,6 @@ import { CSS } from '@dnd-kit/utilities';
 import { Button, cn } from '@sashmen5/components';
 import { GripVertical } from 'lucide-react';
 
-import './SortableItem.css';
-
 interface Props {
   id: UniqueIdentifier;
 }
@@ -44,7 +42,11 @@ export function SortableItem({ children, id }: PropsWithChildren<Props>) {
 
   return (
     <SortableItemContext.Provider value={context}>
-      <li className={cn('SortableItem', 'items-center')} ref={setNodeRef} style={style}>
+      <li
+        className={cn('flex grow justify-between gap-2 bg-background', 'items-center')}
+        ref={setNodeRef}
+        style={style}
+      >
         {children}
       </li>
     </SortableItemContext.Provider>

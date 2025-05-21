@@ -8,6 +8,7 @@ import {
   cn,
 } from '@sashmen5/components';
 import { useRouter } from '@tanstack/react-router';
+import { toast } from 'sonner';
 
 import { PendingRoundedIcon } from '../../../shared/components/Icons';
 import { keyBy } from '../../../shared/utils';
@@ -58,6 +59,7 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
               onClick={async e => {
                 e.stopPropagation();
                 await refreshMovie({ data: { id: d.id } });
+                toast.success('Done');
                 await route.invalidate();
               }}
             >

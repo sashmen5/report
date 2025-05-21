@@ -7,7 +7,6 @@ import { SortableContext, arrayMove, sortableKeyboardCoordinates } from '@dnd-ki
 
 import { cn } from '../cn';
 import { DragHandle, SortableItem } from './SortableItem.component';
-import './SortableList.css';
 import { SortableOverlay } from './SortableOverlay.component';
 
 interface BaseItem {
@@ -52,7 +51,7 @@ export function SortableList<T extends BaseItem>({ items, onChange, renderItem }
       }}
     >
       <SortableContext items={items}>
-        <ul className={cn('SortableList', 'pt-1')} role="application">
+        <ul className={cn('flex flex-col gap-2', 'pt-1')} role="application">
           {items.map(item => (
             <React.Fragment key={item.id}>{renderItem(item)}</React.Fragment>
           ))}
