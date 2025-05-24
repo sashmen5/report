@@ -23,7 +23,7 @@ const refreshAllMovies = createServerFn({ method: 'POST' })
   .middleware([authMiddleware])
   .handler(async () => {
     await mediaManagerService.refreshAllMovies();
-    return { message: 'Movies started to refreshe' };
+    return { message: 'Movies started to refresh' };
   });
 
 const updateMovieStatus = createServerFn({ method: 'POST' })

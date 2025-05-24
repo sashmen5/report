@@ -43,6 +43,21 @@ class MediaManagerService {
     }
 
     const complete = await this.completeData(movie.imdb_id);
+    if (complete.tomatoURL) {
+      try {
+        const popcorn = await fetchFromPopcornmeter(complete.tomatoURL);
+        if (popcorn) {
+          complete.ratings = [
+            ...(complete.ratings ?? []),
+            {
+              source: 'popcornmeter',
+              value: popcorn,
+            },
+          ];
+        }
+      } catch (e) {}
+    }
+
     movie = {
       ...movie,
       ...complete,
@@ -163,6 +178,10 @@ class MediaManagerService {
 
     for (const [index, movie] of movies.entries()) {
       const logIndex = `${index + 1}/${movies.length}`;
+      if (movie.tomatoURL) {
+        console.log(`[${logIndex}] [Already exist]: ${movie.title} (ID: ${movie.id})`);
+        continue;
+      }
       console.log(`[${logIndex}] [Start]: ${movie.title} (ID: ${movie.id})`);
       try {
         await this.refreshMovie(movie.id);
@@ -171,7 +190,7 @@ class MediaManagerService {
         console.error(`[${logIndex}] !!!Failed to refresh!!!: ${movie.title} (ID: ${movie.id})`, error);
       }
 
-      await waitFor({ minMs: 300, maxMs: 2_000 });
+      await waitFor({ minMs: 50, maxMs: 200 });
     }
 
     console.log('[Refresh] All movies refresh process completed.');
