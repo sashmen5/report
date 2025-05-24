@@ -7,18 +7,19 @@ import {
   DropdownMenuTrigger,
   cn,
 } from '@sashmen5/components';
+import { IconStarFilled as IconStar } from '@tabler/icons-react';
 import { useRouter } from '@tanstack/react-router';
 import { toast } from 'sonner';
 
 import { PendingRoundedIcon } from '../../../shared/components/Icons';
 import { keyBy } from '../../../shared/utils';
 import { refreshMovie } from '../../entities/media-manager';
+import { RatingComponent } from '../../entities/rating';
 import { tmdbEntity } from '../../entities/tmdb';
 import { MediaCard, MediaDescription, MediaImg, MediaTitle } from '../../features';
 import { formatDate } from '../../lib/date-utils';
 import type { MovieSchema } from '../../models';
 import TomatoImg from './fresh-tomamot.png';
-import ImdbImg from './imdb-mini.png';
 import PopcornImg from './popcorn.svg';
 
 interface Props {
@@ -75,26 +76,7 @@ const MovieCard: FC<Props> = ({ movie: d, onClick: setActiveMovieId }) => {
         className={'aspect-[6/9] rounded-2xl'}
         src={tmdbEntity.buildPosterImgPath(d.poster_path ?? d.backdrop_path ?? '', '400')}
       />
-      <div className={'grid grid-cols-3 grid-rows-[20px] pb-1 pl-0.5 pt-1.5 text-sm font-bold'}>
-        {byRatings['imdb'] && (
-          <div className={'mx-auto inline-flex w-full items-center gap-1'}>
-            <img src={ImdbImg} alt="Tomato" />
-            <div>{byRatings['imdb']?.value.split('/').at(0)}</div>
-          </div>
-        )}
-        {byRatings['rotten_tomatoes'] && (
-          <div className={'mx-auto inline-flex w-full items-center gap-1'}>
-            <img src={TomatoImg} alt="Tomato" />
-            <div>{byRatings['rotten_tomatoes']?.value}</div>
-          </div>
-        )}
-        {byRatings['popcornmeter'] && (
-          <div className={'mx-auto inline-flex w-full items-center gap-1'}>
-            <img src={PopcornImg} className={'size-5'} alt="Popcorn" />
-            <div>{byRatings['popcornmeter']?.value}</div>
-          </div>
-        )}
-      </div>
+      <RatingComponent ratings={d.ratings} className={'pt-0.5'} />
       <div>
         <MediaTitle className={'break-words'}>{d.title}</MediaTitle>
         <MediaDescription>{formatDate(d.release_date)}</MediaDescription>
